@@ -1,0 +1,12 @@
+.news_search{ padding:5px 5px; }
+.layui-table,.layui-table th{ text-align:center; }
+.news_list .layui-form-switch{ margin-top:0; }
+
+/*分页*/
+#page{ text-align:right; }
+
+        /* 设置table每一行的height */
+.layui-table-cell {
+  height: 10;
+ line-height: 10px;
+}

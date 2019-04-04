@@ -1,8 +1,11 @@
 package com.wudi.controller;
 
-import java.util.ResourceBundle.Control;
-
 import com.jfinal.core.Controller;
+/**
+ * 
+ * @author ljp
+ *
+ */
 
 public class AdminController extends Controller{
 

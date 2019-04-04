@@ -1,0 +1,42 @@
+[{
+	"title" : "后台首页",
+	"icon" : "icon-computer",
+	"href" : "page/main.html",
+	"spread" : false
+},{
+	"title" : "数据管理",
+	"icon" : "&#xe656;",
+	"href" : "",
+	"spread" : true,
+	"children" : [
+		{
+			"title" : "团队管理",
+			"icon" : "&#xe613;",
+			"href" : "admin/groupinfo",
+			"spread" : false
+			},{
+			"title" : "用户管理",
+			"icon" : "&#xe613;",
+			"href" : "admin/userinfo",
+			"spread" : false
+			},{
+			"title" : "管理员表",
+			"icon" : "&#xe613;",
+			"href" : "admin/admininfo",
+			"spread" : false
+			}]
+	},{
+		"title" : "系统设置",
+		"icon" : "&#xe614;",
+		"href" : "",
+		"spread" : true,
+		"children" : [
+		
+		{
+			"title" : "404页面",
+			"icon" : "&#x1006;",
+			"href" : "page/404.html",
+			"spread" : false
+		}]
+		}
+]
