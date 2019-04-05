@@ -3,6 +3,7 @@ package com.wudi.model;
 import com.jfinal.plugin.activerecord.Model;
 
 /**
+ * 会员等级Model
  * @author 韦
  *
  */

@@ -1,2 +1,8 @@
+<<<<<<< HEAD
 eclipse.preferences.version=1
 encoding//src/config.properties=UTF-8
+=======
+eclipse.preferences.version=1
+encoding//src/com/wudi/Start.java=UTF-8
+encoding//src/com/wudi/config/Config.java=UTF-8
+>>>>>>> refs/remotes/origin/master
