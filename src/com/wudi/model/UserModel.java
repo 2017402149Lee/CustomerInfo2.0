@@ -14,6 +14,7 @@ public class UserModel extends Model<UserModel>{
 	private static final long serialVersionUID = 1L;
 	public static final String tableName = "user";
 	public static final UserModel dao = new UserModel();
+	
 	public String getId() {
 		return get("id");
 	}
