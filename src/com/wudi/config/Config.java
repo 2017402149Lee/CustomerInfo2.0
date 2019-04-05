@@ -11,6 +11,17 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.template.Engine;
 import com.wudi.controller.AdminController;
 import com.wudi.controller.WeixinController;
+import com.wudi.model.ConfigModel;
+import com.wudi.model.CustomerModel;
+import com.wudi.model.CustomerTypeModel;
+import com.wudi.model.LevelRecordModel;
+import com.wudi.model.NewsModel;
+import com.wudi.model.RoleModel;
+import com.wudi.model.TeamModel;
+import com.wudi.model.TeamersModel;
+import com.wudi.model.UserIntegralModel;
+import com.wudi.model.UserModel;
+import com.wudi.model.UserintegralDetailModel;
 
 public class Config extends JFinalConfig {
 
@@ -56,7 +67,17 @@ public class Config extends JFinalConfig {
 		arpMysql.setShowSql(showSql);
 		{
 			//将数据库表，绑定到这来来，注意，表名和类要相对应
-
+			arpMysql.addMapping("customer", CustomerModel.class);
+			arpMysql.addMapping("config", ConfigModel.class);
+			arpMysql.addMapping("user", UserModel.class);
+			arpMysql.addMapping("levelRecord", LevelRecordModel.class);
+			arpMysql.addMapping("role", RoleModel.class);
+			arpMysql.addMapping("userintegral", UserIntegralModel.class);
+			arpMysql.addMapping("userintegralDetail", UserintegralDetailModel.class);
+			arpMysql.addMapping("customerType", CustomerTypeModel.class);
+			arpMysql.addMapping("team", TeamModel.class);
+			arpMysql.addMapping("teamers", TeamersModel.class);
+			arpMysql.addMapping("news", NewsModel.class);
 		//添加插件
 		me.add(dsMysql);
 		me.add(arpMysql);
