@@ -10,7 +10,7 @@ import com.jfinal.core.Controller;
 public class AdminController extends Controller{
 
 	public void index() {
-		setAttr("user", getSessionAttr("user"));
+		//setAttr("user", getSessionAttr("user"));
 		renderFreeMarker("index.html");
 	}
 	public void main() {

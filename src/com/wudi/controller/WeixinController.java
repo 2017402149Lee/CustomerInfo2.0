@@ -21,7 +21,6 @@ public class WeixinController extends Controller{
 	}
 	
 
-
 	/**
 	 * 用户注册入口
 	 * 
