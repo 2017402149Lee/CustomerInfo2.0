@@ -10,7 +10,7 @@ public class ConfigModel extends Model<ConfigModel> {
 	 * @author ljp
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final String tableName = "news";
+	public static final String tableName = "config";
 	public static final ConfigModel dao = new ConfigModel();
 	
 	public String getId() {
