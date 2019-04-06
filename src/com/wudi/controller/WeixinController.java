@@ -3,6 +3,7 @@ package com.wudi.controller;
 import java.util.List;
 import com.jfinal.core.Controller;
 import com.wudi.model.UserModel;
+import com.wudi.model.admin.CustomerModel;
 
 /**
  * 
@@ -59,8 +60,8 @@ public class WeixinController extends Controller{
 	/**
 	 * 用户登录入口
 	 * 
-	 * @Description: TODO 根据 phone_no&user_password判断 给微信端返回用户或管理员所有信息
-	 * @author 张志强
+	 * @Description: TODO 根据 phone&password判断 给微信端返回用户或管理员所有信息
+	 * @author wei
 	 */
 	public void userLogin() {
 		String phone = getPara("phone");
@@ -94,6 +95,42 @@ public class WeixinController extends Controller{
 		setAttr("info", info);
 		setAttr("role_id", role_id);
 		setAttr("data", list);
+		renderJson();
+	}
+	
+	/*
+	 * 个人中心页面
+	 * 返回个人中心的全部信息
+	 * @author wei
+	 */
+	public void getUserAllInfo() {
+		String phone = getPara("phone");
+		UserModel user = new UserModel().getphone(phone);
+		setAttr("user", user);
+		renderJson();
+	}
+	
+	
+	/**
+	 * 保存客户信息 xiao
+	 */
+	public void saveOrUpdateCustomer() {
+		String id = getPara("id");
+		String name = getPara("name");
+		int sex = getParaToInt("sex");
+		String tel_no = getPara("tel_no");
+		int disclose = getParaToInt("disclose");
+		int age = getParaToInt("age");
+		String work_address = getPara("work_address");
+		String comments = getPara("comments");
+		String phone_no = getPara("phone_no");
+		String nation = getPara("nation");
+		String type = getPara("type");
+		int status = getParaToInt("status");
+		// 保存数据
+		 boolean result = CustomerModel.saveOrUpate(id, name, sex, tel_no, disclose, age, work_address, comments, phone_no,
+				nation, type, status);
+		setAttr("result", result);
 		renderJson();
 	}
 	

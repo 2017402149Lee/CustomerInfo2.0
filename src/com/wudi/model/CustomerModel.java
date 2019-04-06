@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
+import com.mysql.fabric.xmlrpc.base.Data;
 import com.wudi.util.StringUtil;
 
 
@@ -98,7 +99,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	public Date getCreate_time() {
 		return get("create_time");
 	}
-	public void setCreate_time(Date create_time) {
+	public void setCreate_time(Data create_time) {
 		set("create_time", create_time);
 	}
 
@@ -112,7 +113,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	public String getUpdate_time() {
 		return get("update_time");
 	}
-	public void setUpdate_time(String update_time) {
+	public void setUpdate_time(Data update_time) {
 		set("update_time", update_time);
 	}
 	
@@ -146,5 +147,42 @@ public class CustomerModel extends Model<CustomerModel>{
 		}
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
 	}
+	
+	
+	/**
+	 * ±£´æ
+	 */
+	public static boolean save(String name, int sex, String tel, int disclose, int age, String nation,
+			String addr, String remark, String user_id, Data create_time, int status, Data update_time, String type, String otherinfo) {
+		CustomerModel model = new CustomerModel();
+		model.setId(StringUtil.getId());
+		model.setName(name);
+		model.setSex(sex);
+		model.setTel(tel);
+		model.setDisclose(disclose);
+		model.setAge(age);
+		model.setNation(nation);
+		model.setAddr(addr);
+		model.setRemark(remark);
+		model.setUser_id(user_id);
+		model.setCreate_time(create_time);
+		model.setStatus(status);
+		model.setUpdate_time(update_time);
+		model.setType(type);
+		model.setOtherInfo(otherinfo);
+		return model.save();
+	}
+
+	/**
+	 * ±£´æ
+	 * 
+	 * @param model
+	 * @return
+	 */
+	public static boolean save(CustomerModel model) {
+		return model.save();
+	}
+	
+	
 	
 }

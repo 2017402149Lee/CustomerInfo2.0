@@ -26,7 +26,7 @@ public class TeamModel extends Model<TeamModel>{
 	}
 	public void setName(String name) {
 		set("name", name);
-	}
+	} 
 	public String getUser_id() {
 		return get("user_id");
 	}
