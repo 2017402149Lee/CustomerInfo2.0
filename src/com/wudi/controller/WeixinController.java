@@ -9,11 +9,11 @@ import com.jfinal.core.Controller;
 
 public class WeixinController extends Controller{
 	/**
-	 * 默认获取数据的地方
+	 * 默锟较伙拷取锟斤拷锟捷的地凤拷
 	 */
 	public void index() {
-		setAttr("result", "你好，无敌小团队微信小程序路径！");
+		setAttr("result", "浣犲ソ鏃犳晫灏忓洟闃燂紒");
 		renderJson();
 	}
-	
+
 }

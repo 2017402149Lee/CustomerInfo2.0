@@ -27,14 +27,13 @@ layui.config({//框架的固定，配置的使用
 			    		  return '<span class="layui-badge layui-bg-orange">女</span>'
 			    	  }
 		    	  }}
-		      ,{field: 'tel_no', title: '电话', align:'center'}
+		      ,{field: 'tel', title: '电话', align:'center'}
 		      ,{field: 'comments', title: '备注',align:'center'}
+		      ,{field: 'user_id', title: '录入人',align:'center'}
 		      ,{field: 'status', title: '状态', align:'center',
 		    	  templet: function(d){
 			    	  if(d.status==6){
 			    		  return '<span class="layui-badge layui-bg-green">已成交</span>'
-			    	  }else if(d.status==3){
-			    		  return '<span class="layui-badge layui-bg-orange">待处理</span>'
 			    	  }else if(d.status==2){
 			    		  return '<span class="layui-badge layui-bg-blue">已跟进</span>'
 			    	  }else{

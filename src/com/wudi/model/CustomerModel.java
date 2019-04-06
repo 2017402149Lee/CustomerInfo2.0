@@ -1,12 +1,15 @@
 package com.wudi.model;
 
 import java.util.Date;
+import java.util.List;
 
 import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.activerecord.Page;
+import com.wudi.util.StringUtil;
 
 
 /**
- * ¿Í»§£¨Ñ§Éú£©ÐÅÏ¢Model
+ * ï¿½Í»ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢Model
  * @author 
  *
  */
@@ -128,4 +131,27 @@ public class CustomerModel extends Model<CustomerModel>{
 		set("otherinfo", otherinfo);
 	}
 	
+	/**
+	 * åˆ†é¡µæŸ¥è¯¢æ˜¾ç¤ºï¼Œå°±æ˜¯æŸ¥æ‰¾
+	 * 
+	 * @param pageNumber
+	 * @param pageSize
+	 * @param key
+	 * @return
+	 */
+	
+	public static Page<CustomerModel> getList(int pageNumber, int pageSize, String key, String type) {
+		String sele_sql = "select * ";
+		StringBuffer from_sql = new StringBuffer();
+		from_sql.append("from ").append(tableName).append(" where type='").append(type).append("' ");
+		if (!StringUtil.isBlankOrEmpty(key)) {
+			from_sql.append("and name like '%" + key + "%'");
+		}
+		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
+	}
+	
+	public static List<CustomerModel> getCustomerByType(String type){
+		String sql="select * from"+tableName+"where type = ?";
+		return dao.find(sql,type);
+	}
 }
