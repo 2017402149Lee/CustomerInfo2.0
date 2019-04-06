@@ -64,7 +64,7 @@ public class CustomerModel extends Model<CustomerModel>{
 		set("disclose", disclose);
 	}
 
-	public String getnNation() {
+	public String getNation() {
 		return get("nation");
 	}
 
@@ -100,7 +100,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	public Date getCreate_time() {
 		return get("create_time");
 	}
-	public void setCreate_time(Data create_time) {
+	public void setCreate_time(Date create_time) {
 		set("create_time", create_time);
 	}
 
@@ -111,10 +111,10 @@ public class CustomerModel extends Model<CustomerModel>{
 		set("status", status);
 	}
 	
-	public String getUpdate_time() {
+	public Date getUpdate_time() {
 		return get("update_time");
 	}
-	public void setUpdate_time(Data update_time) {
+	public void setUpdate_time(Date update_time) {
 		set("update_time", update_time);
 	}
 	
@@ -156,6 +156,9 @@ public class CustomerModel extends Model<CustomerModel>{
 		String sql="select * from"+tableName+"where type = ?";
 		return dao.find(sql,type);
 	}
+	public static CustomerModel findModel(String type,String tel) {
+		return dao.findFirst("select * from"+tableName+"where type = ?and tel = ?",type,tel);
+	}
 	public static CustomerModel getById(String id) {
 
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
@@ -178,7 +181,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	 * ����
 	 */
 	public static boolean save(String name, int sex, String tel, int disclose, int age, String nation,
-			String addr, String remark, String user_id, Data create_time, int status, Data update_time, String type, String otherinfo) {
+			String addr, String remark, String user_id, int status, String type, String otherinfo) {
 		CustomerModel model = new CustomerModel();
 		model.setId(StringUtil.getId());
 		model.setName(name);
@@ -190,12 +193,38 @@ public class CustomerModel extends Model<CustomerModel>{
 		model.setAddr(addr);
 		model.setRemark(remark);
 		model.setUser_id(user_id);
-		model.setCreate_time(create_time);
+		model.setCreate_time(new Date());
 		model.setStatus(status);
-		model.setUpdate_time(update_time);
 		model.setType(type);
 		model.setOtherInfo(otherinfo);
 		return model.save();
+	}
+	
+	public static boolean update(String id,CustomerModel model) {
+		boolean result =false;
+		CustomerModel m=CustomerModel.getById(id);
+		if(m == null) {
+			return result;
+		}else {
+			m.setName(model.getName());
+			m.setSex(model.getSex());
+			m.setTel(model.getTel());
+			m.setDisclose(model.getDisclose());
+			m.setAge(model.getAge());
+			m.setNation(model.getNation());
+			m.setAddr(model.getAddr());
+			m.setRemark(model.getRemark());
+			m.setUser_id(model.getUser_id());
+			m.setStatus(model.getStatus());
+			m.setType(model.getType());
+			m.setOtherInfo(model.getOtherInfo());
+		}
+		try {
+			result = m.update();
+		}catch(Exception e){
+			result = false;
+		}
+		return result;
 	}
 
 	/**
@@ -206,5 +235,40 @@ public class CustomerModel extends Model<CustomerModel>{
 	 */
 	public static boolean save(CustomerModel model) {
 		return model.save();
+	}
+	public static boolean saveOrUpate(String id,String name, int sex, String tel, int disclose, int age, String nation,
+			String addr, String remark, String user_id, int status,  String type, String otherinfo) {
+	    boolean result = false;
+	    CustomerModel d= CustomerModel.getById(id);
+	    CustomerModel model = CustomerModel.findModel(type, tel);
+	    if(StringUtil.isBlankOrEmpty(id)) {
+	    	if(model ==null) {
+	    	result= save(name,sex,tel,disclose,age,nation,addr,remark,user_id,status,type,otherinfo);
+	    	}
+	    }else {
+	    	if(model != null&&model.getId().equals(id)) {
+	    		model.setName(name);
+	    		model.setSex(sex);
+	    		model.setTel(tel);
+	    		model.setDisclose(disclose);
+	    		model.setAge(age);
+	    		model.setNation(nation);
+	    		model.setAddr(addr);
+	    		model.setRemark(remark);
+	    		model.setUser_id(user_id);
+	    		model.setType(type);
+	    		model.setOtherInfo(otherinfo);
+	    		
+	    	if(!StringUtil.isBlankOrEmpty(remark)) {
+	    		if (status == 1&&!d.getRemark().equals(remark)) {// 只有未处理状态并且备注不等于第一次添加的时候才可以修改
+					status = 2;
+				}
+	    	}
+	    	model.setUpdate_time(new Date());
+	    	model.setStatus(status);
+	    	}
+	    	result = update(id,model);
+	    }
+		return result;
 	}
 }

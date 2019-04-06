@@ -60,13 +60,10 @@ public class WeixinController extends Controller{
 	/**
 	 * �û���¼���
 	 * 
-<<<<<<< HEAD
 	 * @Description: TODO ���� phone_no&user_password�ж� ��΢�Ŷ˷����û������Ա������Ϣ
 	 * @author ��־ǿ
-=======
 	 * @Description: TODO ���� phone&password�ж� ��΢�Ŷ˷����û������Ա������Ϣ
 	 * @author wei
->>>>>>> branch 'master' of https://github.com/2017402149Lee/CustomerInfo2.0.git
 	 */
 	public void userLogin() {
 		String phone = getPara("phone");
@@ -123,19 +120,19 @@ public class WeixinController extends Controller{
 		String id = getPara("id");
 		String name = getPara("name");
 		int sex = getParaToInt("sex");
-		String tel_no = getPara("tel_no");
+		String tel = getPara("tel");
 		int disclose = getParaToInt("disclose");
 		int age = getParaToInt("age");
-		String work_address = getPara("work_address");
-		String comments = getPara("comments");
-		String phone_no = getPara("phone_no");
+		String addr = getPara("addr");
+		String remark = getPara("remark");
+		String user_id = getPara("user_id");
 		String nation = getPara("nation");
 		String type = getPara("type");
 		int status = getParaToInt("status");
+		String otherinfo =getPara("otherinfo");
 		// ��������
-//		 boolean result = CustomerModel.saveOrUpate(id, name, sex, tel_no, disclose, age, work_address, comments, phone_no,
-//				nation, type, status);
-		//setAttr("result", result);
+		 boolean result = CustomerModel.saveOrUpate(id, name, sex, tel, disclose, age, nation, addr, remark, user_id, status, type, otherinfo);
+		setAttr("result", result);
 		renderJson();
 	}
 
