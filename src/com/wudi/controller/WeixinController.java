@@ -1,7 +1,9 @@
 package com.wudi.controller;
 
 import java.util.List;
+
 import com.jfinal.core.Controller;
+import com.wudi.model.CustomerModel;
 import com.wudi.model.UserModel;
 
 /**
@@ -58,8 +60,13 @@ public class WeixinController extends Controller{
 	/**
 	 * �û���¼���
 	 * 
+<<<<<<< HEAD
 	 * @Description: TODO ���� phone_no&user_password�ж� ��΢�Ŷ˷����û������Ա������Ϣ
 	 * @author ��־ǿ
+=======
+	 * @Description: TODO ���� phone&password�ж� ��΢�Ŷ˷����û������Ա������Ϣ
+	 * @author wei
+>>>>>>> branch 'master' of https://github.com/2017402149Lee/CustomerInfo2.0.git
 	 */
 	public void userLogin() {
 		String phone = getPara("phone");
@@ -95,4 +102,41 @@ public class WeixinController extends Controller{
 		setAttr("data", list);
 		renderJson();
 	}
+	
+	/*
+	 * ��������ҳ��
+	 * ���ظ������ĵ�ȫ����Ϣ
+	 * @author wei
+	 */
+	public void getUserAllInfo() {
+		String phone = getPara("phone");
+		UserModel user = new UserModel().getphone(phone);
+		setAttr("user", user);
+		renderJson();
+	}
+	
+	
+	/**
+	 * ����ͻ���Ϣ xiao
+	 */
+	public void saveOrUpdateCustomer() {
+		String id = getPara("id");
+		String name = getPara("name");
+		int sex = getParaToInt("sex");
+		String tel_no = getPara("tel_no");
+		int disclose = getParaToInt("disclose");
+		int age = getParaToInt("age");
+		String work_address = getPara("work_address");
+		String comments = getPara("comments");
+		String phone_no = getPara("phone_no");
+		String nation = getPara("nation");
+		String type = getPara("type");
+		int status = getParaToInt("status");
+		// ��������
+//		 boolean result = CustomerModel.saveOrUpate(id, name, sex, tel_no, disclose, age, work_address, comments, phone_no,
+//				nation, type, status);
+		//setAttr("result", result);
+		renderJson();
+	}
+
 }
