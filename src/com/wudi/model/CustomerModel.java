@@ -131,6 +131,7 @@ public class CustomerModel extends Model<CustomerModel>{
 		set("otherinfo", otherinfo);
 	}
 	
+
 	/**
 	 * 分页查询显示，就是查找
 	 * 
@@ -154,4 +155,21 @@ public class CustomerModel extends Model<CustomerModel>{
 		String sql="select * from"+tableName+"where type = ?";
 		return dao.find(sql,type);
 	}
+	public static CustomerModel getById(String id) {
+
+		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
+	}
+	/**
+	 * 
+	 */
+	public static Page<CustomerModel> getList(int pageNumber, int pageSize, String key) {
+		String sele_sql = "select * ";
+		StringBuffer from_sql = new StringBuffer();
+		from_sql.append("from ").append(tableName).append(" ");
+		if (!StringUtil.isBlankOrEmpty(key)) {
+			from_sql.append("where  name like '%" + key + "%'");
+		}
+		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
+	}
+
 }
