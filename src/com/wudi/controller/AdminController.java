@@ -39,4 +39,29 @@ public class AdminController extends Controller{
         setAttr("xlsdata", datalist);
         renderJson();
 	}
+	
+	/**
+	 * 团队页面
+	 */
+	public void groupinfo() {
+		render("groupinfo/groupinfoInfo.html");
+	}
+	
+	
+	
+	/*
+	//打开用户信息界面
+	 * */
+	public void userinfo() {
+		render("userinfo/userinfoInfo.html");
+	}
+	
+	
+	/*
+	 * @Descripion: 打开管理员信息界面
+	 * 
+	 */
+	public void admininfo() {
+		render("admininfo/admininfoInfo.html");
+	}
 }

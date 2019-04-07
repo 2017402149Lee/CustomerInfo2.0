@@ -153,28 +153,17 @@ public class CustomerModel extends Model<CustomerModel>{
 	}
 	
 	public static List<CustomerModel> getCustomerByType(String type){
-		String sql="select * from"+tableName+"where type = ?";
+		String sql="select * from "+tableName+" where type = ?";
 		return dao.find(sql,type);
 	}
 	public static CustomerModel findModel(String type,String tel) {
-		return dao.findFirst("select * from"+tableName+"where type = ?and tel = ?",type,tel);
+		return dao.findFirst("select * from "+tableName+" where type = ?and tel = ?",type,tel);
 	}
 	public static CustomerModel getById(String id) {
 
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
 	}
-	/**
-	 * 
-	 */
-	public static Page<CustomerModel> getList(int pageNumber, int pageSize, String key) {
-		String sele_sql = "select * ";
-		StringBuffer from_sql = new StringBuffer();
-		from_sql.append("from ").append(tableName).append(" ");
-		if (!StringUtil.isBlankOrEmpty(key)) {
-			from_sql.append("where  name like '%" + key + "%'");
-		}
-		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
-	}
+
 	
 	
 	/**
