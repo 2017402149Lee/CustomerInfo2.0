@@ -1,11 +1,12 @@
 package com.wudi.model;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
-import com.mysql.fabric.xmlrpc.base.Data;
 import com.wudi.util.StringUtil;
 
 
@@ -259,5 +260,42 @@ public class CustomerModel extends Model<CustomerModel>{
 	    	result = update(id,model);
 	    }
 		return result;
+	}
+	
+	public static boolean delById(String id) {
+		try {
+			String delsql = "DELETE FROM " + tableName + " WHERE id=?";
+			int iRet = Db.update(delsql, id);
+			if (iRet > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	/**
+	 * 找出本年的数据
+	 * 
+	 * @return
+	 */
+	public static List<CustomerModel> getListByCYeanMonth(int month) {
+		StringBuffer sql = new StringBuffer();
+		Calendar now = Calendar.getInstance();
+		int yean = now.get(Calendar.YEAR);
+		// 构造类似2019-01的格式（SELECT * from customer where create_time like '%2019-01%'）
+		StringBuffer m = new StringBuffer();
+		m.append(yean).append("-");
+		if (month < 10) {
+			m.append("0").append(month);
+		} else {
+			m.append(month);
+		}
+		sql.append("select *  from ").append(tableName);
+		sql.append(" where create_time like '%" + m + "%'");
+
+		return dao.find(sql.toString());
 	}
 }
