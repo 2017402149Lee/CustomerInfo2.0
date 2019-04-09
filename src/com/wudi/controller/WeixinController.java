@@ -1,7 +1,10 @@
 package com.wudi.controller;
 
+import java.util.List;
+
 import com.jfinal.core.Controller;
 import com.wudi.model.CustomerModel;
+import com.wudi.model.TeamModel;
 import com.wudi.model.UserModel;
 
 /**
@@ -19,40 +22,28 @@ public class WeixinController extends Controller{
 		setAttr("result", "你好无敌小团队！");
 		renderJson();
 	}
-
 	/**
-	 * �û�ע�����
-	 * 
-	 * @author wei
-	 * @Description: TODO ¼���û�ע����Ϣ ��΢�Ŷ˷�����ʾ��Ϣ
+	 * 用戶注册接口
 	 */
-	public void saveUserinfo() {
+	public void userRegister() {
+		int code = -1;
 		String username = getPara("username");
+		String phone = getPara("phone");
 		String password = getPara("password");
 		int sex = getParaToInt("sex");
-		if (sex==1) {
-			sex = 1;		//��
-		} else {
-			sex = 0;		//Ů
-		}
-		String phone = getPara("phone");
-		int code = 0; // 0ע�᲻�ɹ� 1�û��Ѿ����� 2ע��ɹ�
-		String info = "ע�᲻�ɹ�";
-		UserModel m = new UserModel().getphone(phone);
-		if (m != null) {
-			code = 1;
-			info = "�û��Ѿ�����";
-		} else {
-			boolean result = new UserModel().saveUserinfo(username, password, phone, "001",sex, 0, 0);
-			if (result) {
-				code = 2;
-				info = "ע��ɹ�";
-			}
+		if(username != null) {
+		code = -1;
+		}else if(password ==null) {
+			code = -1;
+		}else {
+			boolean result = UserModel.saveUserinfo(username, password, phone, sex);
+			code = 0;
+			setAttr("result", result);
 		}
 		setAttr("code", code);
-		setAttr("info", info);
 		renderJson();
 	}
+
 	/**
 	 * @author ljp
 	 * @TODO 用戶登录
@@ -160,7 +151,17 @@ public class WeixinController extends Controller{
 	 */
 	public void queryCustomerInfo() {
 		String id = getPara("id");
-		CustomerModel one = CustomerModel.getById(id);
+		int code = -1;
+		CustomerModel data = CustomerModel.findCustomerById(id);
+		if(data != null) {
+			code = 0;
+			setAttr("data", data);
+		}else {
+			code = -1;
+		}
+		setAttr("code", code);
+		renderJson();
+		
 	}
 	/**
 	 * @author ljp
@@ -178,28 +179,41 @@ public class WeixinController extends Controller{
 		setAttr("code", code);
 		renderJson();
 	}
-	
-//	/**
-//	 * ����ͻ���Ϣ xiao
-//	 */
-//	public void saveOrUpdateCustomer() {
-//		String id = getPara("id");
-//		String name = getPara("name");
-//		int sex = getParaToInt("sex");
-//		String tel = getPara("tel");
-//		int disclose = getParaToInt("disclose");
-//		int age = getParaToInt("age");
-//		String addr = getPara("addr");
-//		String remark = getPara("remark");
-//		String user_id = getPara("user_id");
-//		String nation = getPara("nation");
-//		String type = getPara("type");
-//		int status = getParaToInt("status");
-//		String otherinfo =getPara("otherinfo");
-//		// ��������
-//		 boolean result = CustomerModel.saveOrUpate(id, name, sex, tel, disclose, age, nation, addr, remark, user_id, status, type, otherinfo);
-//		setAttr("result", result);
-//		renderJson();
-//	}
-
+	/**
+	 * @author ljp
+	 * @TODO: 创建团队
+	 */
+	public void createTeam() {
+		int code = -1;
+		String name = getPara("name");
+		String user_id = getPara("user_id");
+		String remark = getPara("remark");
+		TeamModel t = TeamModel.getByPhone(name);
+		TeamModel u = TeamModel.findUser_id(user_id);
+		if(t != null) {
+			code = -1;
+		}else if(u != null) {
+			code = -1;
+		}else {
+			boolean result = TeamModel.saveTeam(name, user_id, remark);
+			code = 0;
+			setAttr("result", result);
+		}
+		setAttr("code", code);
+		renderJson();
+	}
+	/**
+	 * 获取自己客户信息列表接口
+	 */
+	public void queryCustomerList() {
+		String user_id = getPara("user_id");
+		List<CustomerModel> list = CustomerModel.queryCustomerList(user_id);
+		setAttr("data", list);
+		renderJson();
+	}
+	public void addTeamer() {
+		String phone = getPara("phone");
+		String team_id =  getPara("team_id");
+		
+	}
 }

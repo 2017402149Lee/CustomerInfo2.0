@@ -1,5 +1,7 @@
 package com.wudi.model;
 
+import java.util.Date;
+
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.util.StringUtil;
@@ -33,10 +35,10 @@ public class TeamModel extends Model<TeamModel>{
 	public void setUser_id(String user_id) {
 		set("user_id", user_id);
 	}
-	public String getCreate_time() {
+	public Date getCreate_time() {
 		return get("create_time");
 	}
-	public void setCeate_time(String create_time) {
+	public void setCeate_time(Date create_time) {
         set("create_time",create_time);
 	}
 	public String getRemark() {
@@ -51,11 +53,36 @@ public class TeamModel extends Model<TeamModel>{
 	public void setStatus(int status) {
 		set("status",status);
 	}
-
 	
+	/**
+	 * 查看团队名称是否存在
+	 * @param name
+	 * @return
+	 */
+	public static TeamModel getByPhone(String name) {
+		String sql = "select * from "+tableName+" where name = ?";
+		return dao.findFirst(sql,name);
+	}
+	
+	public static TeamModel findUser_id(String user_id) {
+		String sql = "select * from "+tableName+" where user_id = ?";
+		return dao.findFirst(sql,user_id);
+	}
 	public static TeamModel getById(String id) {
 
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
+	}
+	
+	public static boolean saveTeam(String name,String user_id,String remark) {
+		TeamModel m = new TeamModel();
+		m.setCeate_time(new Date());
+		m.setName(name);
+		m.setUser_id(user_id);
+		m.setRemark(remark);
+		m.setStatus(1);
+		m.setId(StringUtil.getId());
+		return m.save();
+		
 	}
 	/**
 	 * 

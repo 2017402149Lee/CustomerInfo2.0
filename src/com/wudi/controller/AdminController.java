@@ -7,6 +7,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.bean.TubiaoBean;
 import com.wudi.model.CustomerModel;
+import com.wudi.model.UserModel;
 /**
  * 
  * @author ljp
@@ -57,8 +58,22 @@ public class AdminController extends Controller{
 	public void userinfo() {
 		render("userinfo/userinfoInfo.html");
 	}
-	
-	
+	/**
+	 * 获取用户信息
+	 */
+	public void getUserInfoList() {
+		String key = getPara("key");
+        int limit=getParaToInt("limit");
+        int page=getParaToInt("page");
+        String role_id = getPara("role_id");
+        Page<UserModel> list = UserModel.getList(page, limit, key);
+        List<UserModel> data = UserModel.getXls(role_id);
+        setAttr("msg", "你好！");
+        setAttr("count", list.getTotalRow());
+        setAttr("data", list.getList());
+        setAttr("xlsdata", data);
+        renderJson();
+	}
 	/*
 	 * @Descripion: 打开管理员信息界面
 	 * 

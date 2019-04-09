@@ -164,15 +164,18 @@ public class CustomerModel extends Model<CustomerModel>{
 
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
 	}
-//	public static CustomerModel findOneById(String id) {
-//		String sql = "select * from "+tableName+""
-//		return dao.findFirst(sqlPara);
-//	}
-
+	public static CustomerModel findCustomerById(String id) {
+		String sql = "SELECT a.*,b.username,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b ON a.user_id=b.id where a.id=?";
+		return dao.findFirst(sql,id);
+	}
 	
+	public static List<CustomerModel> queryCustomerList(String user_id){
+		 String sql="select a.*,b.username ,b.phone,c.`name` as type_name from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id LEFT JOIN "+CustomerTypeModel.tableName+" c on a.type=c.id where a.user_id=?";
+		 return dao.find(sql,user_id);
+	}
 	
 	/**
-	 * ����
+	 * 
 	 */
 	public static boolean save(String name, int sex, String tel, int disclose, int age, String nation,
 			String addr, String remark, String user_id, String type, String otherinfo) {

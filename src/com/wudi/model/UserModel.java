@@ -5,7 +5,6 @@ import java.util.List;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.util.StringUtil;
-import com.wudi.model.RoleModel;
 /**
  * 
  * @author ljp
@@ -88,6 +87,16 @@ public class UserModel extends Model<UserModel>{
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
 	}
 	
+	public static List<UserModel>getXls(String role_id){
+		List<UserModel> list;
+		if(role_id.equals("001")) {
+			list = dao.find("select * from "+tableName+" where role_id='001'");
+		}else {
+			list = dao.find("select * from "+tableName+" where role_id='2'");
+		}
+		return list;
+	}
+	
 	/**
 	 * 
 	 * ע���û� �����û���Ϣ
@@ -100,15 +109,15 @@ public class UserModel extends Model<UserModel>{
 	 * @param status
 	 * @return
 	 */
-	public  boolean saveUserinfo(String username,String password,  String phone, String role_id, int sex,int level,int status) {
+	public static boolean saveUserinfo(String username,String password, String phone, int sex) {
 		UserModel m=new UserModel();
 		m.setUsername(username);
 		m.setPassword(password);
 		m.setSex(sex);
 		m.setPhone(phone);
-		m.setLevel(level);
-		m.setStatus(status);//��ʼע���û���û����˴�0����ӹ���Ա��1
-		m.setRole_id(role_id);
+		m.setLevel(0);
+		m.setStatus(0);
+		m.setRole_id("001");
 		m.setId(StringUtil.getId());
 		return m.save();
 	}

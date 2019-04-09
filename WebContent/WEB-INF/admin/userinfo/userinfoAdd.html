@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>信息添加</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+	<style type="text/css">
+		.layui-form { width:60%; float:left; margin-left:5%; margin-top: 3%}
+	</style>
+</head>
+<body class="childrenBody">
+	<form class="layui-form layui-form-pane" name="addform">
+		<div class="layui-form-item">
+			<label class="layui-form-label">姓名</label>
+			<div class="layui-input-inline">
+				<input type="text" class="layui-input" name="user_name"  lay-verify="required" placeholder="请输入姓名"  autocomplete="off">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">手机号码</label>
+			<div class="layui-input-inline">
+				<input type="text" class="layui-input" name="phone_no"  placeholder="请输入号码"  autocomplete="off">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密码</label>
+			<div class="layui-input-inline">
+				<input type="text" class="layui-input" name="user_password"  lay-verify="required" placeholder="请输入密码"  autocomplete="off">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">性别</label>
+			<div class="layui-input-inline">
+			      	<select name="user_sex"  id="selectId" lay-filter="state">
+			      	<option value="0">请选择性别</option>
+			      	<option value="0">男</option>
+			      	<option value="1">女</option>
+      				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit="" lay-filter="add">保存</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		    </div>
+		</div>
+	</form>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../js/userinfo/userinfoAdd.js"></script>
+</body>
+</html>
