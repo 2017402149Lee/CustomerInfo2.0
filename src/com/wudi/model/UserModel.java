@@ -5,6 +5,7 @@ import java.util.List;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.util.StringUtil;
+import com.wudi.model.RoleModel;
 /**
  * 
  * @author ljp
@@ -89,8 +90,8 @@ public class UserModel extends Model<UserModel>{
 	
 	/**
 	 * 
-	 * ×¢²áÓÃ»§ ±£´æÓÃ»§ÐÅÏ¢
-	 * @author ÕÅÖ¾Ç¿ 
+	 * ×¢ï¿½ï¿½ï¿½Ã»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
+	 * @author ï¿½ï¿½Ö¾Ç¿ 
 	 * @param username 
 	 * @param password 
 	 * @param sex
@@ -106,7 +107,7 @@ public class UserModel extends Model<UserModel>{
 		m.setSex(sex);
 		m.setPhone(phone);
 		m.setLevel(level);
-		m.setStatus(status);//¿ªÊ¼×¢²áÓÃ»§»¹Ã»ÓÐÉóºË´«0£¬Ìí¼Ó¹ÜÀíÔ±´«1
+		m.setStatus(status);//ï¿½ï¿½Ê¼×¢ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ë´ï¿½0ï¿½ï¿½ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½Ô±ï¿½ï¿½1
 		m.setRole_id(role_id);
 		m.setId(StringUtil.getId());
 		return m.save();
@@ -114,7 +115,7 @@ public class UserModel extends Model<UserModel>{
 	
 
 	/**
-	 * ²éÑ¯ºÅÂë
+	 * ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½
 	 * @param phone_no
 	 * @return
 	 */
@@ -123,9 +124,13 @@ public class UserModel extends Model<UserModel>{
 		return dao.findFirst(selectsql,phone);
 		
 	}
+	public static UserModel loginByPhone() {
+		String sql = "select * from user,role";
+		return dao.findFirst(sql);
+	}
 	
 	/**
-	 * ¸ù¾ÝºÅÂë²éÕÒ¿Í»§ËùÓÐÐÅÏ¢
+	 * ï¿½ï¿½ï¿½Ýºï¿½ï¿½ï¿½ï¿½ï¿½Ò¿Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	 * @param phone_no
 	 * @return
 	 */
@@ -138,7 +143,7 @@ public class UserModel extends Model<UserModel>{
 	}
 	
 	/**
-	 * ²éÑ¯ºÅÂë
+	 * ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½
 	 * @param phone_no
 	 * @return
 	 */

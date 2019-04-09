@@ -164,6 +164,10 @@ public class CustomerModel extends Model<CustomerModel>{
 
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
 	}
+//	public static CustomerModel findOneById(String id) {
+//		String sql = "select * from "+tableName+""
+//		return dao.findFirst(sqlPara);
+//	}
 
 	
 	
@@ -171,7 +175,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	 * ����
 	 */
 	public static boolean save(String name, int sex, String tel, int disclose, int age, String nation,
-			String addr, String remark, String user_id, int status, String type, String otherinfo) {
+			String addr, String remark, String user_id, String type, String otherinfo) {
 		CustomerModel model = new CustomerModel();
 		model.setId(StringUtil.getId());
 		model.setName(name);
@@ -184,30 +188,36 @@ public class CustomerModel extends Model<CustomerModel>{
 		model.setRemark(remark);
 		model.setUser_id(user_id);
 		model.setCreate_time(new Date());
-		model.setStatus(status);
+		model.setStatus(1);
 		model.setType(type);
 		model.setOtherInfo(otherinfo);
 		return model.save();
 	}
 	
-	public static boolean update(String id,CustomerModel model) {
+	public static boolean update(String id,String name, int sex, String tel, int disclose, int age, String nation,
+			String addr, String remark, String type, String otherinfo,int status) {
 		boolean result =false;
 		CustomerModel m=CustomerModel.getById(id);
 		if(m == null) {
 			return result;
 		}else {
-			m.setName(model.getName());
-			m.setSex(model.getSex());
-			m.setTel(model.getTel());
-			m.setDisclose(model.getDisclose());
-			m.setAge(model.getAge());
-			m.setNation(model.getNation());
-			m.setAddr(model.getAddr());
-			m.setRemark(model.getRemark());
-			m.setUser_id(model.getUser_id());
-			m.setStatus(model.getStatus());
-			m.setType(model.getType());
-			m.setOtherInfo(model.getOtherInfo());
+			m.setName(name);
+			m.setSex(sex);
+			m.setTel(tel);
+			m.setDisclose(disclose);
+			m.setAge(age);
+			m.setNation(nation);
+			m.setAddr(addr);
+			m.setRemark(remark);
+			m.setType(type);
+			m.setOtherInfo(otherinfo);
+	    	if(!StringUtil.isBlankOrEmpty(remark)) {
+    		if (status == 1&&!m.getRemark().equals(remark)) {// 只有未处理状态并且备注不等于第一次添加的时候才可以修改
+				status = 2;
+			}
+    	}
+    	m.setUpdate_time(new Date());
+    	m.setStatus(status);
 		}
 		try {
 			result = m.update();
@@ -226,42 +236,42 @@ public class CustomerModel extends Model<CustomerModel>{
 	public static boolean save(CustomerModel model) {
 		return model.save();
 	}
-	public static boolean saveOrUpate(String id,String name, int sex, String tel, int disclose, int age, String nation,
-			String addr, String remark, String user_id, int status,  String type, String otherinfo) {
-	    boolean result = false;
-	    CustomerModel d= CustomerModel.getById(id);
-	    CustomerModel model = CustomerModel.findModel(type, tel);
-	    if(StringUtil.isBlankOrEmpty(id)) {
-	    	if(model ==null) {
-	    	result= save(name,sex,tel,disclose,age,nation,addr,remark,user_id,status,type,otherinfo);
-	    	}
-	    }else {
-	    	if(model != null&&model.getId().equals(id)) {
-	    		model.setName(name);
-	    		model.setSex(sex);
-	    		model.setTel(tel);
-	    		model.setDisclose(disclose);
-	    		model.setAge(age);
-	    		model.setNation(nation);
-	    		model.setAddr(addr);
-	    		model.setRemark(remark);
-	    		model.setUser_id(user_id);
-	    		model.setType(type);
-	    		model.setOtherInfo(otherinfo);
-	    		
-	    	if(!StringUtil.isBlankOrEmpty(remark)) {
-	    		if (status == 1&&!d.getRemark().equals(remark)) {// 只有未处理状态并且备注不等于第一次添加的时候才可以修改
-					status = 2;
-				}
-	    	}
-	    	model.setUpdate_time(new Date());
-	    	model.setStatus(status);
-	    	}
-	    	result = update(id,model);
-	    }
-		return result;
-	}
-	
+//	public static boolean saveOrUpate(String id,String name, int sex, String tel, int disclose, int age, String nation,
+//			String addr, String remark, String user_id, int status,  String type, String otherinfo) {
+//	    boolean result = false;
+//	    CustomerModel d= CustomerModel.getById(id);
+//	    CustomerModel model = CustomerModel.findModel(type, tel);
+//	    if(StringUtil.isBlankOrEmpty(id)) {
+//	    	if(model ==null) {
+//	    	result= save(name,sex,tel,disclose,age,nation,addr,remark,user_id,status,type,otherinfo);
+//	    	}
+//	    }else {
+//	    	if(model != null&&model.getId().equals(id)) {
+//	    		model.setName(name);
+//	    		model.setSex(sex);
+//	    		model.setTel(tel);
+//	    		model.setDisclose(disclose);
+//	    		model.setAge(age);
+//	    		model.setNation(nation);
+//	    		model.setAddr(addr);
+//	    		model.setRemark(remark);
+//	    		model.setUser_id(user_id);
+//	    		model.setType(type);
+//	    		model.setOtherInfo(otherinfo);
+//	    		
+//	    	if(!StringUtil.isBlankOrEmpty(remark)) {
+//	    		if (status == 1&&!d.getRemark().equals(remark)) {// 只有未处理状态并且备注不等于第一次添加的时候才可以修改
+//					status = 2;
+//				}
+//	    	}
+//	    	model.setUpdate_time(new Date());
+//	    	model.setStatus(status);
+//	    	}
+//	    	result = update(id,model);
+//	    }
+//		return result;
+//	}
+//	
 	public static boolean delById(String id) {
 		try {
 			String delsql = "DELETE FROM " + tableName + " WHERE id=?";
