@@ -169,9 +169,9 @@ public class CustomerModel extends Model<CustomerModel>{
 		return dao.findFirst(sql,id);
 	}
 	
-	public static List<CustomerModel> queryCustomerList(String user_id){
-		 String sql="select a.*,b.username ,b.phone,c.`name` as type_name from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id LEFT JOIN "+CustomerTypeModel.tableName+" c on a.type=c.id where a.user_id=?";
-		 return dao.find(sql,user_id);
+	public static List<CustomerModel> queryCustomerList(String user_id,String type){
+		 String sql="select a.*,b.username ,b.phone,c.`name` as type_name from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id LEFT JOIN "+CustomerTypeModel.tableName+" c on a.type=c.id where a.user_id= ? and a.type= ?";
+		 return dao.find(sql,user_id,type);
 	}
 	
 	/**

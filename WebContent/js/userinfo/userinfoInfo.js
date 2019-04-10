@@ -13,7 +13,7 @@ layui.config({
 	    elem: '#demo',//渲染对象
 	    height: 'full-88',//表格高度
 	    url: 'getUserInfoList', //数据接口
-	    where: {key: '',role_id:'001'},//给后台传的参数
+	    where: {key: ''},//给后台传的参数
 	    page: true, //开启分页
 	    limit: 10,//每页显示信息条数
 	    toolbar: '#toolbarDemo',
@@ -22,7 +22,7 @@ layui.config({
 		      {field: 'id', title: 'ID', sort: true, fixed: 'left',width:100}
 		      ,{field: 'username', title: '用户名',width:100}
 		      ,{field: 'sex', title: '性别',width:50,templet:function(d){
-		    	  if(d.user_sex=='男'){
+		    	  if(d.sex=='男'){
 		    		  return '<span style="color: blue">男</span>'
 		    	  }else{
 		    		  return '<span style="color: red" >女</span>'

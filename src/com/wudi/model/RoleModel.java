@@ -3,13 +3,13 @@ package com.wudi.model;
 import com.jfinal.plugin.activerecord.Model;
 
 /**
- * ½ÇÉ«Model
+ * ï¿½ï¿½É«Model
  * @author 
  *
  */
 public class RoleModel extends Model<RoleModel>{
-	private static final long serialVersionUID = 1L;
-	private static final String tableName = "role";
+	public static final long serialVersionUID = 1L;
+	public static final String tableName = "role";
 	public static final RoleModel dao = new RoleModel();
 	
 	public String getId() {

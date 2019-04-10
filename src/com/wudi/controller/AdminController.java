@@ -65,13 +65,13 @@ public class AdminController extends Controller{
 		String key = getPara("key");
         int limit=getParaToInt("limit");
         int page=getParaToInt("page");
-        String role_id = getPara("role_id");
+        //String role_id = getPara("role_id");
         Page<UserModel> list = UserModel.getList(page, limit, key);
-        List<UserModel> data = UserModel.getXls(role_id);
+        //List<UserModel> data = UserModel.getXls(role_id);
         setAttr("msg", "你好！");
         setAttr("count", list.getTotalRow());
         setAttr("data", list.getList());
-        setAttr("xlsdata", data);
+        //setAttr("xlsdata", data);
         renderJson();
 	}
 	/*

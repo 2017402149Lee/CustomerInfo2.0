@@ -80,7 +80,7 @@ public class UserModel extends Model<UserModel>{
 	public static Page<UserModel> getList(int pageNumber, int pageSize, String key) {
 		String sele_sql = "select * ";
 		StringBuffer from_sql = new StringBuffer();
-		from_sql.append("from ").append(tableName).append(" ");
+		from_sql.append("from ").append(tableName);
 		if (!StringUtil.isBlankOrEmpty(key)) {
 			from_sql.append("where  name like '%" + key + "%'");
 		}
@@ -133,9 +133,14 @@ public class UserModel extends Model<UserModel>{
 		return dao.findFirst(selectsql,phone);
 		
 	}
-	public static UserModel loginByPhone() {
-		String sql = "select * from user,role";
-		return dao.findFirst(sql);
+	/**
+	 * @author ljp
+	 * @param phone
+	 * @return
+	 */
+	public static UserModel loginByPhone(String phone) {
+		String sql = "select * from "+tableName+" a LEFT JOIN "+RoleModel.tableName+" b ON a.role_id=b.permission where a.phone = ?";
+		return dao.findFirst(sql,phone);
 	}
 	
 	/**

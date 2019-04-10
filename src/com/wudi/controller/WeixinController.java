@@ -5,6 +5,7 @@ import java.util.List;
 import com.jfinal.core.Controller;
 import com.wudi.model.CustomerModel;
 import com.wudi.model.TeamModel;
+import com.wudi.model.TeamersModel;
 import com.wudi.model.UserModel;
 
 /**
@@ -31,7 +32,7 @@ public class WeixinController extends Controller{
 		String phone = getPara("phone");
 		String password = getPara("password");
 		int sex = getParaToInt("sex");
-		if(username != null) {
+		if(username == null) {
 		code = -1;
 		}else if(password ==null) {
 			code = -1;
@@ -53,23 +54,23 @@ public class WeixinController extends Controller{
 		String phone = getPara("phone");
 		String password = getPara("password");
 		int code = -1;
-		UserModel user = UserModel.findByPhone(phone);
-		UserModel data = UserModel.loginByPhone();
-		if(!phone.equals(user.getPhone())) {
-			code = 1;
-		}else if(!password.equals(user.getPassword())) {
+		UserModel data = UserModel.loginByPhone(phone);
+		if(!phone.equals(data.getPhone())) {
+			code = 1; 
+		}else if(!password.equals(data.getPassword())) {
 			code = 2;
-		}else if(user.getPassword().equals(password)&&phone.equals(user.getPhone())) {
-			if(user.getStatus()!=1) {
+		}else if(data.getPassword().equals(password)&&phone.equals(data.getPhone())) {
+			if(data.getStatus()==0) {//status 0为未审核，1为审核
 				code = -1;
-			}else {
+			}
 				code =0;
 				setAttr("data", data);
 			}
-		}
+		
 		setAttr("code", code);
 		renderJson();
-	}
+}
+	
 	
 	
 	/**
@@ -204,16 +205,50 @@ public class WeixinController extends Controller{
 	}
 	/**
 	 * 获取自己客户信息列表接口
+	 * @param user_id,type
 	 */
 	public void queryCustomerList() {
 		String user_id = getPara("user_id");
-		List<CustomerModel> list = CustomerModel.queryCustomerList(user_id);
+		String type = getPara("type");
+		List<CustomerModel> list = CustomerModel.queryCustomerList(user_id,type);
 		setAttr("data", list);
 		renderJson();
 	}
+	/**
+	 * @author ljp
+	 * 邀请加入团队接口
+	 */
+	
 	public void addTeamer() {
+		int code = -1;
 		String phone = getPara("phone");
 		String team_id =  getPara("team_id");
-		
+		TeamersModel data = TeamersModel.findByPhone(phone);
+		if(data!=null) {
+			code = -1;
+		}else {
+			boolean result = TeamersModel.saveTeamers(phone, team_id);
+			setAttr("result", result);
+		}
+		setAttr("code", code);
+		renderJson();
+	}
+	
+	/**
+	 * 删除队员接口
+	 * @author ljp
+	 */
+	public void delTeamer() {
+		int code = -1;
+		String phone = getPara("phone");
+		String team_id = getPara("team_id");
+		boolean result = TeamersModel.delById(phone);
+		if(result) {
+			code = 0;
+		}else {
+			code = -1;
+		}
+		setAttr("code", code);
+		renderJson();
 	}
 }
