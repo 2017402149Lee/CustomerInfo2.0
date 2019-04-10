@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jfinal.core.Controller;
 import com.wudi.model.CustomerModel;
+import com.wudi.model.RoleModel;
 import com.wudi.model.TeamModel;
 import com.wudi.model.TeamersModel;
 import com.wudi.model.UserModel;
@@ -32,6 +33,7 @@ public class WeixinController extends Controller{
 		String phone = getPara("phone");
 		String password = getPara("password");
 		int sex = getParaToInt("sex");
+		
 		if(username == null) {
 		code = -1;
 		}else if(password ==null) {
@@ -40,6 +42,10 @@ public class WeixinController extends Controller{
 			boolean result = UserModel.saveUserinfo(username, password, phone, sex);
 			code = 0;
 			setAttr("result", result);
+			if(result) {
+				UserModel m = UserModel.findByPhone(phone);
+				boolean saveRole = RoleModel.save(m.getRole_id());
+			}
 		}
 		setAttr("code", code);
 		renderJson();
@@ -53,8 +59,10 @@ public class WeixinController extends Controller{
 	public void userLogin() {
 		String phone = getPara("phone");
 		String password = getPara("password");
+		
 		int code = -1;
 		UserModel data = UserModel.loginByPhone(phone);
+		RoleModel p = RoleModel.getPermissionBy(data.getRole_id());
 		if(!phone.equals(data.getPhone())) {
 			code = 1; 
 		}else if(!password.equals(data.getPassword())) {
@@ -66,12 +74,11 @@ public class WeixinController extends Controller{
 				code =0;
 				setAttr("data", data);
 			}
-		
+		setAttr("permission", p.getPermission());
 		setAttr("code", code);
 		renderJson();
 }
-	
-	
+		
 	
 	/**
 	 * @author ljp
@@ -95,13 +102,15 @@ public class WeixinController extends Controller{
 	 */
 	public void addCustomerInfo() {
 		int code = -1;
+		String addr = "";
+		String remark = "";
 		String name = getPara("name");
 		int sex = getParaToInt("sex");
 		String tel = getPara("tel");
 		int disclose = getParaToInt("disclose");
 		int age = getParaToInt("age");
-		String addr = getPara("addr");
-		String remark = getPara("remark");
+		addr = getPara("addr");
+		remark = getPara("remark");
 		String user_id = getPara("user_id");
 		String nation = getPara("nation");
 		String type = getPara("type");

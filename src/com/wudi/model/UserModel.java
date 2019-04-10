@@ -117,7 +117,7 @@ public class UserModel extends Model<UserModel>{
 		m.setPhone(phone);
 		m.setLevel(0);
 		m.setStatus(0);
-		m.setRole_id("001");
+		m.setRole_id(StringUtil.getId());
 		m.setId(StringUtil.getId());
 		return m.save();
 	}
@@ -139,7 +139,7 @@ public class UserModel extends Model<UserModel>{
 	 * @return
 	 */
 	public static UserModel loginByPhone(String phone) {
-		String sql = "select * from "+tableName+" a LEFT JOIN "+RoleModel.tableName+" b ON a.role_id=b.permission where a.phone = ?";
+		String sql = "select a.*,b.* from "+tableName+" a LEFT JOIN "+RoleModel.tableName+" b ON a.role_id=b.id where a.phone = ?";
 		return dao.findFirst(sql,phone);
 	}
 	
