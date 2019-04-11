@@ -59,7 +59,7 @@ public class TeamModel extends Model<TeamModel>{
 	 * @param name
 	 * @return
 	 */
-	public static TeamModel getByPhone(String name) {
+	public static TeamModel getByName(String name) {
 		String sql = "select * from "+tableName+" where name = ?";
 		return dao.findFirst(sql,name);
 	}

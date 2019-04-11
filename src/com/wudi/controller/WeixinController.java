@@ -58,8 +58,7 @@ public class WeixinController extends Controller{
 	
 	public void userLogin() {
 		String phone = getPara("phone");
-		String password = getPara("password");
-		
+		String password = getPara("password");	
 		int code = -1;
 		UserModel data = UserModel.loginByPhone(phone);
 		RoleModel p = RoleModel.getPermissionBy(data.getRole_id());
@@ -138,14 +137,13 @@ public class WeixinController extends Controller{
 		String tel = getPara("tel");
 		int disclose = getParaToInt("disclose");
 		int age = getParaToInt("age");
-		int status = getParaToInt("status");
 		String addr = getPara("addr");
 		String remark = getPara("remark");
 		String id = getPara("id");
 		String nation = getPara("nation");
 		String type = getPara("type");
 		String otherinfo =getPara("otherinfo");
-		boolean result = CustomerModel.update(id, name, sex, tel, disclose, age, nation, addr, remark, type, otherinfo, status);
+		boolean result = CustomerModel.update(id, name, sex, tel, disclose, age, nation, addr, remark, type, otherinfo);
 		if(result) {
 			code = 0;
 		}else {
@@ -198,7 +196,7 @@ public class WeixinController extends Controller{
 		String name = getPara("name");
 		String user_id = getPara("user_id");
 		String remark = getPara("remark");
-		TeamModel t = TeamModel.getByPhone(name);
+		TeamModel t = TeamModel.getByName(name);
 		TeamModel u = TeamModel.findUser_id(user_id);
 		if(t != null) {
 			code = -1;
@@ -206,8 +204,14 @@ public class WeixinController extends Controller{
 			code = -1;
 		}else {
 			boolean result = TeamModel.saveTeam(name, user_id, remark);
-			code = 0;
+
 			setAttr("result", result);
+			if(result) {
+				
+				boolean data = TeamersModel.saveForCaptain( user_id);//自动添加队长到teamers表
+				code = 0;
+				setAttr("data", data);
+			}
 		}
 		setAttr("code", code);
 		renderJson();
@@ -230,13 +234,13 @@ public class WeixinController extends Controller{
 	
 	public void addTeamer() {
 		int code = -1;
-		String phone = getPara("phone");
+		String user_id = getPara("user_id");
 		String team_id =  getPara("team_id");
-		TeamersModel data = TeamersModel.findByPhone(phone);
+		TeamersModel data = TeamersModel.findByPhone(user_id);
 		if(data!=null) {
 			code = -1;
 		}else {
-			boolean result = TeamersModel.saveTeamers(phone, team_id);
+			boolean result = TeamersModel.saveTeamers(user_id, team_id);
 			setAttr("result", result);
 		}
 		setAttr("code", code);
@@ -250,7 +254,6 @@ public class WeixinController extends Controller{
 	public void delTeamer() {
 		int code = -1;
 		String phone = getPara("phone");
-		String team_id = getPara("team_id");
 		boolean result = TeamersModel.delById(phone);
 		if(result) {
 			code = 0;
@@ -259,5 +262,26 @@ public class WeixinController extends Controller{
 		}
 		setAttr("code", code);
 		renderJson();
+	}
+	/**
+	 * 队员退出团队
+	 */
+	public void exitTeam() {
+		int code = -1;
+		String user_id = getPara("user_id");
+		boolean result = TeamersModel.delById(user_id);
+		if(result) {
+			code = 0;
+		}else {
+			code = -1;
+		}
+		setAttr("code", code);
+		renderJson();
+	}
+	public void queryTeamCustomerList() {
+		String user_id = getPara("user_id");	
+		String team_id = getPara("team_id");
+		
+		
 	}
 }

@@ -24,11 +24,11 @@ public class TeamersModel extends Model<TeamersModel>{
 	public void setId(String id) {
 		set("id", id);
 	}
-	public String getPhone() {
-		return get("phone");
+	public String getUser_id() {
+		return get("user_id");
 	}
-	public void setPhone(String phone) {
-		set("phone", phone);
+	public void setUser_id(String user_id) {
+		set("user_id", user_id);
 	}
 	public Date getCreate_time() {
 		return get("create_time");
@@ -76,25 +76,41 @@ public class TeamersModel extends Model<TeamersModel>{
 		}
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
 	}
-	
 	/**
-	 * 保存
+	 * 队长的Teamers保存
+	 * @param phone
+	 * @param team_id
+	 * @return
 	 */
-	public static boolean saveTeamers(String phone,String team_id) {
+	public static boolean saveForCaptain(String team_id) {
 		String remark ="";
 		TeamersModel m = new TeamersModel();
 		m.setId(StringUtil.getId());
 		m.setCeate_time(new Date());
 		m.setTeam_id(team_id);
 		m.setType(0);
-		m.setPhone(phone);
+		m.setUser_id(team_id);
+		m.setRemark("你已于"+Util.getCurrentTime()+"创建了团队");
+		return m.save();
+	}
+	/**
+	 * 保存
+	 */
+	public static boolean saveTeamers(String user_id,String team_id) {
+		String remark ="";
+		TeamersModel m = new TeamersModel();
+		m.setId(StringUtil.getId());
+		m.setCeate_time(new Date());
+		m.setTeam_id(team_id);
+		m.setType(0);
+		m.setUser_id(user_id);
 		m.setRemark("你已于"+Util.getCurrentTime()+"加入了团队");
 		return m.save();
 	}
-	public static boolean delById(String phone) {
+	public static boolean delById(String user_id) {
 		try {
-			String delsql = "DELETE FROM " + tableName + " WHERE phone=?";
-			int iRet = Db.update(delsql, phone);
+			String delsql = "DELETE FROM " + tableName + " WHERE user_id=?";
+			int iRet = Db.update(delsql, user_id);
 			if (iRet > 0) {
 				return true;
 			} else {

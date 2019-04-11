@@ -198,8 +198,9 @@ public class CustomerModel extends Model<CustomerModel>{
 	}
 	
 	public static boolean update(String id,String name, int sex, String tel, int disclose, int age, String nation,
-			String addr, String remark, String type, String otherinfo,int status) {
+			String addr, String remark, String type, String otherinfo) {
 		boolean result =false;
+		int status = 0;
 		CustomerModel m=CustomerModel.getById(id);
 		if(m == null) {
 			return result;
