@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jfinal.core.Controller;
 import com.wudi.model.CustomerModel;
+import com.wudi.model.NewsModel;
 import com.wudi.model.RoleModel;
 import com.wudi.model.TeamModel;
 import com.wudi.model.TeamersModel;
@@ -207,9 +208,13 @@ public class WeixinController extends Controller{
 			setAttr("result", result);
 			if(result) {
 				
-				boolean data = TeamersModel.saveForCaptain( user_id);//自动添加队长到teamers表
-				code = 0;
-				setAttr("data", data);
+				boolean data = TeamersModel.saveForCaptain(user_id,u.getId());//自动添加队长到teamers表
+				
+				if(data) {
+					boolean news = NewsModel.saveNews(user_id, name);
+					code = 0;
+					setAttr("data", data);
+				}
 			}
 		}
 		setAttr("code", code);
@@ -282,6 +287,45 @@ public class WeixinController extends Controller{
 		String user_id = getPara("user_id");	
 		String team_id = getPara("team_id");
 		
+	/**
+	 * 获取团队信息接口	
+	 */
+	}
+	public void getTeamInfo() {
+//		String team_id = getPara("team_id");
+		String user_id = getPara("user_id");
+		int code = -1;
+		TeamModel data = TeamModel.findUser_id(user_id);
+		if(data != null) {
+			code = 0;
+			setAttr("data", data);
+		}else {
+			code = -1;
+		}
+		setAttr("code", code);
+		renderJson();
+	}
+	/**
+	 * 获取消息接口
+	 */
+	public void getNewsList() {
+		String user_id = getPara("user_id");
+		int code = -1;
+		NewsModel list = NewsModel.getByUser_id(user_id);
+		if(list != null) {
+			code = 0;
+			setAttr("list", list.getContent());
+		}else {
+			code = -1;
+		}
+		setAttr("code", code);
+		renderJson();
 		
 	}
+//	public void queryTeamCustomerList() {
+//		String user_id = getPara("user_id");
+//		String team_id = getPara("team_id");
+//		int code = -1;
+//		UserModel list = UserModel.
+//	}
 }

@@ -142,7 +142,13 @@ public class UserModel extends Model<UserModel>{
 		String sql = "select a.*,b.* from "+tableName+" a LEFT JOIN "+RoleModel.tableName+" b ON a.role_id=b.id where a.phone = ?";
 		return dao.findFirst(sql,phone);
 	}
+	/**
+	 * @author ljp
+	 */
 	
+//	public static List<?> queryTeamCustomerListByUT(String user_id,String Team_id,int status){
+//		Stirng sql = "select * FROM customer where user_id in (SELECT user_id from teamers where team_id='1554896316282') and `status`=1;"
+//	}
 	/**
 	 * ���ݺ�����ҿͻ�������Ϣ
 	 * @param phone_no

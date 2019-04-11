@@ -1,8 +1,11 @@
 package com.wudi.model;
 
+import java.util.Date;
+
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.util.StringUtil;
+import com.wudi.util.Util;
 /**
  * 
  * @author ljp
@@ -38,10 +41,10 @@ public class NewsModel extends Model<NewsModel>{
 	public void setUser_id(int user_id) {
 		set("user_id", user_id);
 	}
-	public String getCreate_time() {
+	public Date getCreate_time() {
 		return get("create_time");
 	}
-	public void setCeate_time(String create_time) {
+	public void setCeate_time(Date create_time) {
         set("create_time",create_time);
 	}
 	public String getRelease_time() {
@@ -68,6 +71,11 @@ public class NewsModel extends Model<NewsModel>{
 
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
 	}
+	
+	public static NewsModel getByUser_id(String user_id) {
+
+		return dao.findFirst("select * from " + tableName + " where user_id = ? ", user_id);
+	}
 	/**
 	 * 
 	 */
@@ -79,5 +87,17 @@ public class NewsModel extends Model<NewsModel>{
 			from_sql.append("where  name like '%" + key + "%'");
 		}
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
+	}
+	
+	/**
+	 * 保存消息
+	 */
+	public static boolean saveNews(String user_id,String name) {
+		NewsModel m = new NewsModel();
+		m.setId(StringUtil.getId());
+		m.setCeate_time(new Date());
+		m.setContent("你已于"+Util.getCurrentTime()+"加入了团队:"+name);
+		m.setStatus(0);
+		return m.save();
 	}
 }

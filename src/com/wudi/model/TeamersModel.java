@@ -82,15 +82,15 @@ public class TeamersModel extends Model<TeamersModel>{
 	 * @param team_id
 	 * @return
 	 */
-	public static boolean saveForCaptain(String team_id) {
+	public static boolean saveForCaptain(String user_id,String team_id) {
 		String remark ="";
 		TeamersModel m = new TeamersModel();
 		m.setId(StringUtil.getId());
 		m.setCreate_time(new Date());
 		m.setTeam_id(team_id);
 		m.setType(0);
-		m.setUser_id(team_id);
-		m.setRemark("你已于"+Util.getCurrentTime()+"创建了团队");
+		m.setUser_id(user_id);
+		m.setRemark("默认");
 		return m.save();
 	}
 	/**
@@ -104,7 +104,7 @@ public class TeamersModel extends Model<TeamersModel>{
 		m.setTeam_id(team_id);
 		m.setType(0);
 		m.setUser_id(user_id);
-		m.setRemark("你已于"+Util.getCurrentTime()+"加入了团队");
+		m.setRemark("默认");
 		return m.save();
 	}
 	public static boolean delById(String user_id) {
