@@ -33,7 +33,7 @@ public class TeamersModel extends Model<TeamersModel>{
 	public Date getCreate_time() {
 		return get("create_time");
 	}
-	public void setCeate_time(Date create_time) {
+	public void setCreate_time(Date create_time) {
         set("create_time",create_time);
 	}
 	public String getRemark() {
@@ -56,9 +56,9 @@ public class TeamersModel extends Model<TeamersModel>{
 	}
 
 	
-	public static TeamersModel findByPhone(String phone) {
+	public static TeamersModel findByUd(String user_id) {
 
-		return dao.findFirst("select * from " + tableName + " where phone = ? ", phone);
+		return dao.findFirst("select * from " + tableName + " where user_id = ? ", user_id);
 	}
 	public static TeamersModel getById(String id) {
 
@@ -86,7 +86,7 @@ public class TeamersModel extends Model<TeamersModel>{
 		String remark ="";
 		TeamersModel m = new TeamersModel();
 		m.setId(StringUtil.getId());
-		m.setCeate_time(new Date());
+		m.setCreate_time(new Date());
 		m.setTeam_id(team_id);
 		m.setType(0);
 		m.setUser_id(team_id);
@@ -100,7 +100,7 @@ public class TeamersModel extends Model<TeamersModel>{
 		String remark ="";
 		TeamersModel m = new TeamersModel();
 		m.setId(StringUtil.getId());
-		m.setCeate_time(new Date());
+		m.setCreate_time(new Date());
 		m.setTeam_id(team_id);
 		m.setType(0);
 		m.setUser_id(user_id);

@@ -33,12 +33,11 @@ public class WeixinController extends Controller{
 		String phone = getPara("phone");
 		String password = getPara("password");
 		int sex = getParaToInt("sex");
-		
-		if(username == null) {
-		code = -1;
-		}else if(password ==null) {
-			code = -1;
-		}else {
+		UserModel p = UserModel.findByPhone(phone);
+		 if(p != null) {
+			code = -1 ;//2是用户已存在
+		}
+		else {
 			boolean result = UserModel.saveUserinfo(username, password, phone, sex);
 			code = 0;
 			setAttr("result", result);
@@ -201,7 +200,7 @@ public class WeixinController extends Controller{
 		if(t != null) {
 			code = -1;
 		}else if(u != null) {
-			code = -1;
+			code = 2;
 		}else {
 			boolean result = TeamModel.saveTeam(name, user_id, remark);
 
@@ -236,12 +235,13 @@ public class WeixinController extends Controller{
 		int code = -1;
 		String user_id = getPara("user_id");
 		String team_id =  getPara("team_id");
-		TeamersModel data = TeamersModel.findByPhone(user_id);
+		TeamersModel data = TeamersModel.findByUd(user_id);
 		if(data!=null) {
 			code = -1;
 		}else {
 			boolean result = TeamersModel.saveTeamers(user_id, team_id);
 			setAttr("result", result);
+			code = 0;
 		}
 		setAttr("code", code);
 		renderJson();
