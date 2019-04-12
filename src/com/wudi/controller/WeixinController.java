@@ -227,9 +227,15 @@ public class WeixinController extends Controller{
 	 */
 	public void queryCustomerList() {
 		String user_id = getPara("user_id");
-		String type = getPara("type");
-		List<CustomerModel> list = CustomerModel.queryCustomerList(user_id,type);
-		setAttr("data", list);
+		int code = -1;
+		List<CustomerModel> list = CustomerModel.queryCustomerList(user_id);
+		if(list != null) {
+			code = 0;
+			setAttr("data", list);
+		}else {
+			code = -1;
+		}
+		
 		renderJson();
 	}
 	/**
@@ -292,6 +298,7 @@ public class WeixinController extends Controller{
 		String user_id = getPara("user_id");	
 		String team_id = getPara("team_id");
 		int code = -1;
+		
 		List<CustomerModel> list = CustomerModel.queryTeamCustomerList(user_id, team_id);
 		if(list != null) {
 			code = 0;
