@@ -251,10 +251,28 @@ public class WeixinController extends Controller{
 		if(data!=null) {
 			code = -1;
 		}else {
-			boolean result = TeamersModel.saveTeamers(user_id, team_id);
-			setAttr("result", result);
-			code = 0;
+			TeamModel datas=null;
+			//如果团队id为空
+			if(StringUtil.isBlankOrEmpty(team_id)) {
+				//再根据user查找，他所在的团队，找出他的团队id
+				datas = TeamModel.findUser_id(user_id);
+			}else {
+				boolean list = TeamersModel.saveTeamers(user_id, team_id);
+				if(list) {
+					code =0;
+				}else {
+					code = -1;
+				}
+			}
+			if(datas != null) {
+				boolean result = TeamersModel.saveTeamers(user_id, datas.getId());
+				setAttr("result", result);
+				code = 0;				
+			}else {
+				code = -1;
+			}		
 		}
+
 		setAttr("code", code);
 		renderJson();
 	}
@@ -298,7 +316,25 @@ public class WeixinController extends Controller{
 		String user_id = getPara("user_id");	
 		String team_id = getPara("team_id");
 		int code = -1;
-		
+		TeamModel data=null;
+		//如果团队id为空
+		if(StringUtil.isBlankOrEmpty(team_id)) {
+			//再根据user查找，他所在的团队，找出他的团队id
+			data = TeamModel.findUser_id(user_id);
+		}else {
+			List<TeamersModel> result = TeamersModel.findList(team_id);
+			setAttr("result", result);
+		}
+		if(data != null) {
+			code = 0;
+			List<TeamersModel> result = TeamersModel.findList(data.getId());
+
+			setAttr("result", result);
+			
+		}else {
+			code = -1;
+
+		}
 		List<CustomerModel> list = CustomerModel.queryTeamCustomerList(user_id, team_id);
 		if(list != null) {
 			code = 0;
