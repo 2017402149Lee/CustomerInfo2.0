@@ -22,7 +22,7 @@ layui.config({
 		      {field: 'id', title: 'ID', sort: true, fixed: 'left',width:100}
 		      ,{field: 'username', title: '用户名',width:100}
 		      ,{field: 'sex', title: '性别',width:50,templet:function(d){
-		    	  if(d.sex=='男'){
+		    	  if(d.sex==1){
 		    		  return '<span style="color: blue">男</span>'
 		    	  }else{
 		    		  return '<span style="color: red" >女</span>'
@@ -31,7 +31,7 @@ layui.config({
 		      ,{field: 'phone', title: '手机号码'}
 		      ,{field: 'password' ,title:'用户密码'}
 		      ,{field: 'level' ,title:'等级',width:70,templet:function(d){
-		    	  if(d.level=='1'){
+		    	  if(d.level== 1){
 		    		  return '<span style="color: blue">1级</span>'
 		    	  }else{
 		    		  return '<span style="color: red" >0级</span>'
