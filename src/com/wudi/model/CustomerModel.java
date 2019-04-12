@@ -173,6 +173,17 @@ public class CustomerModel extends Model<CustomerModel>{
 		 String sql="select a.*,b.username ,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where a.user_id= ? and a.type= ?";
 		 return dao.find(sql,user_id,type);
 	}
+/**
+ * 查找队员客户
+ * @author ljp
+ * @param user_id
+ * @param team_id
+ * @return
+ */
+	public static List<CustomerModel> queryTeamCustomerList(String user_id,String team_id){
+		String sql = "select a.*,b.username from "+tableName+" a LEFT JOIN "+UserModel.tableName+"b on a.user_id=b.id where user_id in (SELECT user_id from "+TeamersModel.tableName+" where team_id=?)";
+		return dao.find(sql,user_id,team_id);
+	}
 	
 	/**
 	 * 

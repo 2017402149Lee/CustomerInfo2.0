@@ -283,19 +283,32 @@ public class WeixinController extends Controller{
 		setAttr("code", code);
 		renderJson();
 	}
+	/**
+	 * 个人中心界面的接口
+	 * @author 王苏黔
+	 */
 	public void queryTeamCustomerList() {
 		String user_id = getPara("user_id");	
 		String team_id = getPara("team_id");
+		int code = -1;
+		List<CustomerModel> list = CustomerModel.queryTeamCustomerList(user_id, team_id);
+		if(list != null) {
+			code = 0;
+			setAttr("list", list);
+		}
+		setAttr("code", code);
+		renderJson();
 		
 	/**
 	 * 获取团队信息接口	
 	 */
 	}
 	public void getTeamInfo() {
-//		String team_id = getPara("team_id");
+		String team_id = getPara("team_id");
 		String user_id = getPara("user_id");
 		int code = -1;
 		TeamModel data = TeamModel.findUser_id(user_id);
+		List<TeamersModel> result = TeamersModel.findList(team_id);
 		if(data != null) {
 			code = 0;
 			setAttr("data", data);
@@ -322,10 +335,5 @@ public class WeixinController extends Controller{
 		renderJson();
 		
 	}
-//	public void queryTeamCustomerList() {
-//		String user_id = getPara("user_id");
-//		String team_id = getPara("team_id");
-//		int code = -1;
-//		UserModel list = UserModel.
-//	}
+
 }

@@ -1,17 +1,12 @@
 package com.wudi.model;
 
 import java.util.Date;
+import java.util.List;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.util.StringUtil;
-import com.wudi.util.Util;
-/**
- * 
- * @author ljp
- *
- */
 
 public class TeamersModel extends Model<TeamersModel>{
 
@@ -107,6 +102,11 @@ public class TeamersModel extends Model<TeamersModel>{
 		m.setRemark("默认");
 		return m.save();
 	}
+	/**
+	 * 
+	 * @param user_id
+	 * @return
+	 */
 	public static boolean delById(String user_id) {
 		try {
 			String delsql = "DELETE FROM " + tableName + " WHERE user_id=?";
@@ -120,5 +120,13 @@ public class TeamersModel extends Model<TeamersModel>{
 			e.printStackTrace();
 			return false;
 		}
+	}
+	/**
+	 * @TODO：获取所有队员
+	 * @author ljp
+	 */
+	public static List<TeamersModel> findList(String team_id){
+		String sql = "select * from "+tableName+"where team_id = ?";
+		return dao.find(sql,team_id);
 	}
 }
