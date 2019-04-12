@@ -31,7 +31,12 @@
 		"href" : "",
 		"spread" : true,
 		"children" : [
-		
+		{
+			"title" : "角色管理",
+			"icon" : "&#x1006;",
+			"href" : "admin/openRoles",
+			"spread" : false
+		},		
 		{
 			"title" : "404页面",
 			"icon" : "&#x1006;",

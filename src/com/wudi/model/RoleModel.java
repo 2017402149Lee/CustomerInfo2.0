@@ -1,6 +1,8 @@
 package com.wudi.model;
 
 import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.activerecord.Page;
+import com.wudi.util.StringUtil;
 
 /**
  * ��ɫModel
@@ -50,5 +52,26 @@ public class RoleModel extends Model<RoleModel>{
 //		}
 		m.setPermission("1");		
 		return m.save();
+	}
+	public static Page<RoleModel> getList(int pageNumber, int pageSize, String key) {
+		String sele_sql = "select * ";
+		StringBuffer from_sql = new StringBuffer();
+		from_sql.append("from ").append(tableName);
+		if (!StringUtil.isBlankOrEmpty(key)) {
+			from_sql.append("where  name like '%" + key + "%'");
+		}
+		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
+	}
+	public static boolean save(String name,String permission) {
+		RoleModel m = new RoleModel();
+		m.setId(StringUtil.getId());
+		m.setName(name);
+		m.setPermission(permission);
+		m.save();
+		return true;
+	}
+	public static RoleModel getModelById(String id) {
+		String sql="select * from "+tableName+" where id=?";
+		return dao.findFirst(sql,id);
 	}
 }

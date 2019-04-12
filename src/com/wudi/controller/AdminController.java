@@ -1,12 +1,16 @@
 package com.wudi.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.core.Controller;
+import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.bean.TubiaoBean;
 import com.wudi.model.CustomerModel;
+import com.wudi.model.RoleModel;
 import com.wudi.model.UserModel;
 /**
  * 
@@ -122,6 +126,103 @@ public class AdminController extends Controller{
 		String id= getPara("id");
 		boolean result = CustomerModel.delById(id);
 		setAttr("result", result);
+		renderJson();
+	}
+	
+	/**
+	 * 
+	* @Title: openRoles
+	* @Description:打开角色列表页面
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void openRoles() {
+		render("role/roleinfo.html");
+	}
+	/**
+	 * 
+	* @Title: getRoleList
+	* @Description:获取角色信息列表
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void getRoleList() {
+		String key = getPara("key");
+        int limit=getParaToInt("limit");
+        int page=getParaToInt("page");
+        Page<RoleModel> list = RoleModel.getList(page, limit, key);
+        setAttr("code", 0);
+        setAttr("msg", "你好！");
+        setAttr("count", list.getTotalRow());
+        setAttr("data", list.getList());
+        renderJson();
+	}
+	/**
+	 * 
+	* @Title: openRoleAdd
+	* @Description:打开添加角色页面
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void openRoleAdd() {
+		render("role/roleAdd.html");
+	}
+	/**
+	 * 
+	* @Title: saveRole
+	* @Description:添加保存数据
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void saveRole() {
+		Map<String,Integer> p=new HashMap<String,Integer>();
+		
+		String name=getPara("name");
+		
+		for(int i=100;i<105;i++) {
+			String k="c"+i;
+			String v=getPara(k);
+			if(v==null) {
+				p.put(k, 0);
+			}else {
+				p.put(k, 1);
+			}
+		}
+		boolean result =RoleModel.save(name,JsonKit.toJson(p));
+		// 返回结果
+		setAttr("result", result);
+		renderJson();
+	}
+	/**
+	 * 
+	* @Title: openRoleEdit
+	* @Description:打开编辑页面
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void openRoleEdit() {
+		String id=getPara("id");
+		setAttr("id", id);
+		renderFreeMarker("role/roleEdit.html");
+		
+	}
+	/**
+	 * 
+	* @Title: getRoleModel
+	* @Description:获取编辑页面数据
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void getRoleModel() {
+		String id=getPara("id");
+		RoleModel m=RoleModel.getModelById(id);
+		setAttr("m", m);
 		renderJson();
 	}
 }
