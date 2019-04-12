@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>信息添加</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+	<style type="text/css">
+		.layui-form { width:60%; float:left; margin-left:5%; margin-top: 3%}
+	</style>
+</head>
+<body class="childrenBody">
+	<form class="layui-form layui-form-pane" name="addform">
+		<div class="layui-form-item">
+			<label class="layui-form-label">角色名称</label>
+			<div class="layui-input-inline">
+				<input type="text" class="layui-input" name="name"  lay-verify="required" placeholder="请输入楼角色名称"  autocomplete="off">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">权限</label>
+
+  			<div class="layui-input-block">
+				<input type="checkbox" name="c100" lay-skin="primary" title="删除">
+				<input type="checkbox" name="c101" lay-skin="primary" title="修改">
+				<input type="checkbox" name="c102" lay-skin="primary" title="导出">
+				<input type="checkbox" name="c103" lay-skin="primary" title="查看">
+				<input type="checkbox" name="c104" lay-skin="primary" title="查看">
+			</div>
+		
+			
+		</div>
+
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit="" lay-filter="add">保存</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		    </div>
+		</div>
+	</form>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript" src="../js/role/roleAdd.js"></script>
+</body>
+</html>
