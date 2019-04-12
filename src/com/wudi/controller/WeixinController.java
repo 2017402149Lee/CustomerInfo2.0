@@ -311,6 +311,7 @@ public class WeixinController extends Controller{
 		List<TeamersModel> result = TeamersModel.findList(team_id);
 		if(data != null) {
 			code = 0;
+			setAttr("result", result);
 			setAttr("data", data);
 		}else {
 			code = -1;
