@@ -2,6 +2,7 @@
 <<<<<<<=HEAD
 >>>>>>>=refs/remotes/origin/master
 eclipse.preferences.version=1
+encoding//WebContent/json/navs.json=UTF-8
 encoding//src/com/wudi/Start.java=UTF-8
 encoding//src/com/wudi/config/Config.java=UTF-8
 encoding//src/com/wudi/controller/WeixinController.java=UTF-8
