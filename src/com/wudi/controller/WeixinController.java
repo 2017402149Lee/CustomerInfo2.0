@@ -9,6 +9,7 @@ import com.wudi.model.RoleModel;
 import com.wudi.model.TeamModel;
 import com.wudi.model.TeamersModel;
 import com.wudi.model.UserModel;
+import com.wudi.util.StringUtil;
 
 /**
  * 
@@ -307,15 +308,19 @@ public class WeixinController extends Controller{
 		String team_id = getPara("team_id");
 		String user_id = getPara("user_id");
 		int code = -1;
-		TeamModel data = TeamModel.findUser_id(user_id);
-		List<TeamersModel> result = TeamersModel.findList(team_id);
+		TeamModel data=null;
+		//如果团队id为空
+		if(StringUtil.isBlankOrEmpty(team_id)) {
+			//再根据user查找，他所在的团队，找出他的团队id
+			data = TeamModel.findUser_id(user_id);
+		}else {
+			data = TeamModel.getById(team_id);
+		}
 		if(data != null) {
 			code = 0;
-			setAttr("data", data);
-		}else {
-			code = -1;
 		}
 		setAttr("code", code);
+		setAttr("data", data);
 		renderJson();
 	}
 	/**
