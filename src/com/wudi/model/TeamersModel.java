@@ -126,7 +126,7 @@ public class TeamersModel extends Model<TeamersModel>{
 	 * @author ljp
 	 */
 	public static List<TeamersModel> findList(String team_id){
-		String sql = "select * from "+tableName+"where team_id = ?";
+		String sql = "select a.*,b.username,b.sex,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where team_id = ?";
 		return dao.find(sql,team_id);
 	}
 }

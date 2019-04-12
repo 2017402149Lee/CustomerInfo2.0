@@ -208,8 +208,8 @@ public class WeixinController extends Controller{
 
 			setAttr("result", result);
 			if(result) {
-				
-				boolean data = TeamersModel.saveForCaptain(user_id,u.getId());//自动添加队长到teamers表
+				TeamModel s = TeamModel.findUser_id(user_id);
+				boolean data = TeamersModel.saveForCaptain(user_id,s.getId());//自动添加队长到teamers表
 				
 				if(data) {
 					boolean news = NewsModel.saveNews(user_id, name);
@@ -318,6 +318,13 @@ public class WeixinController extends Controller{
 		}
 		if(data != null) {
 			code = 0;
+			List<TeamersModel> result = TeamersModel.findList(data.getId());
+
+			setAttr("result", result);
+			
+		}else {
+			code = -1;
+
 		}
 		setAttr("code", code);
 		setAttr("data", data);
