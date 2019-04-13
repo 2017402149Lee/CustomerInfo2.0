@@ -312,32 +312,31 @@ public class WeixinController extends Controller{
 	 */
 	public void queryTeamCustomerList() {
 		String user_id = getPara("user_id");	
-		String team_id = getPara("team_id");
 		int code = -1;
-		TeamModel data=null;
-		//如果团队id为空
-		if(StringUtil.isBlankOrEmpty(team_id)) {
-			//再根据user查找，他所在的团队，找出他的团队id
-			data = TeamModel.findUser_id(user_id);
-		}else {
-			List<TeamersModel> result = TeamersModel.findList(team_id);
-			setAttr("result", result);
-		}
+		List<CustomerModel> result =null;
+		List<CustomerModel> list = null;
+		TeamModel data = TeamModel.findUser_id(user_id);
 		if(data != null) {
+			list = CustomerModel.queryTeamCustomerList(data.getId(),user_id);//队长查看成员已成交的客户信息
+			setAttr("list", list);
+		if(list != null) {
 			code = 0;
-			List<TeamersModel> result = TeamersModel.findList(data.getId());
-
-			setAttr("result", result);
 			
 		}else {
 			code = -1;
-
 		}
-		List<CustomerModel> list = CustomerModel.queryTeamCustomerList(user_id, team_id);
-		if(list != null) {
-			code = 0;
-			setAttr("list", list);
+		}else {
+			code =-1;
 		}
+		 result = CustomerModel.getCustList(user_id);{
+			if(result != null) {
+				code = 0;
+			}else {
+				code =-1;
+			}
+		}
+		 
+		 setAttr("result", result);
 		setAttr("code", code);
 		renderJson();
 		
@@ -350,6 +349,7 @@ public class WeixinController extends Controller{
 		String user_id = getPara("user_id");
 		int code = -1;
 		TeamModel data=null;
+		TeamersModel teamers = TeamersModel.findByUd(user_id);
 		//如果团队id为空
 		if(StringUtil.isBlankOrEmpty(team_id)) {
 			//再根据user查找，他所在的团队，找出他的团队id
@@ -358,17 +358,25 @@ public class WeixinController extends Controller{
 			data = TeamModel.getById(team_id);
 		}
 		if(data != null) {
-			code = 0;
+			TeamModel team= TeamModel.findUser_id(user_id);
 			List<TeamersModel> result = TeamersModel.findList(data.getId());
-
-			setAttr("result", result);
-			
+			if(result != null&&team!=null) {
+				setAttr("team", team);
+				setAttr("result", result);
+				code = 0;			
+			}
+		}else if(data == null&&teamers!= null ){
+			TeamModel team= TeamModel.findUser_id(user_id);
+			List<TeamersModel> resultT = TeamersModel.findList(teamers.getTeam_id());
+			if(resultT !=null&&team!=null) {
+				setAttr("team", team);
+				code =0;
+				setAttr("result", resultT);
+						}
 		}else {
 			code = -1;
-
 		}
 		setAttr("code", code);
-		setAttr("data", data);
 		renderJson();
 	}
 	/**

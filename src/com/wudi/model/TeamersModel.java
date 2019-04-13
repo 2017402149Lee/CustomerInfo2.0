@@ -50,7 +50,7 @@ public class TeamersModel extends Model<TeamersModel>{
 		set("type",type);
 	}
 	public String getTeam_id() {
-		return ("team_id");
+		return get("team_id");
 	}
 	public void setTeam_id(String team_id) {
 		set("team_id",team_id);
@@ -94,7 +94,7 @@ public class TeamersModel extends Model<TeamersModel>{
 		m.setId(StringUtil.getId());
 		m.setCreate_time(new Date());
 		m.setTeam_id(team_id);
-		m.setType(0);
+		m.setType(1);
 		m.setUser_id(user_id);
 		m.setRemark("默认");
 		m.setPhone(phone);
@@ -135,11 +135,16 @@ public class TeamersModel extends Model<TeamersModel>{
 		}
 	}
 	/**
-	 * @TODO：获取所有队员
+	 * @TODO：队长获取所有队员
 	 * @author ljp
 	 */
 	public static List<TeamersModel> findList(String team_id){
 		String sql = "select a.*,b.username,b.sex,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where team_id = ?";
 		return dao.find(sql,team_id);
 	}
+	public static List<TeamersModel> TeamersfindList(String team_id){
+		String sql = "select a.*,b.phone,b.username,b.sex from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b ON a.user_id=b.id where team_id = ?;";
+		return dao.find(sql,team_id);
+	}
+
 }
