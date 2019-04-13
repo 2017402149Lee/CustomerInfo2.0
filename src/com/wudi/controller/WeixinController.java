@@ -208,13 +208,19 @@ public class WeixinController extends Controller{
 
 			setAttr("result", result);
 			if(result) {
+				UserModel m = UserModel.getById(user_id);
 				TeamModel s = TeamModel.findUser_id(user_id);
-				boolean data = TeamersModel.saveForCaptain(user_id,s.getId());//自动添加队长到teamers表
+				boolean data = TeamersModel.saveForCaptain(user_id,s.getId(),m.getPhone());//自动添加队长到teamers表
 				
 				if(data) {
-					boolean news = NewsModel.saveNews(user_id, name);
-					code = 0;
-					setAttr("data", data);
+					boolean news = NewsModel.saveNews(user_id);
+					if(news) {
+						code = 0;
+						setAttr("data", data);
+					}else {
+						code = -1;
+					}
+					
 				}
 			}
 		}
@@ -246,33 +252,25 @@ public class WeixinController extends Controller{
 	public void addTeamer() {
 		int code = -1;
 		String user_id = getPara("user_id");
-		String team_id =  getPara("team_id");
-		TeamersModel data = TeamersModel.findByUd(user_id);
+		String phone =  getPara("phone");
+		TeamersModel data = TeamersModel.findByPhone(phone);
 		if(data!=null) {
 			code = -1;
 		}else {
-			TeamModel datas=null;
-			//如果团队id为空
-			if(StringUtil.isBlankOrEmpty(team_id)) {
-				//再根据user查找，他所在的团队，找出他的团队id
-				datas = TeamModel.findUser_id(user_id);
-			}else {
-				boolean list = TeamersModel.saveTeamers(user_id, team_id);
-				if(list) {
-					code =0;
+			UserModel m = UserModel.findByPhone(phone);
+			TeamModel c = TeamModel.findUser_id(user_id);
+			boolean result = TeamersModel.saveTeamers(phone, m.getId(),c.getId());
+			if(result) {
+				boolean s = NewsModel.saveNews(user_id);
+				if(s) {
+					code = 0;
 				}else {
-					code = -1;
+					code=-1;
 				}
-			}
-			if(datas != null) {
-				boolean result = TeamersModel.saveTeamers(user_id, datas.getId());
-				setAttr("result", result);
-				code = 0;				
 			}else {
 				code = -1;
-			}		
+			}
 		}
-
 		setAttr("code", code);
 		renderJson();
 	}

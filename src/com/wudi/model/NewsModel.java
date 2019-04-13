@@ -35,10 +35,10 @@ public class NewsModel extends Model<NewsModel>{
 	public void setContent(String content) {
 		set("content",content);
 	}
-	public int getUser_id() {
+	public String getUser_id() {
 		return get("user_id");
 	}
-	public void setUser_id(int user_id) {
+	public void setUser_id(String user_id) {
 		set("user_id", user_id);
 	}
 	public Date getCreate_time() {
@@ -92,12 +92,13 @@ public class NewsModel extends Model<NewsModel>{
 	/**
 	 * 保存消息
 	 */
-	public static boolean saveNews(String user_id,String name) {
+	public static boolean saveNews(String user_id) {
 		NewsModel m = new NewsModel();
 		m.setId(StringUtil.getId());
 		m.setCeate_time(new Date());
-		m.setContent("你已于"+Util.getCurrentTime()+"加入了团队:"+name);
+		m.setContent("你已于"+Util.getCurrentTime()+"加入了团队");
 		m.setStatus(0);
+		m.setUser_id(user_id);
 		return m.save();
 	}
 }

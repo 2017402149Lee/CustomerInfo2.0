@@ -25,6 +25,12 @@ public class TeamersModel extends Model<TeamersModel>{
 	public void setUser_id(String user_id) {
 		set("user_id", user_id);
 	}
+	public String getPhone() {
+		return get("phone");
+	}
+	public void setPhone(String phone) {
+		set("phone", phone);
+	}
 	public Date getCreate_time() {
 		return get("create_time");
 	}
@@ -55,6 +61,11 @@ public class TeamersModel extends Model<TeamersModel>{
 
 		return dao.findFirst("select * from " + tableName + " where user_id = ? ", user_id);
 	}
+	
+	public static TeamersModel findByPhone(String phone) {
+
+		return dao.findFirst("select * from " + tableName + " where phone = ? ", phone);
+	}
 	public static TeamersModel getById(String id) {
 
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
@@ -77,7 +88,7 @@ public class TeamersModel extends Model<TeamersModel>{
 	 * @param team_id
 	 * @return
 	 */
-	public static boolean saveForCaptain(String user_id,String team_id) {
+	public static boolean saveForCaptain(String user_id,String team_id,String phone) {
 		String remark ="";
 		TeamersModel m = new TeamersModel();
 		m.setId(StringUtil.getId());
@@ -86,12 +97,13 @@ public class TeamersModel extends Model<TeamersModel>{
 		m.setType(0);
 		m.setUser_id(user_id);
 		m.setRemark("默认");
+		m.setPhone(phone);
 		return m.save();
 	}
 	/**
 	 * 保存
 	 */
-	public static boolean saveTeamers(String user_id,String team_id) {
+	public static boolean saveTeamers(String phone,String user_id,String team_id) {
 		String remark ="";
 		TeamersModel m = new TeamersModel();
 		m.setId(StringUtil.getId());
@@ -100,6 +112,7 @@ public class TeamersModel extends Model<TeamersModel>{
 		m.setType(0);
 		m.setUser_id(user_id);
 		m.setRemark("默认");
+		m.setPhone(phone);
 		return m.save();
 	}
 	/**
