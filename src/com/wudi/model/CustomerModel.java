@@ -154,7 +154,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	}
 	
 	public static List<CustomerModel> getCustomerByType(String type){
-		String sql="select * from "+tableName+" where type = ?";
+		String sql="select * from "+tableName+" where type = ? and status between 1 and 2 ";
 		return dao.find(sql,type);
 	}
 	public static CustomerModel findModel(String type,String tel) {
@@ -165,13 +165,13 @@ public class CustomerModel extends Model<CustomerModel>{
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
 	}
 	public static CustomerModel findCustomerById(String id) {
-		String sql = "SELECT a.*,b.username,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b ON a.user_id=b.id where a.id=?";
+		String sql = "SELECT a.*,b.username,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b ON a.user_id=b.id where a.id=? and a.status between 1 and 2 ";
 		return dao.findFirst(sql,id);
 	}
 	
-	public static List<CustomerModel> queryCustomerList(String user_id){
-		 String sql="select a.*,b.username ,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where a.user_id= ?";
-		 return dao.find(sql,user_id);
+	public static List<CustomerModel> queryCustomerList(String user_id,String type){
+		 String sql="select a.*,b.username ,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where a.user_id= ? and a.type = ?";
+		 return dao.find(sql,user_id,type);
 	}
 /**
  * 查找队员客户

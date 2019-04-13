@@ -233,8 +233,9 @@ public class WeixinController extends Controller{
 	 */
 	public void queryCustomerList() {
 		String user_id = getPara("user_id");
+		String type = getPara("type");
 		int code = -1;
-		List<CustomerModel> list = CustomerModel.queryCustomerList(user_id);
+		List<CustomerModel> list = CustomerModel.queryCustomerList(user_id,type);
 		if(list != null) {
 			code = 0;
 			setAttr("data", list);
