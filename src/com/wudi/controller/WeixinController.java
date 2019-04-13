@@ -396,5 +396,21 @@ public class WeixinController extends Controller{
 		renderJson();
 		
 	}
-
+	/**
+	 * 管理员获取各个类型的所有客户信息
+	 */
+	public void queryAllList() {
+		String type = getPara("type");
+		int code = -1;
+		List<CustomerModel> data = CustomerModel.getCustomerByType(type);
+		if(data != null) {
+			setAttr("data", data);
+			code =0;
+		}else {
+			code = -1;
+		}
+		
+		setAttr("code", code);
+		renderJson();
+	}
 }

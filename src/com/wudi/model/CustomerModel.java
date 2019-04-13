@@ -331,4 +331,5 @@ public class CustomerModel extends Model<CustomerModel>{
 		String sql = "select name,type,tel from "+tableName+" where user_id = ?";
 		return dao.find(sql,user_id);
 	}
+	
 }
