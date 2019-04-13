@@ -10,14 +10,14 @@
 	"spread" : true,
 	"children" : [
 		{
-			"title" : "团队管理",
-			"icon" : "&#xe613;",
-			"href" : "admin/groupinfo",
-			"spread" : false
-			},{
 			"title" : "用户管理",
 			"icon" : "&#xe613;",
 			"href" : "admin/userinfo",
+			"spread" : false
+		},{
+			"title" : "团队管理",
+			"icon" : "&#xe613;",
+			"href" : "admin/groupinfo",
 			"spread" : false
 			},{
 			"title" : "管理员表",

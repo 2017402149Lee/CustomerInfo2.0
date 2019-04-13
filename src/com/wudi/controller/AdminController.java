@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jfinal.aop.Before;
+import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.bean.TubiaoBean;
+import com.wudi.interceptor.AdminInterceptor;
 import com.wudi.model.CustomerModel;
 import com.wudi.model.RoleModel;
 import com.wudi.model.UserModel;
@@ -18,15 +21,101 @@ import com.wudi.model.UserModel;
  *
  */
 
-public class AdminController extends Controller{
+@Before(AdminInterceptor.class)
+public class AdminController extends Controller {
+	/**
+	 *  功能：登录
+	 *  修改时间：2019年3月20日22:47:23
+	 *  作者： xiao
+	 */
+	@Clear(AdminInterceptor.class)
+	public void login() {
+		String username = getPara("username");
+		String password = getPara("password");
+		// 如果不正确，就提示什么不正确？
+		// 如果正确，就正常显示系统页面
+		UserModel m = UserModel.findByLogin(username);
+		// 判断用户名和密码是否正确
+		if (m != null) {
+			if (m.getPassword().equals(password)) {
+				setAttr("result", 0);// 可以登录
+				setCookie("cname",m.getUsername(), 36000);
+				setSessionAttr("user", m);
+			} else {
+				setAttr("result", 1);// 密码错误
+			}
+		} else {
+			setAttr("result", 2);// 用户名不存在
+		}
+		renderJson();
+	}
 
+	/**
+	 *  功能：退出系统
+	 *  修改时间：2019年3月20日22:47:23
+	 *  作者： xiao
+	 */
+	@Clear(AdminInterceptor.class)
+	public void outLogin() {
+		removeCookie("username");
+		removeSessionAttr("user");
+		redirect("/admin");
+	}
+
+	/**
+	 *  功能：主页
+	 *  修改时间：2019年3月20日22:47:23
+	 *  作者： xiao
+	 */
 	public void index() {
-		//setAttr("user", getSessionAttr("user"));
+		setAttr("user", getSessionAttr("user"));
 		renderFreeMarker("index.html");
 	}
+
+	/**
+	 *  功能：首页
+	 *  修改时间：2019年3月20日22:47:23
+	 *  作者： xiao
+	 */
 	public void main() {
 		render("main.html");
 	}
+	/**
+	 *  功能：打开修改密码页面
+	 *  修改时间：2019年3月21日20:47:23
+	 *  作者： xiao
+	 */
+	public void openUppassword() {
+		setAttr("user", getSessionAttr("user"));
+		renderFreeMarker("userinfo/uppassword.html");
+	}
+	/**
+	 *  功能：打开修改用户密码页面
+	 *  修改时间：2019年3月22日22:47:23
+	 *  作者： xiao
+	 */
+	public void openUpdateUserPassword() {
+		String id = getPara("id");
+		UserModel m = UserModel.getById(id);
+		setAttr("user", m);
+		renderFreeMarker("userinfo/uppassword.html");
+	}
+	/**
+	 *  功能：保存修改密码
+	 *  修改时间：2019年3月21日20:47:23
+	 *  作者： xiao
+	 */
+	public void updatePassword() {
+		String id=getPara("id");
+		String password=getPara("password");
+		boolean result=UserModel.updatePassword(id, password);
+		setAttr("result", result);
+		//情况cookie
+		removeCookie("username");
+		removeSessionAttr("user");
+		renderJson();
+	}
+	
 	public void openCuStomers() {
 		String type=getPara("type");
 		setAttr("type", type);
@@ -56,9 +145,9 @@ public class AdminController extends Controller{
 	
 	
 	
-	/*
-	//打开用户信息界面
-	 * */
+	/**
+	 * 打开用户信息界面
+	 */
 	public void userinfo() {
 		render("userinfo/userinfoInfo.html");
 	}
@@ -69,21 +158,21 @@ public class AdminController extends Controller{
 		String key = getPara("key");
         int limit=getParaToInt("limit");
         int page=getParaToInt("page");
-        //String role_id = getPara("role_id");
         Page<UserModel> list = UserModel.getList(page, limit, key);
-        //List<UserModel> data = UserModel.getXls(role_id);
+        setAttr("code", 0);
         setAttr("msg", "你好！");
         setAttr("count", list.getTotalRow());
         setAttr("data", list.getList());
-        //setAttr("xlsdata", data);
         renderJson();
 	}
-	/*
-	 * @Descripion: 打开管理员信息界面
-	 * 
+	/**
+	 * 审核用户
 	 */
-	public void admininfo() {
-		render("admininfo/admininfoInfo.html");
+	public void checkUser() {
+		String id=getPara("id");
+		boolean result = UserModel.checkUser(id);
+		setAttr("result", result);
+		renderJson();
 	}
 	
 	public void getCustomerNum() {

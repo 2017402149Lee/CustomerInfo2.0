@@ -78,11 +78,11 @@ public class UserModel extends Model<UserModel>{
 	 * 
 	 */
 	public static Page<UserModel> getList(int pageNumber, int pageSize, String key) {
-		String sele_sql = "select * ";
+		String sele_sql = "select a.* ,b.name as rolename ";
 		StringBuffer from_sql = new StringBuffer();
-		from_sql.append("from ").append(tableName);
+		from_sql.append(" from ").append(tableName).append(" a INNER JOIN ").append(RoleModel.tableName).append(" b on a.role_id=b.id");
 		if (!StringUtil.isBlankOrEmpty(key)) {
-			from_sql.append("where  name like '%" + key + "%'");
+			from_sql.append("where  a.name like '%" + key + "%'");
 		}
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
 	}
@@ -172,7 +172,38 @@ public class UserModel extends Model<UserModel>{
 		return dao.findFirst(selectsql,phone);
 		
 	}
-	
-	
-	
+	/**
+	 * 审核用户
+	 * @param id
+	 * @return
+	 */
+	public static boolean checkUser(String id) {
+		UserModel m=dao.findById(id);
+		m.setStatus(1);//1:正常，0未审核,-1异常
+		return m.update();
+	}
+	/**
+	 * 用户登录
+	 * 把用户的基本信息，包括权限一起拿
+	 * @param phone
+	 * @return
+	 */
+	public static UserModel findByLogin(String phone) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select * from ").append(tableName).append(" a INNER JOIN ");
+		sql.append(RoleModel.tableName).append(" b on a.role_id=b.id ");
+		sql.append(" where a.phone=?");
+		return dao.findFirst(sql.toString(),phone);
+		
+	}
+	/**
+	 *  功能：修改密码
+	 *  修改时间：2019年3月20日22:47:23
+	 *  作者： xiao
+	 */
+	public static boolean updatePassword(String id,String password){
+		UserModel m=getById(id);
+		m.setPassword(password);
+		return m.update();
+	}
 }
