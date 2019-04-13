@@ -31,7 +31,8 @@ public class Config extends JFinalConfig {
 		loadPropertyFile("config.properties");
 		// 配置一些系统变量
 		me.setDevMode(getPropertyToBoolean("DevMode", true));//设置为开发模式，方便查看日志
-		me.setError404View("WEB-INF/admin/404.html");
+		me.setError404View("/WEB-INF/admin/404.html");
+		
 	}
 
 	@Override

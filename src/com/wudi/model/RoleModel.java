@@ -67,11 +67,19 @@ public class RoleModel extends Model<RoleModel>{
 		m.setId(StringUtil.getId());
 		m.setName(name);
 		m.setPermission(permission);
-		m.save();
-		return true;
+		return m.save();
 	}
 	public static RoleModel getModelById(String id) {
 		String sql="select * from "+tableName+" where id=?";
 		return dao.findFirst(sql,id);
+	}
+	public static boolean updatePermission(String id,String permission) {
+		RoleModel m = getModelById(id);
+		boolean result=false;
+		if(m!=null) {
+			m.setPermission(permission);
+			result=m.update();
+		}
+		return result;
 	}
 }
