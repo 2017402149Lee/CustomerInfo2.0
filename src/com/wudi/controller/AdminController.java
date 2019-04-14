@@ -13,7 +13,10 @@ import com.jfinal.plugin.activerecord.Page;
 import com.wudi.bean.TubiaoBean;
 import com.wudi.interceptor.AdminInterceptor;
 import com.wudi.model.CustomerModel;
+import com.wudi.model.CustomerTypeModel;
 import com.wudi.model.RoleModel;
+import com.wudi.model.TeamModel;
+import com.wudi.model.TeamersModel;
 import com.wudi.model.UserModel;
 /**
  * 
@@ -113,6 +116,13 @@ public class AdminController extends Controller {
 		//情况cookie
 		removeCookie("username");
 		removeSessionAttr("user");
+		renderJson();
+	}
+	/**
+	 * 获取用户权限
+	 */
+	public void getPermission() {
+		setAttr("user", getSessionAttr("user"));
 		renderJson();
 	}
 	
@@ -313,5 +323,159 @@ public class AdminController extends Controller {
 		RoleModel m=RoleModel.getModelById(id);
 		setAttr("m", m);
 		renderJson();
+	}
+	/**
+	 * 
+	* @Title: saveRole
+	* @Description:添加保存数据
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void updateRole() {
+		Map<String,Integer> p=new HashMap<String,Integer>();
+		
+		String id=getPara("id");
+		
+		for(int i=100;i<105;i++) {
+			String k="c"+i;
+			String v=getPara(k);
+			if(v==null) {
+				p.put(k, 0);
+			}else {
+				p.put(k, 1);
+			}
+		}
+		boolean result =RoleModel.updatePermission(id,JsonKit.toJson(p));
+		// 返回结果
+		setAttr("result", result);
+		renderJson();
+	}
+	/**
+	 * 打开客户类型页面
+	 */
+	public void openCustomerTypes() {
+		render("customer/customerTypeInfo.html");
+	}
+	public void getCustomerTypeList() {
+		String key = getPara("key");
+        int limit=getParaToInt("limit");
+        int page=getParaToInt("page");
+        Page<CustomerTypeModel> list = CustomerTypeModel.getList(page, limit, key);
+        setAttr("code", 0);
+        setAttr("msg", "你好！");
+        setAttr("count", list.getTotalRow());
+        setAttr("data", list.getList());
+        renderJson();
+	}
+	/**
+	 * 
+	* @Title: openCustomerTypeAdd
+	* @Description:打开添加客户类型页面
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void openCustomerTypeAdd() {
+		render("customer/customerTypeAdd.html");
+	}
+	/**
+	 * 
+	* @Title: saveCustomerType
+	* @Description:添加保存数据
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void saveCustomerType() {
+		
+		String name=getPara("name");
+		String type_no=getPara("type_no");
+		boolean result =CustomerTypeModel.save(name,type_no);
+		// 返回结果
+		setAttr("result", result);
+		renderJson();
+	}
+	/**
+	 * 
+	* @Title: openCustomerTypeEdit
+	* @Description:打开编辑页面
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void openCustomerTypeEdit() {
+		String id=getPara("id");
+		setAttr("id", id);
+		renderFreeMarker("customer/customerTypeEdit.html");
+		
+	}
+	/**
+	 * 
+	* @Title: getCustomerTypeModel
+	* @Description:获取编辑页面数据
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void getCustomerTypeModel() {
+		String id=getPara("id");
+		CustomerTypeModel m=CustomerTypeModel.getById(id);
+		setAttr("m", m);
+		renderJson();
+	}
+	/**
+	 * 
+	* @Title: updateCustomerType
+	* @Description:添加保存数据
+	* @param     参数
+	* @return void    返回类型
+	* @throws
+	 */
+	public void updateCustomerType() {
+		String id=getPara("id");
+		String name=getPara("name");
+		String type_no=getPara("type_no");
+		boolean result =CustomerTypeModel.update(id,name,type_no);
+		// 返回结果
+		setAttr("result", result);
+		renderJson();
+	}
+	/**
+	 * 打开团队信息页面
+	 */
+	public void openTeams() {
+		render("team/teaminfo.html");
+	}
+	public void getTeamsList() {
+		String key = getPara("key");
+        int limit=getParaToInt("limit");
+        int page=getParaToInt("page");
+        Page<TeamModel> list = TeamModel.getList(page, limit, key);
+        setAttr("code", 0);
+        setAttr("msg", "你好！");
+        setAttr("count", list.getTotalRow());
+        setAttr("data", list.getList());
+        renderJson();
+	}
+	/**
+	 * 打开团队成员信息页面
+	 */
+	public void openTeamDetail() {
+		String id=getPara("id");
+		setAttr("id", id);
+		renderFreeMarker("team/teamDetail.html");
+	}
+	public void getTeamDetailList() {
+		String team_id=getPara("id");
+		String key = getPara("key");
+        int limit=getParaToInt("limit");
+        int page=getParaToInt("page");
+        Page<TeamersModel> list = TeamersModel.getList(page, limit, team_id,key);
+        setAttr("code", 0);
+        setAttr("msg", "你好！");
+        setAttr("count", list.getTotalRow());
+        setAttr("data", list.getList());
+        renderJson();
 	}
 }

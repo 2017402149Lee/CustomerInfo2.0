@@ -1,3 +1,4 @@
+var per=0;
 layui.config({
 	base : "js/"
 }).use(['form','layer','jquery','laypage','table'],function(){
@@ -6,11 +7,23 @@ layui.config({
 		laypage = layui.laypage,
 		table = layui.table,
 		$ = layui.$;
-
+	//设置权限
+	$.get("getPermission", function(data){
+		var p=data.user.permission;
+		var obj = $.parseJSON(p);
+		var v=obj['c101'];
+		per=v;
+		if(v==1){
+			var arr=new Array();
+			arr.push("<button id ='xls' class='layui-btn  layui-bg-blue' ><i class='layui-icon layui-icon-export'></i>导出所有数据</button>");
+			$("#add_xiao").append(arr.join("\n"));
+		}
+	});
 //==================一个table实例================================
 	 var ins= table.render({
 	    elem: '#demo',//渲染对象
-	    url: 'getGrouplist', //数据接口
+	    height: 'full-88',//表格高度
+	    url: 'getTeamsList', //数据接口
 	    where: {key: ''},//给后台传的参数
 	    page: true, //开启分页
 	    even:true,	//开启隔行
@@ -18,13 +31,25 @@ layui.config({
 	    limit: 10,//每页显示信息条数
 	    id: 'testReload',
 	    cols: [[ //表头
-		      {field: 'id', title: 'ID', sort: true, fixed: 'left',width:100}
-		      ,{field: 'captain_name', title: '团队队长名',width:100}
-		      ,{field: 'captain_phone', title: '队长电话'} 
-		      ,{field: 'group_info', title: '团队信息'}
-		      ,{field: 'group_headcount' ,title:'团队人数',width:100}
-		      ,{field: 'group_name' ,title:'团队名称'}
-		      ,{fixed: 'right', align:'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+		      {field: 'id', title: 'ID', sort: true, fixed: 'left',width:140, align:'center'}
+		      ,{field: 'name', title: '团队名称', align:'center'}
+		      ,{field: 'captain', title: '队长', align:'center'} 
+		      ,{field: 'create_time' ,title:'创建时间', align:'center'}
+		      ,{field: 'status' ,title:'状态', align:'center',width:100, templet: function(d){
+		    	  if(d.status==0){
+		    		  return '<span class="layui-badge layui-bg-red">正常</span>'
+		    	  }else{
+		    		  return '<span class="layui-badge layui-bg-blue">异常</span>'
+		    	  }
+		      }}
+		      ,{fixed: 'right', align:'center',title:'操作', templet:function(d){
+		    	  var arr=new Array();
+		    	  if(per==1){
+			    	arr.push("<a class='layui-btn layui-btn-xs' lay-event='detail'><i class='layui-icon'>&#xe654;</i>查看</a>");
+		    	  }
+		    	  return arr.join("\n");
+		      	}
+		      } //这里的toolbar值是模板元素的选择器
 		    ]], done : function(obj){
 		    	this.obj=obj;
 		    	$('#xls').on('click', function() {//导出所有数据
@@ -86,7 +111,7 @@ layui.config({
 		  var index = layui.layer.open({
               title : "团队信息",
               type : 2,
-              content : "openGroupMemberInfo?captain_phone="+data.captain_phone,
+              content : "openTeamDetail?id="+data.id,
               success : function(layero, index){
                   setTimeout(function(){
                       layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {

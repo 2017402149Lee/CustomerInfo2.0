@@ -12,7 +12,7 @@ import com.wudi.util.StringUtil;
 public class CustomerTypeModel extends Model<CustomerTypeModel>{
 
 	private static final long serialVersionUID = 1L;
-	public static final String tableName = "userintegralDetail";
+	public static final String tableName = "customerType";
 	public static final CustomerTypeModel dao = new CustomerTypeModel();
 	public String getId() {
 		return get("id");
@@ -50,5 +50,19 @@ public class CustomerTypeModel extends Model<CustomerTypeModel>{
 			from_sql.append("where  name like '%" + key + "%'");
 		}
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
+	}
+	
+	public static boolean save(String name,String type_no) {
+		CustomerTypeModel m=new CustomerTypeModel();
+		m.setId(StringUtil.getId());
+		m.setName(name);
+		m.setType_no(type_no);
+		return m.save();
+	}
+	public static boolean update(String id,String name,String type_no) {
+		CustomerTypeModel m=getById(id);
+		m.setName(name);
+		m.setType_no(type_no);
+		return m.update();
 	}
 }

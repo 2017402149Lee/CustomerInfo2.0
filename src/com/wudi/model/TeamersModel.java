@@ -71,16 +71,17 @@ public class TeamersModel extends Model<TeamersModel>{
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
 	}
 	/**
-	 * 
+	 * 根据团队id查找同意团队的队员
 	 */
-	public static Page<TeamersModel> getList(int pageNumber, int pageSize, String key) {
-		String sele_sql = "select * ";
+	public static Page<TeamersModel> getList(int pageNumber, int pageSize, String team_id,String key) {
+		String sele_sql = "select a.*,b.username,b.phone,b.level ";
 		StringBuffer from_sql = new StringBuffer();
-		from_sql.append("from ").append(tableName).append(" ");
+		from_sql.append("from ").append(tableName).append(" a inner join ");
+		from_sql.append(UserModel.tableName).append(" b on a.user_id=b.id ").append(" where a.team_id=? ");
 		if (!StringUtil.isBlankOrEmpty(key)) {
-			from_sql.append("where  name like '%" + key + "%'");
+			from_sql.append(" and a.name like '%" + key + "%' ");
 		}
-		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
+		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString(),team_id);
 	}
 	/**
 	 * 队长的Teamers保存

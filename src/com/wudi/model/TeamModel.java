@@ -88,12 +88,13 @@ public class TeamModel extends Model<TeamModel>{
 	 * 
 	 */
 	public static Page<TeamModel> getList(int pageNumber, int pageSize, String key) {
-		String sele_sql = "select * ";
-		StringBuffer from_sql = new StringBuffer();
-		from_sql.append("from ").append(tableName).append(" ");
+		StringBuffer sql = new StringBuffer();
+		String sele_sql=" select a.*,b.username as captain  ";
+		sql.append(" from ").append(tableName).append(" a ").append(" inner join ");
+		sql.append(UserModel.tableName).append(" b on a.user_id=b.id ");
 		if (!StringUtil.isBlankOrEmpty(key)) {
-			from_sql.append("where  name like '%" + key + "%'");
+			sql.append("where  a.name like '%" + key + "%'");
 		}
-		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
+		return dao.paginate(pageNumber, pageSize, sele_sql, sql.toString());
 	}
 }

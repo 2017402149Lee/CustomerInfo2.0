@@ -59,7 +59,7 @@ layui.config({
   
   
 //=============绑定【添加】事件============================
-	$(window).one("resize",function(){
+	//$(window).one("resize",function(){
 		$(".add_btn").click(function(){
 			var index = layui.layer.open({
 				title : "【添加信息】",
@@ -75,8 +75,8 @@ layui.config({
 				}
 			})			
 			layui.layer.full(index);
-		})
-	}).resize();
+		});
+//	}).resize();
   
 //=======================监听工具条====================================
 	table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"

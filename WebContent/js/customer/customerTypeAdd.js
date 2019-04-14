@@ -7,23 +7,12 @@ layui.config({
 		laypage = layui.laypage;
 		$ = layui.jquery;
 		
-        var arr=new Array();
-        
-        for(var i=100;i<105;i++){
-        	var c="c"+i;
-	        arr.push("<input type='checkbox' name='"+c+"' lay-skin='primary'  title='"+c+"'>");
-        	
-        }	        
-        $("#permission").append(arr.join("\n"));
-		form.render();//必须要再次渲染，要不然option显示不出来
-		
-		
 	//===========================================
 		
  	form.on("submit(add)",function(data){
  		var index;
   		 $.ajax({//异步请求返回给后台
-	    	  url:'saveRole',
+	    	  url:'saveCustomerType',
 	    	  type:'POST',
 	    	  data:data.field,
 	    	  dataType:'json',

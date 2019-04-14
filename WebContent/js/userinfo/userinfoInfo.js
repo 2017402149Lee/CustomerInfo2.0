@@ -1,3 +1,4 @@
+var per=0;
 layui.config({
 	base : "js/"
 }).use(['form','layer','jquery','laypage','table','laytpl'],function(){//组件，使用组件完成功能：from:表单；
@@ -7,7 +8,20 @@ layui.config({
 		table = layui.table,
 		laytpl = layui.laytpl,
 		$ = layui.$;//以上只是将所需要的文件拿出来，以便于后面使用。
-		
+	//设置权限
+	$.get("getPermission", function(data){
+		var p=data.user.permission;
+		var obj = $.parseJSON(p);
+		var v=obj['c101'];
+		per=v;
+		if(v==1){
+			var arr=new Array();
+			arr.push("<a class='layui-btn layui-btn-normal add_btn' id='add_b'> <i class='layui-icon'>&#xe608;</i>添加</a>");
+			arr.push("<button id ='xls' class='layui-btn  layui-bg-blue' ><i class='layui-icon layui-icon-export'></i>导出所有数据</button>");
+			$("#add_xiao").append(arr.join("\n"));
+		}
+	});
+	
 //==================一个table实例================================
 	var ins=  table.render({
 	    elem: '#demo',//渲染对象
@@ -36,7 +50,7 @@ layui.config({
 		    		  return '<span style="color: red" >0级</span>'
 		    	  }
 		      }}
-		      ,{field: 'rolename', title: '角色',width:100}
+		      ,{field: 'rolename', title: '角色',width:130}
 		      ,{field: 'status' ,title:'状态',width:100, templet: function(d){
 		    	  if(d.status==0){
 		    		  return '<span class="layui-badge layui-bg-red">未审核</span>'
@@ -44,8 +58,19 @@ layui.config({
 		    		  return '<span class="layui-badge layui-bg-blue">已审核</span>'
 		    	  }
 		      }}
-
-		      ,{fixed: 'right', align:'center',title:'操作', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+		      ,{fixed: 'right', align:'center',title:'操作', templet:function(d){
+		    	  var arr=new Array();
+		    	  if(per==1){
+			    	  if(d.status==0){
+			    		  arr.push("<a class='layui-btn layui-btn-xs layui-bg-blue' lay-event='check'><i class='layui-icon'>&#xe654;</i>通过</a>");
+			    	  }
+			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'>&#xe642;</i>编辑</a>");
+			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='uppassword'><i class='layui-icon'></i>修改密码</a>");
+			    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'><i class='layui-icon'></i>删除</a>");
+		    	  }
+		    	  return arr.join("\n");
+		      	}
+		      } //这里的toolbar值是模板元素的选择器
 		    ]]
 
 	  });
@@ -83,6 +108,7 @@ layui.config({
 						  });
 				  }
 	  };
+	  
 	//绑定搜索事件
 	  $('.layui-btn').on('click', function() {
 		  var type = $(this).data('type');
@@ -90,28 +116,23 @@ layui.config({
 		  });
 	  
 	  
-	  
-	  
-	  
 	//=============绑定【添加】事件============================
-		$(window).one("resize",function(){
-			$(".add_btn").click(function(){
-				var index = layui.layer.open({
-					title : "【添加信息】",
-					icon: 2,
-					type : 2,
-					content : "openUserinfoAdd",
-					success : function(layero, index){
-						setTimeout(function(){
-							layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
-								tips: 3
-							});
-						},500)
-					}
-				})			
-				layui.layer.full(index);
+	  $(document).on('click','#add_b',function(){
+		  var index = layui.layer.open({
+				title : "【添加信息】",
+				icon: 2,
+				type : 2,
+				area: ['800px', '600px'],
+				content : "openUserinfoAdd",
+				success : function(layero, index){
+					setTimeout(function(){
+						layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
+							tips: 3
+						});
+					},500)
+				}
 			})
-		}).resize();
+		});
 	  
 	//=======================监听工具条====================================
 		table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -216,6 +237,5 @@ layui.config({
 	          layui.layer.full(index);
 		  }
 		});
-	})
-
+});
 
