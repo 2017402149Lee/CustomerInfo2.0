@@ -70,16 +70,27 @@ public class WeixinController extends Controller{
 		}else if(data.getPassword().equals(password)&&phone.equals(data.getPhone())) {
 			if(data.getStatus()==0) {//status 0为未审核，1为审核
 				code = -1;
-			}
+			}else {
 				code =0;
 				setAttr("data", data);
 			}
+		}
+//		List<CustomerModel> cjl = CustomerModel.getCJL(data.getId());
+//		if(data.getLevel() > 0) {
+//		}else if(cjl.size()>=10){
+//			boolean team = UserModel.updateLevel(data.getId());
+//			if(team) {
+//				String words ="你已经升级为1以及会员！";
+//				setAttr("words", words);
+//			}else {
+//				
+//			}
+//		}
+		
 		setAttr("permission", p.getPermission());
 		setAttr("code", code);
 		renderJson();
 }
-		
-	
 	/**
 	 * @author ljp
 	 * @TODO 登出
@@ -144,7 +155,8 @@ public class WeixinController extends Controller{
 		String nation = getPara("nation");
 		String type = getPara("type");
 		String otherinfo =getPara("otherinfo");
-		boolean result = CustomerModel.update(id, name, sex, tel, disclose, age, nation, addr, remark, type, otherinfo);
+		int status = getParaToInt("status");
+		boolean result = CustomerModel.update(id, name, sex, tel, disclose, age, nation, addr, remark, type, otherinfo,status);
 		if(result) {
 			code = 0;
 		}else {
@@ -308,13 +320,12 @@ public class WeixinController extends Controller{
 		renderJson();
 	}
 	/**
-	 * 个人中心界面的接口
+	 * 查看团队队员成交的信息
 	 * @author 王苏黔
 	 */
 	public void queryTeamCustomerList() {
 		String user_id = getPara("user_id");	
 		int code = -1;
-		List<CustomerModel> result =null;
 		List<CustomerModel> list = null;
 		TeamModel data = TeamModel.findUser_id(user_id);
 		if(data != null) {
@@ -329,15 +340,7 @@ public class WeixinController extends Controller{
 		}else {
 			code =-1;
 		}
-		 result = CustomerModel.getCustList(user_id);{
-			if(result != null) {
-				code = 0;
-			}else {
-				code =-1;
-			}
-		}
 		 
-		 setAttr("result", result);
 		setAttr("code", code);
 		renderJson();
 		
@@ -367,7 +370,7 @@ public class WeixinController extends Controller{
 				code = 0;			
 			}
 		}else if(data == null&&teamers!= null ){
-			TeamModel team= TeamModel.findUser_id(user_id);
+			TeamModel team= TeamModel.getById(teamers.getTeam_id());
 			List<TeamersModel> resultT = TeamersModel.findList(teamers.getTeam_id());
 			if(resultT !=null&&team!=null) {
 				setAttr("team", team);
@@ -414,4 +417,21 @@ public class WeixinController extends Controller{
 		setAttr("code", code);
 		renderJson();
 	}
+	/**
+	 * 个人中心
+	 */
+	public void userGetCust() {
+		String user_id = getPara("user_id");
+		String status = getPara("status");
+		int code = -1;
+		List<CustomerModel> data = CustomerModel.getCustList(user_id, status);
+		if(data != null) {
+			code = 0;
+			setAttr("data", data);
+		}else {
+			code = -1;
+		}
+		setAttr("code", code);
+		renderJson();
+		}
 }

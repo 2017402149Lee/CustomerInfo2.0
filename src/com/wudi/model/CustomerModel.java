@@ -168,6 +168,10 @@ public class CustomerModel extends Model<CustomerModel>{
 		String sql = "SELECT a.*,b.username,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b ON a.user_id=b.id where a.id=? and a.status between 1 and 2 ";
 		return dao.findFirst(sql,id);
 	}
+	public static List<CustomerModel> getCJL(String user_id){
+		String sql = "slecet * from "+tableName+" where user_id = ? and status = 6";
+		return dao.find(sql,user_id);
+	}
 	
 	public static List<CustomerModel> queryCustomerList(String user_id,String type){
 		 String sql="select a.*,b.username ,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where a.user_id= ? and a.type = ?";
@@ -209,9 +213,8 @@ public class CustomerModel extends Model<CustomerModel>{
 	}
 	
 	public static boolean update(String id,String name, int sex, String tel, int disclose, int age, String nation,
-			String addr, String remark, String type, String otherinfo) {
+			String addr, String remark, String type, String otherinfo,int status) {
 		boolean result =false;
-		int status = 0;
 		CustomerModel m=CustomerModel.getById(id);
 		if(m == null) {
 			return result;
@@ -227,12 +230,11 @@ public class CustomerModel extends Model<CustomerModel>{
 			m.setType(type);
 			m.setOtherInfo(otherinfo);
 	    	if(!StringUtil.isBlankOrEmpty(remark)) {
-    		if (status == 1&&!m.getRemark().equals(remark)) {// 只有未处理状态并且备注不等于第一次添加的时候才可以修改
-				status = 2;
+    		if (status == 1 &&!m.getRemark().equals(remark)) {// 只有未处理状态并且备注不等于第一次添加的时候才可以修改
+				m.setStatus(2);
 			}
     	}
     	m.setUpdate_time(new Date());
-    	m.setStatus(status);
 		}
 		try {
 			result = m.update();
@@ -327,9 +329,9 @@ public class CustomerModel extends Model<CustomerModel>{
 	 * 个人中心的三种Status
 	 * @return
 	 */
-	public static List<CustomerModel> getCustList(String user_id){
-		String sql = "select name,type,tel from "+tableName+" where user_id = ?";
-		return dao.find(sql,user_id);
+	public static List<CustomerModel> getCustList(String user_id,String status){
+		String sql = "select name,type,tel from "+tableName+" where user_id = ? and status = ?";
+		return dao.find(sql,user_id,status);
 	}
 	
 }
