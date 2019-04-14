@@ -154,7 +154,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	}
 	
 	public static List<CustomerModel> getCustomerByType(String type){
-		String sql="select * from "+tableName+" where type = ? and status between 1 and 2 ";
+		String sql="select a.*,b.username from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id WHERE type = ? and a.status between 1 and 2 ";
 		return dao.find(sql,type);
 	}
 	public static CustomerModel findModel(String type,String tel) {
@@ -187,7 +187,6 @@ public class CustomerModel extends Model<CustomerModel>{
 				}else {
 					from_sql.append(" and a.status=").append(status);
 				}
-				
 			}
 		 return dao.find(from_sql.toString());
 	}
@@ -207,7 +206,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	 * 
 	 */
 	public static boolean save(String name, int sex, String tel, int disclose, int age, String nation,
-			String addr, String remark, String user_id, String type, String otherinfo) {
+			String addr, String remark, String user_id, String type, String otherinfo,int status) {
 		CustomerModel model = new CustomerModel();
 		model.setId(StringUtil.getId());
 		model.setName(name);
@@ -220,7 +219,7 @@ public class CustomerModel extends Model<CustomerModel>{
 		model.setRemark(remark);
 		model.setUser_id(user_id);
 		model.setCreate_time(new Date());
-		model.setStatus(1);
+		model.setStatus(status);
 		model.setType(type);
 		model.setOtherInfo(otherinfo);
 		return model.save();
@@ -243,11 +242,12 @@ public class CustomerModel extends Model<CustomerModel>{
 			m.setRemark(remark);
 			m.setType(type);
 			m.setOtherInfo(otherinfo);
-	    	if(!StringUtil.isBlankOrEmpty(remark)) {
-    		if (status == 1 &&!m.getRemark().equals(remark)) {// 只有未处理状态并且备注不等于第一次添加的时候才可以修改
-				m.setStatus(2);
-			}
-    	}
+//	    	if(!StringUtil.isBlankOrEmpty(remark)) {
+//    		if (status == 1 &&!m.getRemark().equals(remark)) {// 只有未处理状态并且备注不等于第一次添加的时候才可以修改
+//				m.setStatus(2);
+////			}
+//    	}
+			m.setStatus(status);
     	m.setUpdate_time(new Date());
 		}
 		try {
@@ -343,9 +343,9 @@ public class CustomerModel extends Model<CustomerModel>{
 	 * 个人中心的三种Status
 	 * @return
 	 */
-	public static List<CustomerModel> getCustList(String user_id,String status){
-		String sql = "select name,type,tel from "+tableName+" where user_id = ? and status = ?";
-		return dao.find(sql,user_id,status);
+	public static List<CustomerModel> getCustList(String user_id,String type){
+		String sql = "select * from "+tableName+" where user_id = ? nad type = ? and status between 1 and 2 ";
+		return dao.find(sql,user_id,type);
 	}
 	
 }

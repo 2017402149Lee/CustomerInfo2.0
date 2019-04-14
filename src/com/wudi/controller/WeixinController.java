@@ -110,7 +110,8 @@ public class WeixinController extends Controller{
 		String nation = getPara("nation");
 		String type = getPara("type");
 		String otherinfo =getPara("otherinfo");
-		boolean result = CustomerModel.save(name, sex, tel, disclose, age, nation, addr, remark, user_id, type, otherinfo);
+		int status = getParaToInt("status");
+		boolean result = CustomerModel.save(name, sex, tel, disclose, age, nation, addr, remark, user_id, type, otherinfo,status);
 		if(result) {
 			code = 0;
 		}else {
@@ -230,7 +231,7 @@ public class WeixinController extends Controller{
 	
 	public void addTeamer() {
 		int code = -1;
-		String user_id=getPara("team_id");
+		String user_id=getPara("user_id");
 		String team_id = getPara("team_id");
 		String phone =  getPara("phone");
 		//检查是否友这个人
@@ -381,9 +382,9 @@ public class WeixinController extends Controller{
 	 */
 	public void userGetCust() {
 		String user_id = getPara("user_id");
-		String status = getPara("status");
+		String type = getPara("type");
 		int code = -1;
-		List<CustomerModel> data = CustomerModel.getCustList(user_id, status);
+		List<CustomerModel> data = CustomerModel.getCustList(user_id,type);
 		if(data != null) {
 			code = 0;
 			setAttr("data", data);

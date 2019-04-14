@@ -28,8 +28,8 @@ layui.config({//框架的固定，配置的使用
 			    	  }
 		    	  }}
 		      ,{field: 'tel', title: '电话', align:'center'}
-		      ,{field: 'comments', title: '备注',align:'center'}
-		      ,{field: 'user_id', title: '录入人',align:'center'}
+		      ,{field: 'remark', title: '备注',align:'center'}
+		      ,{field: 'username', title: '录入人',align:'center'}
 		      ,{field: 'status', title: '状态', align:'center',
 		    	  templet: function(d){
 			    	  if(d.status==6){
