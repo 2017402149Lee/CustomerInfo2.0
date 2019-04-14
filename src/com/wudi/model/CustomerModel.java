@@ -173,9 +173,18 @@ public class CustomerModel extends Model<CustomerModel>{
 		return dao.find(sql,user_id);
 	}
 	
-	public static List<CustomerModel> queryCustomerList(String user_id,String type){
-		 String sql="select a.*,b.username ,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where a.user_id= ? and a.type = ?";
-		 return dao.find(sql,user_id,type);
+	public static List<CustomerModel> queryCustomerList(String user_id,String type,int status){
+			StringBuffer from_sql = new StringBuffer();
+			from_sql.append(" select a.*,b.username ,b.phone  ");
+			from_sql.append("from ").append(tableName).append(" a LEFT JOIN ").append(UserModel.tableName).append(" b on a.user_id=b.id ");
+			from_sql.append(" where a.user_id= '").append(user_id).append(" ' ");
+			if (!StringUtil.isBlankOrEmpty(type)) {
+				from_sql.append(" and a.type= '").append(type).append("' ");
+			}
+			if(status!=-1) {
+				from_sql.append(" and a.status=").append(status);
+			}
+		 return dao.find(from_sql.toString());
 	}
 /**
  * 查找队员客户
