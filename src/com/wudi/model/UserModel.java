@@ -182,6 +182,12 @@ public class UserModel extends Model<UserModel>{
 		m.setStatus(1);//1:正常，0未审核,-1异常
 		return m.update();
 	}
+	
+	public static boolean upateUserRole(String id,String role_id) {
+		UserModel m=dao.findById(id);
+		m.setRole_id(role_id);
+		return m.update();
+	}
 	/**
 	 * 用户登录
 	 * 把用户的基本信息，包括权限一起拿
