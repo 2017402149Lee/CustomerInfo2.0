@@ -11,7 +11,6 @@ import com.wudi.util.StringUtil;
 
 
 /**
- * �ͻ���ѧ������ϢModel
  * @author 
  *
  */
