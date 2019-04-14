@@ -1,1 +1,8 @@
 /com/
+/build/
+/target/
+/.settings/
+.classpath
+.project
+.gitignore
+.class
