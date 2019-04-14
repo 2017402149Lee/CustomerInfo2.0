@@ -350,13 +350,11 @@ public class WeixinController extends Controller{
 	public void getNewsList() {
 		String user_id = getPara("user_id");
 		int code = -1;
-		NewsModel list = NewsModel.getByUser_id(user_id);
+		List<NewsModel> list = NewsModel.getByReading(user_id);
 		if(list != null) {
 			code = 0;
-			setAttr("list", list.getContent());
-		}else {
-			code = -1;
 		}
+		setAttr("list", list);
 		setAttr("code", code);
 		renderJson();
 		

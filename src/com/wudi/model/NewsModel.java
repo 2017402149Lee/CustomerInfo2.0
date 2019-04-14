@@ -1,6 +1,7 @@
 package com.wudi.model;
 
 import java.util.Date;
+import java.util.List;
 
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
@@ -73,7 +74,6 @@ public class NewsModel extends Model<NewsModel>{
 	}
 	
 	public static NewsModel getByUser_id(String user_id) {
-
 		return dao.findFirst("select * from " + tableName + " where user_id = ? ", user_id);
 	}
 	/**
@@ -114,5 +114,8 @@ public class NewsModel extends Model<NewsModel>{
 		m.setUser_id(user_id);
 		m.setReading(reading);
 		return m.save();
+	}
+	public static List<NewsModel> getByReading(String reading) {
+		return dao.find("select * from " + tableName + " where reading like '%"+reading+"%' ");
 	}
 }
