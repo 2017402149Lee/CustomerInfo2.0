@@ -182,7 +182,12 @@ public class CustomerModel extends Model<CustomerModel>{
 				from_sql.append(" and a.type= '").append(type).append("' ");
 			}
 			if(status!=-1) {
-				from_sql.append(" and a.status=").append(status);
+				if(status==-2) {
+					from_sql.append(" and a.status<>6");
+				}else {
+					from_sql.append(" and a.status=").append(status);
+				}
+				
 			}
 		 return dao.find(from_sql.toString());
 	}
