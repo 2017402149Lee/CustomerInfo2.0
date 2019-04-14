@@ -184,6 +184,30 @@ public class AdminController extends Controller {
 		setAttr("result", result);
 		renderJson();
 	}
+	/**
+	 * 修改用户角色
+	 */
+	public void openUpateUserRole() {
+		String id=getPara("id");
+		UserModel user=UserModel.getById(id);
+		setAttr("user", user);
+		renderFreeMarker("userinfo/updUserRole.html");
+	}
+	/**
+	 * 保存修改用户角色
+	 */
+	public void upateUserRole() {
+		String id=getPara("id");
+		String role_id=getPara("role_id");
+		boolean result = UserModel.upateUserRole(id,role_id);
+		setAttr("result", result);
+		renderJson();
+	}
+	public void getRoleListForSelect() {
+		List<RoleModel> list=RoleModel.getList();
+		setAttr("list", list);
+		renderJson();
+	}
 	
 	public void getCustomerNum() {
 		String type=getPara("type");

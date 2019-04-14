@@ -139,7 +139,7 @@ public class UserModel extends Model<UserModel>{
 	 * @return
 	 */
 	public static UserModel loginByPhone(String phone) {
-		String sql = "select a.*,b.* from "+tableName+" a LEFT JOIN "+RoleModel.tableName+" b ON a.role_id=b.id where a.phone = ?";
+		String sql = "select a.*,b.name as rolename,b.permission from "+tableName+" a LEFT JOIN "+RoleModel.tableName+" b ON a.role_id=b.id where a.phone = ?";
 		return dao.findFirst(sql,phone);
 	}
 	/**
@@ -180,6 +180,12 @@ public class UserModel extends Model<UserModel>{
 	public static boolean checkUser(String id) {
 		UserModel m=dao.findById(id);
 		m.setStatus(1);//1:正常，0未审核,-1异常
+		return m.update();
+	}
+	
+	public static boolean upateUserRole(String id,String role_id) {
+		UserModel m=dao.findById(id);
+		m.setRole_id(role_id);
 		return m.update();
 	}
 	/**

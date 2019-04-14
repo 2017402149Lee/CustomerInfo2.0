@@ -1,5 +1,7 @@
 package com.wudi.model;
 
+import java.util.List;
+
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.util.StringUtil;
@@ -81,5 +83,9 @@ public class RoleModel extends Model<RoleModel>{
 			result=m.update();
 		}
 		return result;
+	}
+	public static List<RoleModel> getList() {
+		String sql="select * from "+tableName;
+		return dao.find(sql);
 	}
 }

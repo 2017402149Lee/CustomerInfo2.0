@@ -296,20 +296,12 @@ public class WeixinController extends Controller{
 		String user_id = getPara("user_id");	
 		int code = -1;
 		List<CustomerModel> list = null;
-		TeamModel data = TeamModel.findCaptain(user_id);
-		if(data != null) {
-			list = CustomerModel.queryTeamCustomerList(data.getId(),user_id);//队长查看成员已成交的客户信息
-			setAttr("list", list);
-		if(list != null) {
-			code = 0;
-			
-		}else {
-			code = -1;
+		TeamersModel m=TeamersModel.findByUd(user_id);
+		if(m != null) {
+			list = CustomerModel.queryTeamCustomerList(m.getTeam_id());//队长查看成员已成交的客户信息
+			code=0;
 		}
-		}else {
-			code =-1;
-		}
-		 
+		setAttr("list", list);
 		setAttr("code", code);
 		renderJson();
 		

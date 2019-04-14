@@ -64,7 +64,7 @@ layui.config({
 			    	  if(d.status==0){
 			    		  arr.push("<a class='layui-btn layui-btn-xs layui-bg-blue' lay-event='check'><i class='layui-icon'>&#xe654;</i>通过</a>");
 			    	  }
-			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'>&#xe642;</i>编辑</a>");
+			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'>&#xe642;</i>修改角色</a>");
 			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='uppassword'><i class='layui-icon'></i>修改密码</a>");
 			    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'><i class='layui-icon'></i>删除</a>");
 		    	  }
@@ -225,7 +225,7 @@ layui.config({
 			  var index = layui.layer.open({
 	              title : "修改信息",
 	              type : 2,
-	              content : "openUserinfoEdit?phone_no="+data.phone_no,
+	              content : "openUpateUserRole?id="+data.id,
 	              success : function(layero, index){
 	                  setTimeout(function(){
 	                      layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
