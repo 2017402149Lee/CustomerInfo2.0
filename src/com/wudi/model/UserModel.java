@@ -206,4 +206,10 @@ public class UserModel extends Model<UserModel>{
 		m.setPassword(password);
 		return m.update();
 	}
+	public static boolean updateLevel(String id){
+		UserModel m=getById(id);
+		m.setLevel(1);
+		return m.update();
+	}
+	
 }
