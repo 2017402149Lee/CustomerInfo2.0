@@ -147,5 +147,18 @@ public class TeamersModel extends Model<TeamersModel>{
 		String sql = "select b.id,b.username,b.sex,b.phone,b.level from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where a.team_id = ?";
 		return dao.find(sql,team_id);
 	}
-
+	public static boolean delTeamer(String user_id,String team_id) {
+		try {
+			String delsql = "DELETE FROM " + tableName + " WHERE user_id=? and team_id=?";
+			int iRet = Db.update(delsql, user_id,team_id);
+			if (iRet > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

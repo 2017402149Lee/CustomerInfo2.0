@@ -8,6 +8,19 @@ layui.config({
 		laytpl = layui.laytpl,
 		$ = layui.$;//以上只是将所需要的文件拿出来，以便于后面使用。
 		
+	//设置权限
+	$.get("getPermission", function(data){
+		var p=data.user.permission;
+		var obj = $.parseJSON(p);
+		var v=obj['c101'];
+		per=v;
+		if(v==1){
+			var arr=new Array();
+			arr.push("<a class='layui-btn layui-btn-normal add_btn' id='add_b'> <i class='layui-icon'>&#xe608;</i>添加</a>");
+			$("#add_xiao").append(arr.join("\n"));
+		}
+	});
+	
 //==================一个table实例================================
 	var ins=  table.render({
 	    elem: '#demo',//渲染对象
@@ -22,7 +35,15 @@ layui.config({
 		      {field: 'id', title: 'ID', sort: true, fixed: 'left',width:150}
 		      ,{field: 'name', title: '角色名称',width:150}
 		      ,{field: 'permission' ,title:'权限'}
-		      ,{fixed: 'right', align:'center',width:200,title:'操作', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+		      ,{fixed: 'right', align:'center',title:'操作', templet:function(d){
+		    	  var arr=new Array();
+		    	  if(per==1){
+			    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-warm' lay-event='detail'><i class='layui-icon'>&#xe615;</i>查看</a>");
+			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'>&#xe642;</i>编辑</a>");
+		    	  }
+		    	  return arr.join("\n");
+		      	}
+		      } //这里的toolbar值是模板元素的选择器
 		    ]]
 
 	  });

@@ -26,7 +26,7 @@
 			"href" : "admin/openTeams",
 			"spread" : false
 			},{
-			"title" : "管理员表",
+			"title" : "其他管理",
 			"icon" : "&#xe613;",
 			"href" : "admin/admininfo",
 			"spread" : false

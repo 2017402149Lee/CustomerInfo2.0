@@ -137,12 +137,10 @@ public class AdminController extends Controller {
         int page=getParaToInt("page");
         String type=getPara("type"); 
         Page<CustomerModel> list = CustomerModel.getList(page, limit, key,type);
-        List<CustomerModel> datalist = CustomerModel.getCustomerByType(type);
         setAttr("code", 0);
         setAttr("msg", "你好！");
         setAttr("count", list.getTotalRow());
         setAttr("data", list.getList());
-        setAttr("xlsdata", datalist);
         renderJson();
 	}
 	

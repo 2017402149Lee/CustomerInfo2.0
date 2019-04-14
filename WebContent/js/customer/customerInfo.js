@@ -7,7 +7,18 @@ layui.config({//框架的固定，配置的使用
 		table = layui.table,
 		laytpl = layui.laytpl,
 		$ = layui.$;//以上只是将所需要的文件拿出来，以便于后面使用。
-
+	//设置权限
+	$.get("getPermission", function(data){
+		var p=data.user.permission;
+		var obj = $.parseJSON(p);
+		var v=obj['c101'];
+		per=v;
+		if(v==1){
+			var arr=new Array();
+			arr.push("<button id ='xls' class='layui-btn  layui-bg-blue' ><i class='layui-icon layui-icon-export'></i>导出所有数据</button>");
+			$("#add_xiao").append(arr.join("\n"));
+		}
+	});
 //==================一个table实例================================//table怎么设置
 	var ins =  table.render({
 	    elem: '#demo',//渲染对象
@@ -18,7 +29,7 @@ layui.config({//框架的固定，配置的使用
 	    limit: 10,//每页显示信息条数
 	    id: 'testReload',
 	    cols:  [[ //表头
-	    	 {field: 'name', title: '姓名', sort: true, fixed: 'left'}
+	    	 {field: 'name', title: '姓名', sort: true,align:'center', fixed: 'left'}
 		      ,{field: 'sex', title: '性别',align:'center',width:70,
 		    	  templet: function(d){
 		    		  if(d.sex==1){
@@ -40,7 +51,20 @@ layui.config({//框架的固定，配置的使用
 			    		  return '<span class="layui-badge layui-bg-red">未处理</span>'
 			    	  }
 			      }}
-		      ,{fixed: 'right', title:'操作', align:'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+		      ,{fixed: 'right', align:'center',title:'操作', templet:function(d){
+		    	  var arr=new Array();
+		    	  if(per==1){
+			    	  if(d.status==2){
+			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='chengjiao'><i class='layui-icon'>&#xe654;</i>成交</a>");
+			    	  }
+			    	  if(d.status!=6){
+				    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'><i class='layui-icon'>&#xe640;</i>删除</a>");
+			    	  }
+		    	  }
+		    	  return arr.join("\n");
+		      	}
+		      }
+		      //这里的toolbar值是模板元素的选择器
 	    ]],done : function(obj){
 	    	this.obj=obj;
 	    	$('#xls').on('click', function() {//导出所有数据

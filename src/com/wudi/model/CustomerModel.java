@@ -142,11 +142,12 @@ public class CustomerModel extends Model<CustomerModel>{
 	 */
 	
 	public static Page<CustomerModel> getList(int pageNumber, int pageSize, String key, String type) {
-		String sele_sql = "select * ";
+		String sele_sql = "select a.*,b.username ";
 		StringBuffer from_sql = new StringBuffer();
-		from_sql.append("from ").append(tableName).append(" where type='").append(type).append("' ");
+		from_sql.append("from ").append(tableName).append(" a left join ").append(UserModel.tableName).append(" b on a.user_id=b.id ");
+		from_sql.append(" where a.type='").append(type).append("' ");
 		if (!StringUtil.isBlankOrEmpty(key)) {
-			from_sql.append("and name like '%" + key + "%'");
+			from_sql.append(" and a.name like '%" + key + "%'");
 		}
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
 	}

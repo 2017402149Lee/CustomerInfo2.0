@@ -5,7 +5,6 @@ import java.util.List;
 import com.jfinal.core.Controller;
 import com.wudi.model.CustomerModel;
 import com.wudi.model.NewsModel;
-import com.wudi.model.RoleModel;
 import com.wudi.model.TeamModel;
 import com.wudi.model.TeamersModel;
 import com.wudi.model.UserModel;
@@ -199,7 +198,7 @@ public class WeixinController extends Controller{
 			boolean result = TeamModel.createTeam(name, user_id, remark);
 			if(result) {
 				code = 0;//创建成功
-				NewsModel.createNews("创建团队","你已于"+Util.getCurrentTime()+"加入了团队",user_id);
+				NewsModel.createNews("创建团队","你已于"+Util.getCurrentTime()+"加入了团队",user_id,user_id);
 			}
 		}else {
 			code = 1;
@@ -248,7 +247,7 @@ public class WeixinController extends Controller{
 					boolean result=TeamersModel.addTeamers(user.getId(), team_id, 0);
 					if(result) {
 						code = 0;//成功
-						NewsModel.createNews("邀请加入团队","你已于"+Util.getCurrentTime()+"被邀请加入了团队",user_id);
+						NewsModel.createNews("邀请加入团队","你已于"+Util.getCurrentTime()+"被邀请加入了团队",user_id,user.getId());
 					}
 				}
 			}
@@ -263,8 +262,9 @@ public class WeixinController extends Controller{
 	 */
 	public void delTeamer() {
 		int code = -1;
-		String phone = getPara("phone");
-		boolean result = TeamersModel.delById(phone);
+		String user_id = getPara("user_id");
+		String team_id=getPara("team_id");
+		boolean result = TeamersModel.delTeamer(user_id,team_id);
 		if(result) {
 			code = 0;
 		}else {
@@ -279,7 +279,8 @@ public class WeixinController extends Controller{
 	public void exitTeam() {
 		int code = -1;
 		String user_id = getPara("user_id");
-		boolean result = TeamersModel.delById(user_id);
+		String team_id=getPara("team_id");
+		boolean result = TeamersModel.delTeamer(user_id,team_id);
 		if(result) {
 			code = 0;
 		}else {

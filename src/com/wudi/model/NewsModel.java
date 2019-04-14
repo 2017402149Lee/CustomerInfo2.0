@@ -62,7 +62,7 @@ public class NewsModel extends Model<NewsModel>{
 	public String getReading() {
 		return ("reading");
 	}
-	public void satReading(String reading) {
+	public void setReading(String reading) {
 		set("reading",reading);
 	}
 
@@ -104,7 +104,7 @@ public class NewsModel extends Model<NewsModel>{
 	/**
 	 * 保存消息
 	 */
-	public static boolean createNews(String title,String content,String user_id) {
+	public static boolean createNews(String title,String content,String user_id,String reading) {
 		NewsModel m = new NewsModel();
 		m.setId(StringUtil.getId());
 		m.setCeate_time(new Date());
@@ -112,6 +112,7 @@ public class NewsModel extends Model<NewsModel>{
 		m.setContent(content);
 		m.setStatus(0);
 		m.setUser_id(user_id);
+		m.setReading(reading);
 		return m.save();
 	}
 }
