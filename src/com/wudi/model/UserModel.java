@@ -117,7 +117,7 @@ public class UserModel extends Model<UserModel>{
 		m.setPhone(phone);
 		m.setLevel(0);
 		m.setStatus(0);
-		m.setRole_id(StringUtil.getId());
+		m.setRole_id("1555138505019");
 		m.setId(StringUtil.getId());
 		return m.save();
 	}

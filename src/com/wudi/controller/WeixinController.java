@@ -37,15 +37,11 @@ public class WeixinController extends Controller{
 		int sex = getParaToInt("sex");
 		UserModel p = UserModel.findByPhone(phone);
 		 if(p != null) {
-			code = -1 ;//2是用户已存在
-		}
-		else {
+			code = 1 ;//2是用户已存在
+		}else {
 			boolean result = UserModel.saveUserinfo(username, password, phone, sex);
-			code = 0;
-			setAttr("result", result);
 			if(result) {
-				UserModel m = UserModel.findByPhone(phone);
-				boolean saveRole = RoleModel.save(m.getRole_id());
+				code = 0;
 			}
 		}
 		setAttr("code", code);
@@ -62,32 +58,20 @@ public class WeixinController extends Controller{
 		String password = getPara("password");	
 		int code = -1;
 		UserModel data = UserModel.loginByPhone(phone);
-		RoleModel p = RoleModel.getPermissionBy(data.getRole_id());
-		if(!phone.equals(data.getPhone())) {
-			code = 1; 
-		}else if(!password.equals(data.getPassword())) {
-			code = 2;
-		}else if(data.getPassword().equals(password)&&phone.equals(data.getPhone())) {
-			if(data.getStatus()==0) {//status 0为未审核，1为审核
+		if(data!=null) {
+			if(data.getStatus()==0) {
 				code = -1;
 			}else {
-				code =0;
-				setAttr("data", data);
+				if(password.equals(data.getPassword())) {
+					code = 0;
+				}else {
+					code = 2;
+				}
 			}
+		}else {
+			code = 1;
 		}
-//		List<CustomerModel> cjl = CustomerModel.getCJL(data.getId());
-//		if(data.getLevel() > 0) {
-//		}else if(cjl.size()>=10){
-//			boolean team = UserModel.updateLevel(data.getId());
-//			if(team) {
-//				String words ="你已经升级为1以及会员！";
-//				setAttr("words", words);
-//			}else {
-//				
-//			}
-//		}
-		
-		setAttr("permission", p.getPermission());
+		setAttr("data", data);
 		setAttr("code", code);
 		renderJson();
 }
