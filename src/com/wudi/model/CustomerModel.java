@@ -55,7 +55,6 @@ public class CustomerModel extends Model<CustomerModel>{
 		set("tel", tel);
 	}
 
-
 	public int getDisclose() {
 		return get("disclose");
 	}
