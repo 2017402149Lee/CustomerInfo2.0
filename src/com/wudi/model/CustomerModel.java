@@ -231,8 +231,7 @@ public class CustomerModel extends Model<CustomerModel>{
 			m.setOtherInfo(otherinfo);
 	    	if(!StringUtil.isBlankOrEmpty(remark)) {
     		if (status == 1 &&!m.getRemark().equals(remark)) {// 只有未处理状态并且备注不等于第一次添加的时候才可以修改
-				status = 2;
-				m.setStatus(status);
+				m.setStatus(2);
 			}
     	}
     	m.setUpdate_time(new Date());
