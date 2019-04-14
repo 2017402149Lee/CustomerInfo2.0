@@ -139,7 +139,7 @@ public class UserModel extends Model<UserModel>{
 	 * @return
 	 */
 	public static UserModel loginByPhone(String phone) {
-		String sql = "select a.*,b.* from "+tableName+" a LEFT JOIN "+RoleModel.tableName+" b ON a.role_id=b.id where a.phone = ?";
+		String sql = "select a.*,b.name as rolename,b.permission from "+tableName+" a LEFT JOIN "+RoleModel.tableName+" b ON a.role_id=b.id where a.phone = ?";
 		return dao.findFirst(sql,phone);
 	}
 	/**
