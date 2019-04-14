@@ -9,7 +9,7 @@ import com.wudi.model.RoleModel;
 import com.wudi.model.TeamModel;
 import com.wudi.model.TeamersModel;
 import com.wudi.model.UserModel;
-import com.wudi.util.StringUtil;
+import com.wudi.util.Util;
 
 /**
  * 
@@ -209,32 +209,15 @@ public class WeixinController extends Controller{
 		String name = getPara("name");
 		String user_id = getPara("user_id");
 		String remark = getPara("remark");
-		TeamModel t = TeamModel.getByName(name);
-		TeamModel u = TeamModel.findUser_id(user_id);
-		if(t != null) {
-			code = -1;
-		}else if(u != null) {
-			code = 2;
-		}else {
-			boolean result = TeamModel.saveTeam(name, user_id, remark);
-
-			setAttr("result", result);
+		boolean exit = TeamModel.isExit(name,user_id);
+		if(!exit) {//如果不存在，那么就可以创建
+			boolean result = TeamModel.createTeam(name, user_id, remark);
 			if(result) {
-				UserModel m = UserModel.getById(user_id);
-				TeamModel s = TeamModel.findUser_id(user_id);
-				boolean data = TeamersModel.saveForCaptain(user_id,s.getId(),m.getPhone());//自动添加队长到teamers表
-				
-				if(data) {
-					boolean news = NewsModel.saveNews(user_id);
-					if(news) {
-						code = 0;
-						setAttr("data", data);
-					}else {
-						code = -1;
-					}
-					
-				}
+				code = 0;//创建成功
+				NewsModel.createNews("创建团队","你已于"+Util.getCurrentTime()+"加入了团队",user_id);
 			}
+		}else {
+			code = 1;
 		}
 		setAttr("code", code);
 		renderJson();
@@ -264,24 +247,26 @@ public class WeixinController extends Controller{
 	
 	public void addTeamer() {
 		int code = -1;
-		String user_id = getPara("user_id");
+		String user_id=getPara("team_id");
+		String team_id = getPara("team_id");
 		String phone =  getPara("phone");
-		TeamersModel data = TeamersModel.findByPhone(phone);
-		if(data!=null) {
-			code = -1;
-		}else {
-			UserModel m = UserModel.findByPhone(phone);
-			TeamModel c = TeamModel.findUser_id(user_id);
-			boolean result = TeamersModel.saveTeamers(phone, m.getId(),c.getId());
-			if(result) {
-				boolean s = NewsModel.saveNews(user_id);
-				if(s) {
-					code = 0;
-				}else {
-					code=-1;
-				}
-			}else {
+		//检查是否友这个人
+		UserModel user=UserModel.findByPhone(phone);
+		if(user!=null) {
+			//检查一下是否在团队里面
+			TeamersModel data = TeamersModel.findByUd(user.getId());
+			if(data!=null) {
 				code = -1;
+			}else {
+				//检查一下是否有这个团队
+				TeamModel team=TeamModel.getById(team_id);
+				if(team!=null) {
+					boolean result=TeamersModel.addTeamers(user.getId(), team_id, 0);
+					if(result) {
+						code = 0;//成功
+						NewsModel.createNews("邀请加入团队","你已于"+Util.getCurrentTime()+"被邀请加入了团队",user_id);
+					}
+				}
 			}
 		}
 		setAttr("code", code);
@@ -327,7 +312,7 @@ public class WeixinController extends Controller{
 		String user_id = getPara("user_id");	
 		int code = -1;
 		List<CustomerModel> list = null;
-		TeamModel data = TeamModel.findUser_id(user_id);
+		TeamModel data = TeamModel.findCaptain(user_id);
 		if(data != null) {
 			list = CustomerModel.queryTeamCustomerList(data.getId(),user_id);//队长查看成员已成交的客户信息
 			setAttr("list", list);
@@ -349,37 +334,36 @@ public class WeixinController extends Controller{
 	 */
 	}
 	public void getTeamInfo() {
-		String team_id = getPara("team_id");
 		String user_id = getPara("user_id");
 		int code = -1;
 		TeamModel data=null;
-		TeamersModel teamers = TeamersModel.findByUd(user_id);
-		//如果团队id为空
-		if(StringUtil.isBlankOrEmpty(team_id)) {
-			//再根据user查找，他所在的团队，找出他的团队id
-			data = TeamModel.findUser_id(user_id);
-		}else {
-			data = TeamModel.getById(team_id);
+		//再根据user查找，他所在的团队，找出他的团队id
+		TeamersModel teamer=TeamersModel.findByUd(user_id);
+		if(teamer!=null) {
+			data = TeamModel.getById(teamer.getTeam_id());
+			code = 1;
 		}
-		if(data != null) {
-			TeamModel team= TeamModel.findUser_id(user_id);
-			List<TeamersModel> result = TeamersModel.findList(data.getId());
-			if(result != null&&team!=null) {
-				setAttr("team", team);
-				setAttr("result", result);
-				code = 0;			
-			}
-		}else if(data == null&&teamers!= null ){
-			TeamModel team= TeamModel.getById(teamers.getTeam_id());
-			List<TeamersModel> resultT = TeamersModel.findList(teamers.getTeam_id());
-			if(resultT !=null&&team!=null) {
-				setAttr("team", team);
-				code =0;
-				setAttr("result", resultT);
-						}
-		}else {
-			code = -1;
+		setAttr("data", data);
+		setAttr("code", code);
+		renderJson();
+	}
+	/**
+	 * 获取团队信息及团队成员信息接口	
+	 */
+	public void getTeamDetailInfo() {
+		String user_id = getPara("user_id");
+		int code = -1;
+		TeamModel data=null;
+		List<TeamersModel> list=null;
+		//再根据user查找，他所在的团队，找出他的团队id
+		TeamersModel teamer=TeamersModel.findByUd(user_id);
+		if(teamer!=null) {
+			data = TeamModel.getById(teamer.getTeam_id());
+			list=TeamersModel.findList(teamer.getTeam_id());
+			code = 1;
 		}
+		setAttr("data", data);
+		setAttr("list", list);
 		setAttr("code", code);
 		renderJson();
 	}

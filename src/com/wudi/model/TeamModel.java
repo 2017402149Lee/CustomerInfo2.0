@@ -59,14 +59,23 @@ public class TeamModel extends Model<TeamModel>{
 	 * @param name
 	 * @return
 	 */
-	public static TeamModel getByName(String name) {
-		String sql = "select * from "+tableName+" where name = ?";
-		return dao.findFirst(sql,name);
+	public static boolean isExit(String name,String captainId) {
+		String sql = "select * from "+tableName+" where name = ? or user_id=?";
+		TeamModel m=dao.findFirst(sql,name,captainId);
+		boolean result=false;
+		if(m==null) {//不存在
+			result=true;
+		}
+		return result;
 	}
-	
-	public static TeamModel findUser_id(String user_id) {
+	/**
+	 * 根据队长找团队信息
+	 * @param user_id
+	 * @return
+	 */
+	public static TeamModel findCaptain(String captainId) {
 		String sql = "select * from "+tableName+" where user_id = ?";
-		return dao.findFirst(sql,user_id);
+		return dao.findFirst(sql,captainId);
 	}
 	public static TeamModel getById(String id) {
 
@@ -82,6 +91,27 @@ public class TeamModel extends Model<TeamModel>{
 		m.setStatus(1);
 		m.setId(StringUtil.getId());
 		return m.save();
+		
+	}
+	public static boolean createTeam(String name,String user_id,String remark) {
+		boolean result=false;
+		TeamModel m = new TeamModel();
+		m.setCeate_time(new Date());
+		m.setName(name);
+		m.setUser_id(user_id);
+		m.setRemark(remark);
+		m.setStatus(1);
+		m.setId(StringUtil.getId());
+		//找到队长的信息
+		UserModel captain = UserModel.getById(user_id);
+		if(captain!=null) {
+			//保存团队型
+			result=m.save();
+			//将队长信息添加到团队里面
+			TeamersModel.addTeamers(captain.getId(), m.getId(), 1);
+			
+		}
+		return result;
 		
 	}
 	/**

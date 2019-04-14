@@ -25,12 +25,6 @@ public class TeamersModel extends Model<TeamersModel>{
 	public void setUser_id(String user_id) {
 		set("user_id", user_id);
 	}
-	public String getPhone() {
-		return get("phone");
-	}
-	public void setPhone(String phone) {
-		set("phone", phone);
-	}
 	public Date getCreate_time() {
 		return get("create_time");
 	}
@@ -89,7 +83,7 @@ public class TeamersModel extends Model<TeamersModel>{
 	 * @param team_id
 	 * @return
 	 */
-	public static boolean saveForCaptain(String user_id,String team_id,String phone) {
+	public static boolean saveForCaptain(String user_id,String team_id) {
 		String remark ="";
 		TeamersModel m = new TeamersModel();
 		m.setId(StringUtil.getId());
@@ -98,7 +92,6 @@ public class TeamersModel extends Model<TeamersModel>{
 		m.setType(1);
 		m.setUser_id(user_id);
 		m.setRemark("默认");
-		m.setPhone(phone);
 		return m.save();
 	}
 	/**
@@ -113,7 +106,18 @@ public class TeamersModel extends Model<TeamersModel>{
 		m.setType(0);
 		m.setUser_id(user_id);
 		m.setRemark("默认");
-		m.setPhone(phone);
+		return m.save();
+	}
+	/**
+	 * 保存
+	 */
+	public static boolean addTeamers(String user_id,String team_id,int type) {
+		TeamersModel m = new TeamersModel();
+		m.setId(StringUtil.getId());
+		m.setCreate_time(new Date());
+		m.setTeam_id(team_id);
+		m.setType(type);
+		m.setUser_id(user_id);
 		return m.save();
 	}
 	/**
@@ -136,15 +140,11 @@ public class TeamersModel extends Model<TeamersModel>{
 		}
 	}
 	/**
-	 * @TODO：队长获取所有队员
+	 * @TODO：根据团队id获取所有队员
 	 * @author ljp
 	 */
 	public static List<TeamersModel> findList(String team_id){
-		String sql = "select a.*,b.username,b.sex,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where team_id = ?";
-		return dao.find(sql,team_id);
-	}
-	public static List<TeamersModel> TeamersfindList(String team_id){
-		String sql = "select a.*,b.phone,b.username,b.sex from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b ON a.user_id=b.id where team_id = ?;";
+		String sql = "select b.id,b.username,b.sex,b.phone,b.level from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where a.team_id = ?";
 		return dao.find(sql,team_id);
 	}
 
