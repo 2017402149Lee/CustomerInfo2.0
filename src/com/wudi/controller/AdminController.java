@@ -505,16 +505,11 @@ public class AdminController extends Controller {
 	 */
 	public void completeCustomer() {
 		String id = getPara("id");
-		boolean result = false;
+		boolean result;
 		CustomerModel comp = CustomerModel.getById(id);
 		if(comp!=null) {
 			comp.setStatus(6);
 			 result =comp.update();
-			if(comp.update()){
-				result = true;
-			}else {
-				result = false;
-			}
 		}else {
 			result = false;
 		}
