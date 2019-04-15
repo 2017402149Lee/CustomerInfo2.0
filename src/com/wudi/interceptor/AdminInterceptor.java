@@ -12,6 +12,7 @@ import com.jfinal.core.Controller;
  *
  */
 public class AdminInterceptor implements Interceptor {
+	@Override
 	public void intercept(Invocation inv) {
 		Controller c = inv.getController();
 		String cookiename = c.getCookie("cname");

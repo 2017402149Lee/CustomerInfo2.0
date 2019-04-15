@@ -70,6 +70,17 @@ public class WeixinController extends Controller{
 		}else {
 			code = 1;
 		}
+		UserModel user = UserModel.findByPhone(phone);//判断成交量是否大于等于10，是的话就给他升级为1级会员，让他可以创建团队
+		if(user!=null) {
+			List<CustomerModel> list = CustomerModel.getCJL(user.getId());
+			if(list.size()>=10&&user.getLevel()!=1) {
+				user.setLevel(1);
+				user.update();
+			}else {
+				String words = "你没有成交10个客户或者你已经是会员。";
+				setAttr("words", words);
+			}
+		}
 		setAttr("data", data);
 		setAttr("code", code);
 		renderJson();
@@ -393,4 +404,27 @@ public class WeixinController extends Controller{
 		setAttr("code", code);
 		renderJson();
 		}
+	/**
+	 * 通过查看他的成交量，判断是否能升级成为1级会员，并且升级
+	 */
+	public void checkLevel() {
+		String user_id = getPara("user_id");
+		int code = -1;
+		UserModel user = UserModel.getById(user_id);//判断成交量是否大于等于10，是的话就给他升级为1级会员，让他可以创建团队
+		if(user!=null) {
+			List<CustomerModel> list = CustomerModel.getCJL(user.getId());
+			if(list.size()>=10&&user.getLevel()!=1) {
+				user.setLevel(1);
+				user.update();
+			}else {
+				String words = "你没有成交10个客户或者你已经是会员。";
+				setAttr("words", words);
+			}
+		}else {
+			code = 0;
+		}
+		
+		setAttr("code", code);
+		renderJson();
+	}
 }

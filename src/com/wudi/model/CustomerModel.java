@@ -168,7 +168,7 @@ public class CustomerModel extends Model<CustomerModel>{
 		return dao.findFirst(sql,id);
 	}
 	public static List<CustomerModel> getCJL(String user_id){
-		String sql = "slecet * from "+tableName+" where user_id = ? and status = 6";
+		String sql = "select * from "+ tableName +" where status = 6 and user_id = ? ";
 		return dao.find(sql,user_id);
 	}
 	
