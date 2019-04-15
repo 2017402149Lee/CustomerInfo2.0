@@ -109,11 +109,12 @@ public class WeixinController extends Controller{
 		int code = -1;
 		String addr = "";
 		String remark = "";
+		String age = "";
 		String name = getPara("name");
 		int sex = getParaToInt("sex");
 		String tel = getPara("tel");
 		int disclose = getParaToInt("disclose");
-		int age = getParaToInt("age");
+		age = getPara("age");
 		addr = getPara("addr");
 		remark = getPara("remark");
 		String user_id = getPara("user_id");
@@ -143,7 +144,7 @@ public class WeixinController extends Controller{
 		int sex = getParaToInt("sex");
 		String tel = getPara("tel");
 		int disclose = getParaToInt("disclose");
-		int age = getParaToInt("age");
+		String age = getPara("age");
 		String addr = getPara("addr");
 		String remark = getPara("remark");
 		String id = getPara("id");

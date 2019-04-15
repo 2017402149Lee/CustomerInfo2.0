@@ -40,10 +40,10 @@ public class CustomerModel extends Model<CustomerModel>{
 		set("sex", sex);
 	}
 
-	public int getAge() {
+	public String getAge() {
 		return get("age");
 	}
-	public void setAge(int age) {
+	public void setAge(String age) {
 		set("age", age);
 	}
 
@@ -204,7 +204,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	/**
 	 * 
 	 */
-	public static boolean save(String name, int sex, String tel, int disclose, int age, String nation,
+	public static boolean save(String name, int sex, String tel, int disclose, String age, String nation,
 			String addr, String remark, String user_id, String type, String otherinfo,int status) {
 		CustomerModel model = new CustomerModel();
 		model.setId(StringUtil.getId());
@@ -224,7 +224,7 @@ public class CustomerModel extends Model<CustomerModel>{
 		return model.save();
 	}
 	
-	public static boolean update(String id,String name, int sex, String tel, int disclose, int age, String nation,
+	public static boolean update(String id,String name, int sex, String tel, int disclose, String age, String nation,
 			String addr, String remark, String type, String otherinfo,int status) {
 		boolean result =false;
 		CustomerModel m=CustomerModel.getById(id);

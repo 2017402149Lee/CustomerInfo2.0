@@ -500,4 +500,25 @@ public class AdminController extends Controller {
         setAttr("data", list.getList());
         renderJson();
 	}
+	/**
+	 * 完成按钮的方法
+	 */
+	public void completeCustomer() {
+		String id = getPara("id");
+		boolean result = false;
+		CustomerModel comp = CustomerModel.getById(id);
+		if(comp!=null) {
+			comp.setStatus(6);
+			 result =comp.update();
+			if(comp.update()){
+				result = true;
+			}else {
+				result = false;
+			}
+		}else {
+			result = false;
+		}
+		setAttr("result", result);
+		renderJson();
+	}
 }
