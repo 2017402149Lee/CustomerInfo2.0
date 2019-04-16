@@ -40,7 +40,22 @@ layui.config({//框架的固定，配置的使用
 		    	  }}
 		      ,{field: 'tel', title: '电话', align:'center'}
 		      ,{field: 'remark', title: '备注',align:'center'}
-		      ,{field: 'username', title: '录入人',align:'center'}
+		      ,{field: 'disclose', title: '是否透漏录入人', align:'center',templet: function(d){
+		    	  if(d.disclose==1){
+		    		  return '<span class="layui-badge layui-bg-green">是</span>'
+		    	  }else{
+		    		  return '<span class="layui-badge layui-bg-green">否</span>'
+		    		  }
+		    	  }
+		      }
+		      ,{field: 'disclose', title: '录入人',align:'center',templet: function(d){
+		    	  if(d.disclose==1){
+		    		  return d.username
+		    	  }else{
+		    		  return '保密'
+		    		  }
+		    	  }
+		      }
 		      ,{field: 'status', title: '状态', align:'center',
 		    	  templet: function(d){
 			    	  if(d.status==6){

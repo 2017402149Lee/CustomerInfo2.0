@@ -25,11 +25,6 @@
 			"icon" : "&#xe613;",
 			"href" : "admin/openTeams",
 			"spread" : false
-			},{
-			"title" : "其他管理",
-			"icon" : "&#xe613;",
-			"href" : "admin/admininfo",
-			"spread" : false
 			}]
 	},{
 		"title" : "系统设置",

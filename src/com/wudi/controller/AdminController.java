@@ -516,4 +516,19 @@ public class AdminController extends Controller {
 		setAttr("result", result);
 		renderJson();
 	}
+	/**
+	 * 打开升级会员的页面
+	 */
+	public void openChangeLevel() {
+		String id=getPara("id");
+		setAttr("id", id);
+		renderFreeMarker("userinfo/changeLevel.html");
+	}
+	public void updateLevel() {
+		String id=getPara("id");
+		int level = getParaToInt("level");
+		boolean result=UserModel.updateLevel(id, level);
+		setAttr("result", result);
+		renderJson();
+	}
 }

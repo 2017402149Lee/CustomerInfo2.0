@@ -23,6 +23,7 @@ layui.config({
 	});
 	
 //==================一个table实例================================
+
 	var ins=  table.render({
 	    elem: '#demo',//渲染对象
 	    height: 'full-88',//表格高度
@@ -41,8 +42,8 @@ layui.config({
 		    		  return '<span style="color: red" >女</span>'
 		    	  }
 		      }} 
-		      ,{field: 'phone', title: '账号（手机号码）'}
-		      ,{field: 'password' ,title:'用户密码'}
+		      ,{field: 'phone', title: '账号（手机号码）',width:150}
+		      ,{field: 'password' ,title:'用户密码',width:140}
 		      ,{field: 'level' ,title:'等级',width:70,templet:function(d){
 		    	  if(d.level== 1){
 		    		  return '<span style="color: blue">1级</span>'
@@ -59,11 +60,13 @@ layui.config({
 		    	  }
 		      }}
 		      ,{fixed: 'right', align:'center',title:'操作', templet:function(d){
+		    	 
 		    	  var arr=new Array();
 		    	  if(per==1){
 			    	  if(d.status==0){
 			    		  arr.push("<a class='layui-btn layui-btn-xs layui-bg-blue' lay-event='check'><i class='layui-icon'>&#xe654;</i>通过</a>");
 			    	  }
+			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='changeLevel'><i class='layui-icon'></i>升级会员</a>");
 			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'>&#xe642;</i>修改角色</a>");
 			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='uppassword'><i class='layui-icon'></i>修改密码</a>");
 			    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'><i class='layui-icon'></i>删除</a>");
@@ -204,7 +207,23 @@ layui.config({
 		      layer.close(index);
 		    });
 			  
-		  } else if(layEvent === 'uppassword'){
+		  } else if(layEvent === 'changeLevel'){
+			  //编辑
+			  var index = layui.layer.open({
+	              title : "【升级成为会员】",
+	              type : 2,
+	              area: ['600px', '400px'],
+	              content : "openChangeLevel?id="+data.id,
+	              success : function(layero, index){
+	                  setTimeout(function(){
+	                      layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
+	                          tips: 3
+	                      });
+	                  },500)
+	              }
+	          })          
+		  
+		  }else if(layEvent === 'uppassword'){
 			  //编辑
 			  var index = layui.layer.open({
 	              title : "【修改密码信息】",

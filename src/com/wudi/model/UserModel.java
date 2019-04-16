@@ -217,5 +217,10 @@ public class UserModel extends Model<UserModel>{
 		m.setLevel(1);
 		return m.update();
 	}
+	public static boolean updateLevel(String id,int level){
+		UserModel m=getById(id);
+		m.setLevel(level);
+		return m.update();
+	}
 	
 }
