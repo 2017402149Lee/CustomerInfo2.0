@@ -103,6 +103,13 @@ public class AdminController extends Controller {
 		setAttr("user", m);
 		renderFreeMarker("userinfo/uppassword.html");
 	}
+	public void openCustomerRemark() {
+		String id=getPara("id");
+		CustomerModel m = CustomerModel.getById(id);
+		setAttr("id", id);
+		setAttr("remark", m.getRemark());
+		renderFreeMarker("customer/upremark.html");
+	}
 	/**
 	 *  功能：保存修改密码
 	 *  修改时间：2019年3月21日20:47:23
@@ -528,6 +535,14 @@ public class AdminController extends Controller {
 		String id=getPara("id");
 		int level = getParaToInt("level");
 		boolean result=UserModel.updateLevel(id, level);
+		setAttr("result", result);
+		renderJson();
+	}
+	
+	public void updateRemark() {
+		String id=getPara("id");
+		String remark = getPara("remark");
+		boolean result=CustomerModel.updateRemark(id, remark);
 		setAttr("result", result);
 		renderJson();
 	}

@@ -43,7 +43,6 @@ layui.config({
 		    	  }
 		      }} 
 		      ,{field: 'phone', title: '账号（手机号码）',width:150}
-		      ,{field: 'password' ,title:'用户密码',width:140}
 		      ,{field: 'level' ,title:'等级',width:70,templet:function(d){
 		    	  if(d.level== 1){
 		    		  return '<span style="color: blue">1级</span>'

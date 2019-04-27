@@ -48,14 +48,8 @@ layui.config({//框架的固定，配置的使用
 		    		  }
 		    	  }
 		      }
-		      ,{field: 'disclose', title: '录入人',align:'center',templet: function(d){
-		    	  if(d.disclose==1){
-		    		  return d.username
-		    	  }else{
-		    		  return '保密'
-		    		  }
-		    	  }
-		      }
+		      ,{field: 'username', title: '录入人',align:'center'}
+		      
 		      ,{field: 'status', title: '状态', align:'center',
 		    	  templet: function(d){
 			    	  if(d.status==6){
@@ -68,7 +62,8 @@ layui.config({//框架的固定，配置的使用
 			      }}
 		      ,{fixed: 'right', align:'center',title:'操作', templet:function(d){
 		    	  var arr=new Array();
-		    	  if(per==1){
+		    	  if(per==0||per==1){
+		    		  	arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'></i>编辑</a>");
 			    	  if(d.status==2){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='chengjiao'><i class='layui-icon'>&#xe654;</i>成交</a>");
 			    	  }
@@ -194,10 +189,10 @@ layui.config({//框架的固定，配置的使用
 	    });
 	  }else if(layEvent === 'edit'){ //编辑
 		  var index = layui.layer.open({
-              title : "【修改信息】",
+              title : "【修改备注】",
               type : 2,
               area: ['800px', '600px'],
-              content : "openSpecialPromotiomEdit?id="+data.id,
+              content : "openCustomerRemark?id="+data.id,
               success : function(layero, index){
                   setTimeout(function(){
                       layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {

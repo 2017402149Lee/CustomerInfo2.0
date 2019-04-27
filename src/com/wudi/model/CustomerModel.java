@@ -347,4 +347,10 @@ public class CustomerModel extends Model<CustomerModel>{
 		return dao.find(sql,user_id,type);
 	}
 	
+	public static boolean updateRemark(String id,String remark){
+		CustomerModel m=getById(id);
+		m.setRemark(remark);
+		return m.update();
+	}
+	
 }
