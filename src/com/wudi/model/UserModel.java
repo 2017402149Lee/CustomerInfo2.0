@@ -2,6 +2,7 @@ package com.wudi.model;
 
 import java.util.List;
 
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.util.StringUtil;
@@ -221,6 +222,22 @@ public class UserModel extends Model<UserModel>{
 		UserModel m=getById(id);
 		m.setLevel(level);
 		return m.update();
+	}
+	
+
+	public static boolean delById(String id) {
+		try {
+			String delsql = "DELETE FROM " + tableName + " WHERE id=?";
+			int iRet = Db.update(delsql, id);
+			if (iRet > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 }
