@@ -36,7 +36,7 @@ public class WeixinController extends Controller{
 		int sex = getParaToInt("sex");
 		UserModel p = UserModel.findByPhone(phone);
 		 if(p != null) {
-			code = 1 ;//2是用户已存在
+			code = 1 ;//1是用户已存在
 		}else {
 			boolean result = UserModel.saveUserinfo(username, password, phone, sex);
 			if(result) {
@@ -59,16 +59,16 @@ public class WeixinController extends Controller{
 		UserModel data = UserModel.loginByPhone(phone);
 		if(data!=null) {
 			if(data.getStatus()==0) {
-				code = -1;
+				code = -1;//-1未审核
 			}else {
 				if(password.equals(data.getPassword())) {
-					code = 0;
+					code = 0;//0成功
 				}else {
-					code = 2;
+					code = 2;//2密码错
 				}
 			}
 		}else {
-			code = 1;
+			code = 1;//1用户不存在
 		}
 		UserModel user = UserModel.findByPhone(phone);//判断成交量是否大于等于10，是的话就给他升级为1级会员，让他可以创建团队
 		if(user!=null) {
@@ -122,11 +122,16 @@ public class WeixinController extends Controller{
 		String type = getPara("type");
 		String otherinfo =getPara("otherinfo");
 		int status = getParaToInt("status");
+		CustomerModel checktel = CustomerModel.findModel(type, tel);
+		if(checktel != null) {
+			code = -1;
+		}else {
 		boolean result = CustomerModel.save(name, sex, tel, disclose, age, nation, addr, remark, user_id, type, otherinfo,status);
 		if(result) {
 			code = 0;
 		}else {
 			code = -1;
+		}
 		}
 		setAttr("code", code);
 		renderJson();

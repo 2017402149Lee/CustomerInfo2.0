@@ -36,7 +36,7 @@ layui.config({
 		      ,{field: 'captain', title: '队长', align:'center'} 
 		      ,{field: 'create_time' ,title:'创建时间', align:'center'}
 		      ,{field: 'status' ,title:'状态', align:'center',width:100, templet: function(d){
-		    	  if(d.status==0){
+		    	  if(d.status==1){
 		    		  return '<span class="layui-badge layui-bg-red">正常</span>'
 		    	  }else{
 		    		  return '<span class="layui-badge layui-bg-blue">异常</span>'

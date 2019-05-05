@@ -16,11 +16,6 @@
 			"spread" : false
 		},
 		{
-			"title" : "客户类型管理",
-			"icon" : "&#xe613;",
-			"href" : "admin/openCustomerTypes",
-			"spread" : false
-		},{
 			"title" : "团队管理",
 			"icon" : "&#xe613;",
 			"href" : "admin/openTeams",

@@ -29,18 +29,17 @@ layui.config({//框架的固定，配置的使用
 	    limit: 10,//每页显示信息条数
 	    id: 'testReload',
 	    cols:  [[ //表头
-	    	 {field: 'name', title: '姓名', sort: true,align:'center', fixed: 'left'}
-		      ,{field: 'sex', title: '性别',align:'center',width:70,
+	    	 {field: 'name', title: '姓名', sort: true,align:'center', fixed: 'left',width:110}
+	    	 ,{field: 'tel', title: '电话', align:'center',width:120}
+		      ,{field: 'sex', title: '性别',align:'center',width:60,
 		    	  templet: function(d){
 		    		  if(d.sex==1){
 			    		  return '<span class="layui-badge layui-bg-blue">男</span>'
 			    	  }else{
 			    		  return '<span class="layui-badge layui-bg-orange">女</span>'
 			    	  }
-		    	  }}
-		      ,{field: 'tel', title: '电话', align:'center'}
-		      ,{field: 'remark', title: '备注',align:'center'}
-		      ,{field: 'disclose', title: '是否透漏录入人', align:'center',templet: function(d){
+		    	  }}		     		      
+		      ,{field: 'disclose', title: '是否透漏录入人', align:'center', width:130,templet: function(d){
 		    	  if(d.disclose==1){
 		    		  return '<span class="layui-badge layui-bg-green">是</span>'
 		    	  }else{
@@ -48,8 +47,11 @@ layui.config({//框架的固定，配置的使用
 		    		  }
 		    	  }
 		      }
-		      ,{field: 'username', title: '录入人',align:'center'}
-		      
+		      ,{field: 'username', title: '录入人',align:'center',width:120}
+		      ,{field: 'age', title: '年龄',align:'center',width:60}
+		      ,{field: 'nation', title: '民族',align:'center',width:80}
+		      ,{field: 'addr', title: '工作地址',align:'center'}
+		      ,{field: 'remark', title: '备注',align:'center'}
 		      ,{field: 'status', title: '状态', align:'center',
 		    	  templet: function(d){
 			    	  if(d.status==6){
@@ -57,14 +59,15 @@ layui.config({//框架的固定，配置的使用
 			    	  }else if(d.status==2){
 			    		  return '<span class="layui-badge layui-bg-blue">已跟进</span>'
 			    	  }else{
-			    		  return '<span class="layui-badge layui-bg-red">未处理</span>'
+			    		  return '<span class="layui-badge layui-bg-red">待处理</span>'
 			    	  }
 			      }}
 		      ,{fixed: 'right', align:'center',title:'操作', templet:function(d){
 		    	  var arr=new Array();
 		    	  if(per==0||per==1){
+		    		  if(d.status!=6){
 		    		  	arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'></i>编辑</a>");
-			    	  if(d.status==2){
+		    		  }if(d.status==2){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='chengjiao'><i class='layui-icon'>&#xe654;</i>成交</a>");
 			    	  }
 			    	  if(d.status!=6){

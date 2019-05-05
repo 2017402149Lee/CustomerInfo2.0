@@ -163,6 +163,11 @@ public class CustomerModel extends Model<CustomerModel>{
 
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
 	}
+	
+	public static CustomerModel findBytel(String tel) {
+
+		return dao.findFirst("select * from " + tableName + " where id = ? ", tel);
+	}
 	public static CustomerModel findCustomerById(String id) {
 		String sql = "SELECT a.*,b.username,b.phone from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b ON a.user_id=b.id where a.id=? and a.status between 1 and 2 ";
 		return dao.findFirst(sql,id);
@@ -350,6 +355,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	public static boolean updateRemark(String id,String remark){
 		CustomerModel m=getById(id);
 		m.setRemark(remark);
+		m.setStatus(2);
 		return m.update();
 	}
 	
