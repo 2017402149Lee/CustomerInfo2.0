@@ -546,4 +546,10 @@ public class AdminController extends Controller {
 		setAttr("result", result);
 		renderJson();
 	}
+	public void delUserModel() {
+		String id= getPara("id");
+		boolean result = UserModel.delById(id);
+		setAttr("result", result);
+		renderJson();
+	}
 }

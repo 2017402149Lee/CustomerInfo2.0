@@ -175,7 +175,7 @@ layui.config({
 					var msgid;
 					//向服务端发送删除指令
 			 		 $.ajax({//异步请求返回给后台
-				    	  url:'deleteUserinfo',
+				    	  url:'delUserModel',
 				    	  type:'POST',
 				    	  data:{"id":data.id},
 				    	  dataType:'json',
