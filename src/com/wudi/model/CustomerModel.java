@@ -145,7 +145,7 @@ public class CustomerModel extends Model<CustomerModel>{
 		String sele_sql = "select a.*,b.username ";
 		StringBuffer from_sql = new StringBuffer();
 		from_sql.append("from ").append(tableName).append(" a left join ").append(UserModel.tableName).append(" b on a.user_id=b.id ");
-		from_sql.append(" where a.type='").append(type).append("' ");
+		from_sql.append(" where a.type='").append(type).append("' and a.status in (1,2,6) ");
 		if (!StringUtil.isBlankOrEmpty(key)) {
 			from_sql.append(" and a.name like '%" + key + "%'");
 		}
@@ -202,7 +202,7 @@ public class CustomerModel extends Model<CustomerModel>{
  * @return
  */
 	public static List<CustomerModel> queryTeamCustomerList(String team_id){
-		String sql = "select a.*,b.username from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where user_id in (SELECT user_id from "+TeamersModel.tableName+" where team_id=?) and a.status = 6";
+		String sql = "select a.*,b.username from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where user_id in (SELECT user_id from "+TeamersModel.tableName+" where team_id=?) and a.status between 1 and 2";
 		return dao.find(sql,team_id);
 	}
 	
@@ -355,6 +355,18 @@ public class CustomerModel extends Model<CustomerModel>{
 	public static boolean updateRemark(String id,String remark){
 		CustomerModel m=getById(id);
 		m.setRemark(remark);
+		m.setStatus(2);
+		return m.update();
+	}
+	
+	public static boolean updateStatus(String id){
+		CustomerModel m=getById(id);
+		m.setStatus(7);
+		return m.update();
+	}
+	
+	public static boolean updateCancel(String id){  	//取消成交
+		CustomerModel m=getById(id);
 		m.setStatus(2);
 		return m.update();
 	}

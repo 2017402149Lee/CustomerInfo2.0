@@ -19,18 +19,66 @@
   <div class="layui-form-item">
     <label class="layui-form-label">id</label>
     <div class="layui-input-inline">
-      <input type="text" name="id" value="${(id)}" required  lay-verify="required" placeholder="请输入学工号" autocomplete="off" class="layui-input">
+      <input type="text" name="id" value="${(id)}" required  lay-verify="required" placeholder="请输入学工号" autocomplete="off" class="layui-input" >
+    </div>
+    <div class="layui-form-mid layui-word-aux">*</div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">姓名</label>
+    <div class="layui-input-inline">
+      <input type="text" name="name" value="${(name)}" required  lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input" >
+    </div>
+    <div class="layui-form-mid layui-word-aux">*</div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">电话</label>
+    <div class="layui-input-inline">
+      <input type="text" name="tel" value="${(tel)}" required  lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input" >
+    </div>
+    <div class="layui-form-mid layui-word-aux">*</div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">性别</label>
+    <div class="layui-input-inline">
+      <input type="text" name="Ssex" value="${(Ssex)}" required  lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input" >
+    </div>
+    <div class="layui-form-mid layui-word-aux">*</div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">是否透漏录入人信息</label>
+    <div class="layui-input-inline">
+      <input type="text" name="Dis" value="${(Dis)}" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input" >
+    </div>
+    <div class="layui-form-mid layui-word-aux">*</div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">年龄</label>
+    <div class="layui-input-inline">
+      <input type="text" name="age" value="${(age)}" required   placeholder="" autocomplete="off" class="layui-input" >
+    </div>
+    
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">民族</label>
+    <div class="layui-input-inline">
+      <input type="text" name="nation" value="${(nation)}" required   placeholder="" autocomplete="off" class="layui-input" > 
+    </div>
+    
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">工作地址</label>
+    <div class="layui-input-inline">
+      <input type="text" name="addr" value="${(addr)}" required   placeholder="" autocomplete="off" class="layui-input" >
     </div>
     <div class="layui-form-mid layui-word-aux">*</div>
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label">修改备注</label>
+    <label class="layui-form-label">备注</label>
     <div class="layui-input-block">
       <input type="text" name="remark" value="${(remark)}"  required  lay-verify="required"  class="layui-input"  autocomplete="off" >
     </div>
     <div class="layui-form-mid layui-word-aux">*</div>
   </div>
-  
   <div class="layui-form-item">
     <div class="layui-input-inline">
       <button class="layui-btn" lay-submit lay-filter="upremark">立即提交</button>

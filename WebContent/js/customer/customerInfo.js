@@ -29,17 +29,18 @@ layui.config({//框架的固定，配置的使用
 	    limit: 10,//每页显示信息条数
 	    id: 'testReload',
 	    cols:  [[ //表头
-	    	 {field: 'name', title: '姓名', sort: true,align:'center', fixed: 'left',width:110}
-	    	 ,{field: 'tel', title: '电话', align:'center',width:120}
-		      ,{field: 'sex', title: '性别',align:'center',width:60,
+	    	 {field: 'name', title: '姓名', sort: true,align:'center', fixed: 'left'}
+		      ,{field: 'sex', title: '性别',align:'center',width:70,
 		    	  templet: function(d){
 		    		  if(d.sex==1){
 			    		  return '<span class="layui-badge layui-bg-blue">男</span>'
 			    	  }else{
 			    		  return '<span class="layui-badge layui-bg-orange">女</span>'
 			    	  }
-		    	  }}		     		      
-		      ,{field: 'disclose', title: '是否透漏录入人', align:'center', width:130,templet: function(d){
+		    	  }}
+		      ,{field: 'tel', title: '电话', align:'center'}
+		      ,{field: 'remark', title: '备注',align:'center'}
+		      ,{field: 'disclose', title: '是否透漏录入人', align:'center',templet: function(d){
 		    	  if(d.disclose==1){
 		    		  return '<span class="layui-badge layui-bg-green">是</span>'
 		    	  }else{
@@ -47,19 +48,16 @@ layui.config({//框架的固定，配置的使用
 		    		  }
 		    	  }
 		      }
-		      ,{field: 'username', title: '录入人',align:'center',width:120}
-		      ,{field: 'age', title: '年龄',align:'center',width:60}
-		      ,{field: 'nation', title: '民族',align:'center',width:80}
-		      ,{field: 'addr', title: '工作地址',align:'center'}
-		      ,{field: 'remark', title: '备注',align:'center'}
+		      ,{field: 'username', title: '录入人',align:'center'}
+		      
 		      ,{field: 'status', title: '状态', align:'center',
 		    	  templet: function(d){
 			    	  if(d.status==6){
 			    		  return '<span class="layui-badge layui-bg-green">已成交</span>'
 			    	  }else if(d.status==2){
 			    		  return '<span class="layui-badge layui-bg-blue">已跟进</span>'
-			    	  }else{
-			    		  return '<span class="layui-badge layui-bg-red">待处理</span>'
+			    	  }else if(d.status==1){
+			    		  return '<span class="layui-badge layui-bg-red">未处理</span>'
 			    	  }
 			      }}
 		      ,{fixed: 'right', align:'center',title:'操作', templet:function(d){
@@ -67,11 +65,18 @@ layui.config({//框架的固定，配置的使用
 		    	  if(per==0||per==1){
 		    		  if(d.status!=6){
 		    		  	arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'></i>编辑</a>");
-		    		  }if(d.status==2){
+		    		  }
+			    	  if(d.status==2){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='chengjiao'><i class='layui-icon'>&#xe654;</i>成交</a>");
 			    	  }
 			    	  if(d.status!=6){
 				    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'><i class='layui-icon'>&#xe640;</i>删除</a>");
+			    	  }
+			    	  if(d.status==6){
+				    	  arr.push("<a class='layui-btn layui-btn-xs ' lay-event='hide'><i class='layui-icon'></i>删除</a>");
+			    	  }
+			    	  if(d.status==6){
+				    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='cancel'><i class='layui-icon'></i>取消成交</a>");
 			    	  }
 		    	  }
 		    	  return arr.join("\n");
@@ -159,7 +164,73 @@ layui.config({//框架的固定，配置的使用
 	      layer.close(index);
 	    });
 
-	  } else if(layEvent === 'handle'){ //处理 
+	  } 
+	  else if(layEvent === 'hide'){ //隐藏
+		  layer.confirm('确定删除此成交信息？',{icon:3, title:'提示信息'},function(index){
+				var msgid;
+				//向服务端发送指令
+		 		 $.ajax({//异步请求返回给后台
+			    	  url:'hideCustomer',
+			    	  type:'POST',
+			    	  data:{"id":data.id},
+			    	  dataType:'json',
+			    	  beforeSend: function(re){
+			    		  msgid = top.layer.msg('数据处理中，请稍候',{icon: 16,time:false,shade:0.8});
+			          },
+			    	  success:function(d){
+			    		  top.layer.close(msgid);
+			    		  if(d.result){
+			    			  active.reload();//重新加载数据
+			    		  }else{
+			    			  top.layer.msg("操作失败！，数据库操作有问题！！");
+			    		  }
+				    		
+			    	  },
+			    	  error:function(XMLHttpRequest, textStatus, errorThrown){
+			    		  top.layer.msg('操作失败！！！服务器有问题！！！！<br>请检测服务器是否启动？', {
+			    		        time: 20000, //20s后自动关闭
+			    		        btn: ['知道了']
+			    		      });
+			           }
+			      });
+		 //关闭当前提示	
+	      layer.close(index);
+	    });
+
+	  }
+	  else if(layEvent === 'cancel'){ //取消成交
+		  layer.confirm('确定取消成交信息？',{icon:3, title:'提示信息'},function(index){
+				var msgid;
+				//向服务端发送指令
+		 		 $.ajax({//异步请求返回给后台
+			    	  url:'cencelCustomer',
+			    	  type:'POST',
+			    	  data:{"id":data.id},
+			    	  dataType:'json',
+			    	  beforeSend: function(re){
+			    		  msgid = top.layer.msg('数据处理中，请稍候',{icon: 16,time:false,shade:0.8});
+			          },
+			    	  success:function(d){
+			    		  top.layer.close(msgid);
+			    		  if(d.result){
+			    			  active.reload();//重新加载数据
+			    		  }else{
+			    			  top.layer.msg("操作失败！，数据库操作有问题！！");
+			    		  }
+				    		
+			    	  },
+			    	  error:function(XMLHttpRequest, textStatus, errorThrown){
+			    		  top.layer.msg('操作失败！！！服务器有问题！！！！<br>请检测服务器是否启动？', {
+			    		        time: 20000, //20s后自动关闭
+			    		        btn: ['知道了']
+			    		      });
+			           }
+			      });
+		 //关闭当前提示	
+	      layer.close(index);
+	    });
+
+	  }else if(layEvent === 'handle'){ //处理 
 		  layer.confirm('确定处理此信息？',{icon:3, title:'提示信息'},function(index){
 				var msgid;
 				//向服务端发送指令

@@ -38,8 +38,11 @@ public class AdminController extends Controller {
 		// 如果不正确，就提示什么不正确？
 		// 如果正确，就正常显示系统页面
 		UserModel m = UserModel.findByLogin(username);
+		String check = m.getRole_id();
+		RoleModel pp = RoleModel.getModelById(check);
+		String right = pp.getName();
 		// 判断用户名和密码是否正确
-		if (m != null) {
+		if (m != null && (right.equals("超级管理员")||right.equals("客服人员"))) {
 			if (m.getPassword().equals(password)) {
 				setAttr("result", 0);// 可以登录
 				setCookie("cname",m.getUsername(), 36000);
@@ -106,7 +109,28 @@ public class AdminController extends Controller {
 	public void openCustomerRemark() {
 		String id=getPara("id");
 		CustomerModel m = CustomerModel.getById(id);
+		int sex = m.getSex();
+		int disclose = m.getDisclose();
+		String Ssex = "";
+		String Dis = "";
+		if(sex == 1) {
+			Ssex = "男";
+		} else {
+			Ssex = "女";
+		}
+		if(disclose == 1) {
+			Dis = "是";
+		} else {
+			Dis = "否";
+		}
 		setAttr("id", id);
+		setAttr("name", m.getName());
+		setAttr("tel", m.getTel());
+		setAttr("Ssex", Ssex);
+		setAttr("Dis", Dis);
+		setAttr("age", m.getAge());
+		setAttr("nation", m.getNation());
+		setAttr("addr", m.getAddr());
 		setAttr("remark", m.getRemark());
 		renderFreeMarker("customer/upremark.html");
 	}
@@ -230,7 +254,7 @@ public class AdminController extends Controller {
 			List<CustomerModel> list=CustomerModel.getListByCYeanMonth(i);//获取客户信息列表
 			for(CustomerModel m:list) {
 				
-				if(m.getStatus()==6) {//找到成交的客户信息
+				if(m.getStatus()==6 || m.getStatus()==7) {//找到成交的客户信息
 					c_num++;
 				}else {
 					w_num++;
@@ -545,11 +569,25 @@ public class AdminController extends Controller {
 		boolean result=CustomerModel.updateRemark(id, remark);
 		setAttr("result", result);
 		renderJson();
+}
+	
+	public void hideCustomer() {
+		String id=getPara("id");
+		boolean result=CustomerModel.updateStatus(id);
+		setAttr("result", result);
+		renderJson();
 	}
+	public void cencelCustomer() {
+		String id = getPara("id");
+		boolean result=CustomerModel.updateCancel(id);
+		setAttr("result", result);
+		renderJson();
+	}
+	
 	public void delUserModel() {
 		String id= getPara("id");
 		boolean result = UserModel.delById(id);
 		setAttr("result", result);
 		renderJson();
-	}
+}
 }
