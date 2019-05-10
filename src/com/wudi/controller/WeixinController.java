@@ -1,20 +1,13 @@
 package com.wudi.controller;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import com.jfinal.core.Controller;
-import com.jfinal.upload.UploadFile;
 import com.wudi.model.CustomerModel;
 import com.wudi.model.NewsModel;
 import com.wudi.model.TeamModel;
 import com.wudi.model.TeamersModel;
 import com.wudi.model.UserModel;
-import com.wudi.plugin.BaiduPlugin;
-import com.wudi.util.StringUtil;
 import com.wudi.util.Util;
 
 /**
@@ -441,64 +434,5 @@ public class WeixinController extends Controller{
 		renderJson();
 	}
 	
-	/**
-	 * 测试百度人脸识别
-	 */
-	public void testface() {
-	    // 传入可选参数调用接口
-	    HashMap<String, String> options = new HashMap<String, String>();
-	    options.put("face_field", "age");
-	    options.put("max_face_num", "2");
-	    options.put("face_type", "LIVE");
-	    String image =Util.GetImageStr("../baiduface/WebContent/images/xx2.jpg");
-	    String imageType = "BASE64";
-	    
-	    // 人脸检测
-	    JSONObject res = BaiduPlugin.face.detect(image, imageType, options);
-	    renderJson(res.toString(2));
-	}
-	/**
-	 * 人脸识别搜索
-	 */
-	public void faceSearchT() {
-	    // 传入可选参数调用接口
-	    HashMap<String, String> options = new HashMap<String, String>();
-	    options.put("quality_control", "HIGH");
-	    options.put("max_user_num", "2");
-	    String image =Util.GetImageStr("../baiduface/WebContent/upload/1557462025819.jpg");
-	    String imageType = "BASE64";
-	    String groupIdList = "test";
-	    
-	    // 人脸搜索
-	    JSONObject res = BaiduPlugin.face.search(image, imageType, groupIdList, options);
-	    
-	    renderJson(res.toString(2));
-	}
-	/**
-	 * 人脸识别搜索
-	 */
-	public void faceSearch() {
-		
-		UploadFile upFile = getFile();//单个上传文件一句搞定  默认路径是 upload
-		File file = upFile.getFile();
-        String extName = StringUtil.getFileExt(file.getName());
-        String filePath = upFile.getUploadPath();
-        String fileName = System.currentTimeMillis() + extName;
-        file.renameTo(new File(filePath+"\\"+fileName));
-        
-		
-	    // 传入可选参数调用接口
-	    HashMap<String, String> options = new HashMap<String, String>();
-//	    options.put("quality_control", "NORMAL");
-//	    options.put("liveness_control", "LOW");
-	    String url=filePath+"\\"+fileName;
-	    String image =Util.GetImageStr(url);
-	    String imageType = "BASE64";
-	    String groupIdList = "test";
-	    
-	    // 人脸搜索
-	    JSONObject res = BaiduPlugin.face.search(image, imageType, groupIdList, options);
-	    
-	    renderJson(res.toString(2));
-	}
+
 }

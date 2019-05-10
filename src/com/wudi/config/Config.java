@@ -22,7 +22,6 @@ import com.wudi.model.TeamersModel;
 import com.wudi.model.UserIntegralModel;
 import com.wudi.model.UserModel;
 import com.wudi.model.UserintegralDetailModel;
-import com.wudi.plugin.BaiduPlugin;
 
 public class Config extends JFinalConfig {
 
@@ -84,11 +83,6 @@ public class Config extends JFinalConfig {
 		me.add(dsMysql);
 		me.add(arpMysql);
 		}
-		
-		
-		//加载百度ai插件
-		BaiduPlugin baiduai=new BaiduPlugin(getProperty("APP_ID"),getProperty("API_KEY"), getProperty("SECRET_KEY"));
-		me.add(baiduai);
 		
 	}
 
