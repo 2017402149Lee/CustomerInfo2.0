@@ -202,7 +202,7 @@ public class CustomerModel extends Model<CustomerModel>{
  * @return
  */
 	public static List<CustomerModel> queryTeamCustomerList(String team_id){
-		String sql = "select a.*,b.username from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where user_id in (SELECT user_id from "+TeamersModel.tableName+" where team_id=?) and a.status between 1 and 2";
+		String sql = "select a.*,b.username from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where user_id in (SELECT user_id from "+TeamersModel.tableName+" where team_id=?)";
 		return dao.find(sql,team_id);
 	}
 	
