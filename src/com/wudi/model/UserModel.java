@@ -79,9 +79,9 @@ public class UserModel extends Model<UserModel>{
 	 * 
 	 */
 	public static Page<UserModel> getList(int pageNumber, int pageSize, String key) {
-		String sele_sql = "select a.* ,b.name as rolename ";
+		String sele_sql = "select a.*,c.total ,b.name as rolename ";
 		StringBuffer from_sql = new StringBuffer();
-		from_sql.append(" from ").append(tableName).append(" a INNER JOIN ").append(RoleModel.tableName).append(" b on a.role_id=b.id");
+		from_sql.append(" from ").append(tableName).append(" a INNER JOIN ").append(RoleModel.tableName).append(" b INNER JOIN ").append(UserIntegralModel.tableName).append(" c on a.role_id=b.id and a.id=c.user_id");
 		if (!StringUtil.isBlankOrEmpty(key)) {
 			from_sql.append("where  a.name like '%" + key + "%'");
 		}

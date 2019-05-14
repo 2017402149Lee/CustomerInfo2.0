@@ -151,6 +151,7 @@ public class CustomerModel extends Model<CustomerModel>{
 		}
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
 	}
+
 	
 	public static List<CustomerModel> getCustomerByType(String type){
 		String sql="select a.*,b.username from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id WHERE type = ? and a.status between 1 and 2 ";

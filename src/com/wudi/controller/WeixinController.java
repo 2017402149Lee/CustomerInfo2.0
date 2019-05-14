@@ -7,6 +7,7 @@ import com.wudi.model.CustomerModel;
 import com.wudi.model.NewsModel;
 import com.wudi.model.TeamModel;
 import com.wudi.model.TeamersModel;
+import com.wudi.model.UserIntegralModel;
 import com.wudi.model.UserModel;
 import com.wudi.util.Util;
 
@@ -40,13 +41,17 @@ public class WeixinController extends Controller{
 		}else {
 			boolean result = UserModel.saveUserinfo(username, password, phone, sex);
 			if(result) {
+				UserModel a = UserModel.findByPhone(phone);
+				boolean InitIntegra = UserIntegralModel.InitIntegra(a.getId());
+				if(InitIntegra){
+					code = 0;
+				}
 				code = 0;
 			}
 		}
 		setAttr("code", code);
 		renderJson();
 	}
-
 	/**
 	 * @author ljp
 	 * @TODO 用戶登录
@@ -62,7 +67,9 @@ public class WeixinController extends Controller{
 				code = -1;//-1未审核
 			}else {
 				if(password.equals(data.getPassword())) {
-					code = 0;//0成功
+					code = 0;
+					UserIntegralModel integra = UserIntegralModel.getIntegraById(data.getId());
+					setAttr("integra", integra);
 				}else {
 					code = 2;//2密码错
 				}
@@ -122,13 +129,44 @@ public class WeixinController extends Controller{
 		String type = getPara("type");
 		String otherinfo =getPara("otherinfo");
 		int status = getParaToInt("status");
+		//int last = UserIntegralModel.findLastTotal(user_id);
 		CustomerModel checktel = CustomerModel.findModel(type, tel);
 		if(checktel != null) {
 			code = -1;
 		}else {
 		boolean result = CustomerModel.save(name, sex, tel, disclose, age, nation, addr, remark, user_id, type, otherinfo,status);
 		if(result) {
-			code = 0;
+			TeamModel check = TeamModel.findCaptain(user_id);//检查是否是队长
+			if(check !=null) {
+				//是的话 就只给自己加积分
+				boolean saveIntegra = UserIntegralModel.saveIntegraForSelf(user_id);
+				if(saveIntegra) {
+					code = 0;
+				}else {
+					code= -1;
+				}
+			}else {
+				TeamersModel find = TeamersModel.findByUd(user_id);
+				if(find != null) {
+					TeamModel d = TeamModel.getById(find.getId());
+					if(d != null) {
+						boolean self = UserIntegralModel.saveIntegraForSelf(user_id);
+						boolean cap = UserIntegralModel.saveIntegraForSelf(d.getUser_id());
+						if(cap && self) {
+							code = 0;
+						}else {
+							code= -1;
+						}
+					}else {
+						code= -1;
+					}
+					
+				}else {
+					code= -1;
+				}
+				
+			}
+
 		}else {
 			code = -1;
 		}
@@ -433,6 +471,4 @@ public class WeixinController extends Controller{
 		setAttr("code", code);
 		renderJson();
 	}
-	
-
 }

@@ -17,6 +17,7 @@ import com.wudi.model.CustomerTypeModel;
 import com.wudi.model.RoleModel;
 import com.wudi.model.TeamModel;
 import com.wudi.model.TeamersModel;
+import com.wudi.model.UserIntegralModel;
 import com.wudi.model.UserModel;
 /**
  * 
@@ -536,11 +537,37 @@ public class AdminController extends Controller {
 	 */
 	public void completeCustomer() {
 		String id = getPara("id");
-		boolean result;
+		boolean result = false;
 		CustomerModel comp = CustomerModel.getById(id);
 		if(comp!=null) {
 			comp.setStatus(6);
-			 result =comp.update();
+			 boolean m =comp.update();
+			 if(m) {
+				 TeamModel n = TeamModel.findCaptain(comp.getUser_id());
+				 if(n != null) {
+					 result = UserIntegralModel.updateintegra(comp.getUser_id());
+				 }else {
+					 TeamersModel c = TeamersModel.findByUd(comp.getUser_id());
+					 if(c != null) {
+						 TeamModel cap = TeamModel.getById(c.getId());
+						 if(cap != null) {
+							 boolean results = UserIntegralModel.updateintegra(comp.getUser_id());
+							 boolean ss = UserIntegralModel.updateintegraForCap(cap.getUser_id());
+								if(results && ss) {
+									result = true;
+								}else {
+									result = false;
+								}
+						 }else {
+								result = false;
+							}
+					 }else {
+							result = false;
+						}
+				 }
+			 }else {
+					result = false;
+				}
 		}else {
 			result = false;
 		}
@@ -574,20 +601,35 @@ public class AdminController extends Controller {
 	public void hideCustomer() {
 		String id=getPara("id");
 		boolean result=CustomerModel.updateStatus(id);
-		setAttr("result", result);
+		if(result) {
+			setAttr("result", result);
+		}
 		renderJson();
 	}
 	public void cencelCustomer() {
 		String id = getPara("id");
 		boolean result=CustomerModel.updateCancel(id);
-		setAttr("result", result);
+		if(result) {
+			setAttr("result", result);
+		}
 		renderJson();
 	}
 	
 	public void delUserModel() {
 		String id= getPara("id");
 		boolean result = UserModel.delById(id);
-		setAttr("result", result);
+		if(result) {
+			setAttr("result", result);
+		}
 		renderJson();
-}
+	}
+	public void cleanIntegra() {
+		String id = getPara("id");
+		boolean result = UserIntegralModel.cleanintegra(id);
+		if(result) {
+			setAttr("result", result);
+		}
+		renderJson();
+	}
+	
 }
