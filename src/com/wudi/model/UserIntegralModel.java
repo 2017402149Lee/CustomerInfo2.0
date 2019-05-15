@@ -95,6 +95,12 @@ public static boolean InitIntegra(String user_id) {
 		m.setTotal(integra+30);
 		return m.update();
 	}
+	public static boolean addIntegra(String user_id,int total) {//给积分
+		UserIntegralModel m = UserIntegralModel.findById(user_id);
+		int integra = m.getTotal();
+		m.setTotal(integra+total);
+		return m.update();
+	}
 	public static boolean cleanintegra(String user_id) {
 		UserIntegralModel m = UserIntegralModel.findById(user_id);
 		m.setTotal(0);
@@ -107,7 +113,7 @@ public static boolean InitIntegra(String user_id) {
 	public static UserIntegralModel getIntegraById(String user_id) {
 		return dao.findFirst("select total from " + tableName + " where user_id = ? ", user_id);
 	}
-	public static UserIntegralModel getId(String id) {
-		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
+	public static UserIntegralModel getId(String user_id) {
+		return dao.findFirst("select * from " + tableName + " where id = ? ", user_id);
 	}
 }

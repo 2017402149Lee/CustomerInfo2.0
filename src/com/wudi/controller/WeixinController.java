@@ -143,7 +143,7 @@ public class WeixinController extends Controller{
 				if(saveIntegra) {
 					code = 0;
 				}else {
-					code= -1;
+					code= -2;
 				}
 			}else {
 				TeamersModel find = TeamersModel.findByUd(user_id);
@@ -155,14 +155,19 @@ public class WeixinController extends Controller{
 						if(cap && self) {
 							code = 0;
 						}else {
-							code= -1;
+							code= -2;
 						}
 					}else {
-						code= -1;
+						code= -2;
 					}
 					
 				}else {
-					code= -1;
+					boolean self = UserIntegralModel.saveIntegraForSelf(user_id);
+					if(self) {
+						code = 0;
+					}else {
+						code = -2;
+					}
 				}
 				
 			}

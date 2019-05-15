@@ -74,9 +74,8 @@ layui.config({//框架的固定，配置的使用
 			    	  }
 			    	  if(d.status==6){
 				    	  arr.push("<a class='layui-btn layui-btn-xs ' lay-event='hide'><i class='layui-icon'></i>删除</a>");
-			    	  }
-			    	  if(d.status==6){
 				    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='cancel'><i class='layui-icon'></i>取消成交</a>");
+				    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
 			    	  }
 		    	  }
 		    	  return arr.join("\n");
@@ -276,7 +275,22 @@ layui.config({//框架的固定，配置的使用
               }
           })          
           layui.layer.full(index);
-	  } else if(layEvent === 'del'){
+	  } else if(layEvent === 'gain'){ //添加积分
+		  var index = layui.layer.open({
+              title : "【添加积分】",
+              type : 2,
+              area: ['800px', '600px'],
+              content : "openAddIntegra?user_id="+data.user_id,
+              success : function(layero, index){
+                  setTimeout(function(){
+                      layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
+                          tips: 3
+                      });
+                  },500)
+              }
+          })          
+          layui.layer.full(index);
+	  }else if(layEvent === 'del'){
 		  //删除
 		  layer.confirm('确定删除此信息？',{icon:3, title:'提示信息'},function(index){
 				var msgid;

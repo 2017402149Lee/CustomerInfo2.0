@@ -550,7 +550,7 @@ public class AdminController extends Controller {
 					 TeamersModel c = TeamersModel.findByUd(comp.getUser_id());
 					 if(c != null) {
 						 TeamModel cap = TeamModel.getById(c.getId());
-						 if(cap != null) {
+						 if(cap != null) {//如果有团队
 							 boolean results = UserIntegralModel.updateintegra(comp.getUser_id());
 							 boolean ss = UserIntegralModel.updateintegraForCap(cap.getUser_id());
 								if(results && ss) {
@@ -561,8 +561,14 @@ public class AdminController extends Controller {
 						 }else {
 								result = false;
 							}
-					 }else {
-							result = false;
+					 }else {//没有团队
+						 boolean results = UserIntegralModel.updateintegra(comp.getUser_id());
+						 if(results) {
+							 result =true;
+						 }else {
+							 result = false;
+						 }
+						 
 						}
 				 }
 			 }else {
@@ -631,5 +637,22 @@ public class AdminController extends Controller {
 		}
 		renderJson();
 	}
-	
+	public void openAddIntegra() {
+		String user_id = getPara("user_id");
+		setAttr("user_id", user_id);
+		renderFreeMarker("customer/addIntegra.html");
+	}
+	public void addIntegra(){
+		String user_id=getPara("user_id");
+		int total = getParaToInt("total");
+		boolean result=UserIntegralModel.addIntegra(user_id, total);
+		setAttr("result", result);
+		renderJson();
+	}
+	public void getIntegra() {
+		String id=getPara("id");
+		UserIntegralModel result=UserIntegralModel.getId(id);
+		setAttr("result", result);
+		renderJson();
+	}
 }
