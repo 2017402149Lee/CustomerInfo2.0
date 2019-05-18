@@ -81,7 +81,10 @@ public class TeamModel extends Model<TeamModel>{
 
 		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
 	}
-	
+	public static TeamModel findcapUser_idById(String id) {
+
+		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
+	}
 	public static boolean saveTeam(String name,String user_id,String remark) {
 		TeamModel m = new TeamModel();
 		m.setCeate_time(new Date());

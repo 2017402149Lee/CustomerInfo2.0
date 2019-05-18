@@ -69,7 +69,7 @@ layui.config({
 			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'>&#xe642;</i>修改角色</a>");
 			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='uppassword'><i class='layui-icon'></i>修改密码</a>");
 			    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'><i class='layui-icon'></i>删除</a>");
-			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='clean'><i class='layui-icon'></i>积分清零</a>");
+			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='upIntegra'><i class='layui-icon'></i>修改积分</a>");
 		    	  }
 		    	  return arr.join("\n");
 		      	}
@@ -240,37 +240,20 @@ layui.config({
 	          })          
 		  
 		  }
-		  else if(layEvent === 'clean'){
-			  layer.confirm('确定清零？',{icon:3, title:'提示信息'},function(index){
-					var msgid;
-					//向服务端发送指令
-			 		 $.ajax({//异步请求返回给后台
-				    	  url:'	cleanIntegra?id'+data.id,
-				    	  type:'POST',
-				    	  data:{"id":data.id},
-				    	  dataType:'json',
-				    	  beforeSend: function(re){
-				    		  msgid = top.layer.msg('数据处理中，请稍候',{icon: 16,time:false,shade:0.8});
-				          },
-				    	  success:function(d){
-				    		  top.layer.close(msgid);
-				    		  if(d.result){
-				    			  actives.reload();//重新加载数据
-				    		  }else{
-				    			  top.layer.msg("操作失败！，数据库操作有问题！！");
-				    		  }
-					    		
-				    	  },
-				    	  error:function(XMLHttpRequest, textStatus, errorThrown){
-				    		  top.layer.msg('操作失败！！！服务器有问题！！！！<br>请检测服务器是否启动？', {
-				    		        time: 20000, //20s后自动关闭
-				    		        btn: ['知道了']
-				    		      });
-				           }
-				      });
-			 //关闭当前提示	
-		      layer.close(index);
-		    });
+		  else if(layEvent === 'upIntegra'){
+			  var index = layui.layer.open({
+	              title : "【修改积分】",
+	              type : 2,
+	              area: ['600px', '400px'],
+	              content : "openUserIntegra?id="+data.id,
+	              success : function(layero, index){
+	                  setTimeout(function(){
+	                      layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
+	                          tips: 3
+	                      });
+	                  },500)
+	              }
+	          })          
 		  }else if(layEvent === 'edit'){ //编辑
 			  var index = layui.layer.open({
 	              title : "修改信息",

@@ -55,6 +55,10 @@ public class TeamersModel extends Model<TeamersModel>{
 
 		return dao.findFirst("select * from " + tableName + " where user_id = ? ", user_id);
 	}
+	public static TeamersModel getTeam_id(String user_id) {
+
+		return dao.findFirst("select * from " + tableName + " where user_id = ? ", user_id);
+	}
 	
 	public static TeamersModel findByPhone(String phone) {
 

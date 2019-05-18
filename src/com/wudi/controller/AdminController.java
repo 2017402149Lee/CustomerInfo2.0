@@ -160,7 +160,9 @@ public class AdminController extends Controller {
 	
 	public void openCuStomers() {
 		String type=getPara("type");
+		String user_id=getPara("user_id");
 		setAttr("type", type);
+		setAttr("user_id", user_id);
 		renderFreeMarker("customer/customerInfo.html");
 	}
 	public void queryCustomers() {
@@ -541,39 +543,39 @@ public class AdminController extends Controller {
 		CustomerModel comp = CustomerModel.getById(id);
 		if(comp!=null) {
 			comp.setStatus(6);
-			 boolean m =comp.update();
-			 if(m) {
-				 TeamModel n = TeamModel.findCaptain(comp.getUser_id());
-				 if(n != null) {
-					 result = UserIntegralModel.updateintegra(comp.getUser_id());
-				 }else {
-					 TeamersModel c = TeamersModel.findByUd(comp.getUser_id());
-					 if(c != null) {
-						 TeamModel cap = TeamModel.getById(c.getId());
-						 if(cap != null) {//如果有团队
-							 boolean results = UserIntegralModel.updateintegra(comp.getUser_id());
-							 boolean ss = UserIntegralModel.updateintegraForCap(cap.getUser_id());
-								if(results && ss) {
-									result = true;
-								}else {
-									result = false;
-								}
-						 }else {
-								result = false;
-							}
-					 }else {//没有团队
-						 boolean results = UserIntegralModel.updateintegra(comp.getUser_id());
-						 if(results) {
-							 result =true;
-						 }else {
-							 result = false;
-						 }
-						 
-						}
-				 }
-			 }else {
-					result = false;
-				}
+			 result =comp.update();
+//			 if(m) {
+//				 TeamModel n = TeamModel.findCaptain(comp.getUser_id());
+//				 if(n != null) {
+//					 result = UserIntegralModel.updateintegra(comp.getUser_id());
+//				 }else {
+//					 TeamersModel c = TeamersModel.findByUd(comp.getUser_id());
+//					 if(c != null) {
+//						 TeamModel cap = TeamModel.getById(c.getId());
+//						 if(cap != null) {//如果有团队
+//							 boolean results = UserIntegralModel.updateintegra(comp.getUser_id());
+//							 boolean ss = UserIntegralModel.updateintegraForCap(cap.getUser_id());
+//								if(results && ss) {
+//									result = true;
+//								}else {
+//									result = false;
+//								}
+//						 }else {
+//								result = false;
+//							}
+//					 }else {//没有团队
+//						 boolean results = UserIntegralModel.updateintegra(comp.getUser_id());
+//						 if(results) {
+//							 result =true;
+//						 }else {
+//							 result = false;
+//						 }
+//						 
+//						}
+//				 }
+//			 }else {
+//					result = false;
+//				}
 		}else {
 			result = false;
 		}
@@ -582,7 +584,7 @@ public class AdminController extends Controller {
 	}
 	/**
 	 * 打开升级会员的页面
-	 */
+	 */	
 	public void openChangeLevel() {
 		String id=getPara("id");
 		setAttr("id", id);
@@ -612,7 +614,7 @@ public class AdminController extends Controller {
 		}
 		renderJson();
 	}
-	public void cencelCustomer() {
+	public void cencelCustomer() { 	//取消成交
 		String id = getPara("id");
 		boolean result=CustomerModel.updateCancel(id);
 		if(result) {
@@ -629,12 +631,18 @@ public class AdminController extends Controller {
 		}
 		renderJson();
 	}
-	public void cleanIntegra() {
+	public void openUserIntegra() {
 		String id = getPara("id");
-		boolean result = UserIntegralModel.cleanintegra(id);
-		if(result) {
-			setAttr("result", result);
-		}
+		UserIntegralModel m = UserIntegralModel.findById(id);
+		setAttr("id",id);
+		setAttr("total", m.getTotal());
+		renderFreeMarker("userinfo/upIntegra.html");
+	}
+	public void upUserIntegra() {
+		String id=getPara("id");
+		int total = getParaToInt("total");
+		boolean result=UserIntegralModel.upUserIntegtra(id, total);
+		setAttr("result", result);
 		renderJson();
 	}
 	public void openAddIntegra() {
@@ -642,6 +650,14 @@ public class AdminController extends Controller {
 		setAttr("user_id", user_id);
 		renderFreeMarker("customer/addIntegra.html");
 	}
+	public void openAddIntegraForCap() {
+		String user_id = getPara("user_id");
+		TeamersModel team_id = TeamersModel.getTeam_id(user_id);
+		TeamModel capUser_id = TeamModel.findcapUser_idById(team_id.getTeam_id());
+		setAttr("user_id", capUser_id.getUser_id());
+		renderFreeMarker("customer/addIntegraForCap.html");
+	}
+	
 	public void addIntegra(){
 		String user_id=getPara("user_id");
 		int total = getParaToInt("total");

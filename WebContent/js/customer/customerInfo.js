@@ -23,13 +23,13 @@ layui.config({//框架的固定，配置的使用
 	var ins =  table.render({
 	    elem: '#demo',//渲染对象
 	    height:'full-88',//表格高度
-	    url: 'queryCustomers', //数据接口
+	    url: 'queryCustomers',//数据接口
 	    where: {key: '',type:$("#type").val()},//给后台传的参数
 	    page: true, //开启分页
 	    limit: 10,//每页显示信息条数
 	    id: 'testReload',
 	    cols:  [[ //表头
-	    	 {field: 'name', title: '姓名', sort: true,align:'center', fixed: 'left'}
+	    	 {field: 'name', title: '姓名', sort: true,align:'center', fixed: 'left',width:'110'}
 		      ,{field: 'sex', title: '性别',align:'center',width:70,
 		    	  templet: function(d){
 		    		  if(d.sex==1){
@@ -38,9 +38,9 @@ layui.config({//框架的固定，配置的使用
 			    		  return '<span class="layui-badge layui-bg-orange">女</span>'
 			    	  }
 		    	  }}
-		      ,{field: 'tel', title: '电话', align:'center'}
-		      ,{field: 'remark', title: '备注',align:'center'}
-		      ,{field: 'disclose', title: '是否透漏录入人', align:'center',templet: function(d){
+		      ,{field: 'tel', title: '电话', align:'center',width:'200'}
+		      ,{field: 'remark', title: '备注',align:'center',width:'300'}
+		      ,{field: 'disclose', title: '是否透漏录入人', align:'center',width:'110',templet: function(d){
 		    	  if(d.disclose==1){
 		    		  return '<span class="layui-badge layui-bg-green">是</span>'
 		    	  }else{
@@ -48,9 +48,9 @@ layui.config({//框架的固定，配置的使用
 		    		  }
 		    	  }
 		      }
-		      ,{field: 'username', title: '录入人',align:'center'}
+		      ,{field: 'username', title: '录入人',align:'center',width:'90'}
 		      
-		      ,{field: 'status', title: '状态', align:'center',
+		      ,{field: 'status', title: '状态', align:'center',width:'90',
 		    	  templet: function(d){
 			    	  if(d.status==6){
 			    		  return '<span class="layui-badge layui-bg-green">已成交</span>'
@@ -60,22 +60,27 @@ layui.config({//框架的固定，配置的使用
 			    		  return '<span class="layui-badge layui-bg-red">未处理</span>'
 			    	  }
 			      }}
-		      ,{fixed: 'right', align:'center',title:'操作', templet:function(d){
+		      ,{fixed: 'right', align:'center',title:'操作',width:'350', templet:function(d){
 		    	  var arr=new Array();
 		    	  if(per==0||per==1){
-		    		  if(d.status!=6){
-		    		  	arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'></i>编辑</a>");
-		    		  }
 			    	  if(d.status==2){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='chengjiao'><i class='layui-icon'>&#xe654;</i>成交</a>");
 			    	  }
 			    	  if(d.status!=6){
+			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'></i>编辑</a>");
 				    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'><i class='layui-icon'>&#xe640;</i>删除</a>");
 			    	  }
 			    	  if(d.status==6){
 				    	  arr.push("<a class='layui-btn layui-btn-xs ' lay-event='hide'><i class='layui-icon'></i>删除</a>");
 				    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='cancel'><i class='layui-icon'></i>取消成交</a>");
-				    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
+				    	  //arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
+			    	  }
+			    	  if(d.captype==1&&d.status==6){
+			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
+			    	  }
+			    	  if(d.captype==0&&d.status==6){
+			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
+			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gaincap'><i class='layui-icon'></i>给队长积分</a>");
 			    	  }
 		    	  }
 		    	  return arr.join("\n");
@@ -281,6 +286,22 @@ layui.config({//框架的固定，配置的使用
               type : 2,
               area: ['800px', '600px'],
               content : "openAddIntegra?user_id="+data.user_id,
+              success : function(layero, index){
+                  setTimeout(function(){
+                      layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
+                          tips: 3
+                      });
+                  },500)
+              }
+          })          
+          layui.layer.full(index);
+	  }
+	  else if(layEvent === 'gaincap'){ //给队长添加积分
+		  var index = layui.layer.open({
+              title : "【添加积分】",
+              type : 2,
+              area: ['800px', '600px'],
+              content : "openAddIntegraForCap?user_id="+data.user_id,
               success : function(layero, index){
                   setTimeout(function(){
                       layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {

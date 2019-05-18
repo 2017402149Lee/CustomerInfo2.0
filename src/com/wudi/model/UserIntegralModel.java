@@ -66,22 +66,28 @@ public static boolean InitIntegra(String user_id) {
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
 	}
 	
-	public static boolean saveIntegraForCap(String user_id) {//队长加积分
+	public static boolean saveIntegraForCap(String user_id) {//队员给队长加积分
 			
 					UserIntegralModel m = UserIntegralModel.findById(user_id);
 				    int integra = m.getTotal();
-					m.setTotal(integra+2);
+					m.setTotal(integra+3);
 					m.setUpdata_time(new Date());
 					return m.update();
 		}
 	public static boolean saveIntegraForSelf(String user_id) {//自己加积分
-		
 		UserIntegralModel m = UserIntegralModel.findById(user_id);
 	    int integra = m.getTotal();
-		m.setTotal(integra+10);
+		m.setTotal(integra+7);
 		m.setUpdata_time(new Date());
 		return m.update();
-}
+	}
+	public static boolean saveIntegraForSelfNoTeam(String user_id) {//自己加积分（无团队）
+		UserIntegralModel m = UserIntegralModel.findById(user_id);
+	    int integra = m.getTotal();
+		m.setTotal(integra+7);
+		m.setUpdata_time(new Date());
+		return m.update();
+	}
 	public static boolean updateintegraForCap(String user_id) {//成交时给队长加积分
 		UserIntegralModel m = UserIntegralModel.findById(user_id);
 		int integra = m.getTotal();
@@ -92,7 +98,7 @@ public static boolean InitIntegra(String user_id) {
 	public static boolean updateintegra(String user_id) {//成交时自己加积分
 		UserIntegralModel m = UserIntegralModel.findById(user_id);
 		int integra = m.getTotal();
-		m.setTotal(integra+30);
+		m.setTotal(integra+0);
 		return m.update();
 	}
 	public static boolean addIntegra(String user_id,int total) {//给积分
@@ -101,9 +107,9 @@ public static boolean InitIntegra(String user_id) {
 		m.setTotal(integra+total);
 		return m.update();
 	}
-	public static boolean cleanintegra(String user_id) {
-		UserIntegralModel m = UserIntegralModel.findById(user_id);
-		m.setTotal(0);
+	public static boolean upUserIntegtra(String id, int total) {		//获取到用户的积分，在进行修改
+		UserIntegralModel m = UserIntegralModel.findById(id);
+		m.setTotal(total);
 		return m.update();
 	}
 	
@@ -115,5 +121,8 @@ public static boolean InitIntegra(String user_id) {
 	}
 	public static UserIntegralModel getId(String user_id) {
 		return dao.findFirst("select * from " + tableName + " where id = ? ", user_id);
+	}
+	public static UserIntegralModel getById(String id) {
+		return dao.findFirst("select * from " + tableName + " where id = ? ", id);
 	}
 }

@@ -142,10 +142,12 @@ public class CustomerModel extends Model<CustomerModel>{
 	 */
 	
 	public static Page<CustomerModel> getList(int pageNumber, int pageSize, String key, String type) {
-		String sele_sql = "select a.*,b.username ";
+		String sele_sql = "select a.*,b.username,c.type as captype ";
 		StringBuffer from_sql = new StringBuffer();
-		from_sql.append("from ").append(tableName).append(" a left join ").append(UserModel.tableName).append(" b on a.user_id=b.id ");
-		from_sql.append(" where a.type='").append(type).append("' and a.status in (1,2,6) ");
+		from_sql.append("from ").append(tableName).append(" a left join ").append(UserModel.tableName).append(" b on a.user_id=b.id").append(" left join " ).append(TeamersModel.tableName).append(" c on c.user_id=b.id ");
+		from_sql.append(" where a.type='").append(type).append("' and a.status in (1,2,6)");
+		//StringBuffer UserSql = new StringBuffer(); 
+		//UserSql.append("select type from ").append(TeamersModel.tableName).append(" where user_id = '").append(user_id).append(" '");
 		if (!StringUtil.isBlankOrEmpty(key)) {
 			from_sql.append(" and a.name like '%" + key + "%'");
 		}

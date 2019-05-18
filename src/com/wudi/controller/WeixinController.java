@@ -143,15 +143,15 @@ public class WeixinController extends Controller{
 				if(saveIntegra) {
 					code = 0;
 				}else {
-					code= -2;
+					code= -2; 	//加积分失败
 				}
-			}else {
+			}else {//不是队长
 				TeamersModel find = TeamersModel.findByUd(user_id);
-				if(find != null) {
+				if(find != null) {//有团队的
 					TeamModel d = TeamModel.getById(find.getId());
 					if(d != null) {
 						boolean self = UserIntegralModel.saveIntegraForSelf(user_id);
-						boolean cap = UserIntegralModel.saveIntegraForSelf(d.getUser_id());
+						boolean cap = UserIntegralModel.saveIntegraForCap(d.getUser_id());
 						if(cap && self) {
 							code = 0;
 						}else {
@@ -161,8 +161,8 @@ public class WeixinController extends Controller{
 						code= -2;
 					}
 					
-				}else {
-					boolean self = UserIntegralModel.saveIntegraForSelf(user_id);
+				}else {//没团队的
+					boolean self = UserIntegralModel.saveIntegraForSelfNoTeam(user_id);
 					if(self) {
 						code = 0;
 					}else {
