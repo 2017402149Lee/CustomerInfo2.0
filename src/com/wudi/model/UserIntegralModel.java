@@ -74,7 +74,14 @@ public static boolean InitIntegra(String user_id) {
 					m.setUpdata_time(new Date());
 					return m.update();
 		}
-	public static boolean saveIntegraForSelf(String user_id) {//自己加积分
+	public static boolean saveIntegraForSelf(String user_id) {//队长加的积分
+		UserIntegralModel m = UserIntegralModel.findById(user_id);
+	    int integra = m.getTotal();
+		m.setTotal(integra+10);
+		m.setUpdata_time(new Date());
+		return m.update();
+	}
+	public static boolean saveIntegraForPalyer(String user_id) {//队员加的积分
 		UserIntegralModel m = UserIntegralModel.findById(user_id);
 	    int integra = m.getTotal();
 		m.setTotal(integra+7);

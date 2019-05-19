@@ -40,7 +40,7 @@ layui.config({//框架的固定，配置的使用
 		    	  }}
 		      ,{field: 'tel', title: '电话', align:'center',width:'200'}
 		      ,{field: 'remark', title: '备注',align:'center',width:'300'}
-		      ,{field: 'disclose', title: '是否透漏录入人', align:'center',width:'110',templet: function(d){
+		      ,{field: 'disclose', title: '是否透漏录入人', align:'center',width:'160',templet: function(d){
 		    	  if(d.disclose==1){
 		    		  return '<span class="layui-badge layui-bg-green">是</span>'
 		    	  }else{
@@ -48,7 +48,7 @@ layui.config({//框架的固定，配置的使用
 		    		  }
 		    	  }
 		      }
-		      ,{field: 'username', title: '录入人',align:'center',width:'90'}
+		      ,{field: 'username', title: '录入人',align:'center',width:'100'}
 		      
 		      ,{field: 'status', title: '状态', align:'center',width:'90',
 		    	  templet: function(d){
@@ -73,7 +73,10 @@ layui.config({//框架的固定，配置的使用
 			    	  if(d.status==6){
 				    	  arr.push("<a class='layui-btn layui-btn-xs ' lay-event='hide'><i class='layui-icon'></i>删除</a>");
 				    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='cancel'><i class='layui-icon'></i>取消成交</a>");
-				    	  //arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
+			    	  }
+			    	  if(d.status==6&&d.captype==null){
+				    	 
+				    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
 			    	  }
 			    	  if(d.captype==1&&d.status==6){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");

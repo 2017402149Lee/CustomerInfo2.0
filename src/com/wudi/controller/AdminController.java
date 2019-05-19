@@ -541,45 +541,14 @@ public class AdminController extends Controller {
 		String id = getPara("id");
 		boolean result = false;
 		CustomerModel comp = CustomerModel.getById(id);
+		
 		if(comp!=null) {
 			comp.setStatus(6);
 			 result =comp.update();
-//			 if(m) {
-//				 TeamModel n = TeamModel.findCaptain(comp.getUser_id());
-//				 if(n != null) {
-//					 result = UserIntegralModel.updateintegra(comp.getUser_id());
-//				 }else {
-//					 TeamersModel c = TeamersModel.findByUd(comp.getUser_id());
-//					 if(c != null) {
-//						 TeamModel cap = TeamModel.getById(c.getId());
-//						 if(cap != null) {//如果有团队
-//							 boolean results = UserIntegralModel.updateintegra(comp.getUser_id());
-//							 boolean ss = UserIntegralModel.updateintegraForCap(cap.getUser_id());
-//								if(results && ss) {
-//									result = true;
-//								}else {
-//									result = false;
-//								}
-//						 }else {
-//								result = false;
-//							}
-//					 }else {//没有团队
-//						 boolean results = UserIntegralModel.updateintegra(comp.getUser_id());
-//						 if(results) {
-//							 result =true;
-//						 }else {
-//							 result = false;
-//						 }
-//						 
-//						}
-//				 }
-//			 }else {
-//					result = false;
-//				}
 		}else {
 			result = false;
 		}
-		setAttr("result", result);
+		setAttr("result", result);   
 		renderJson();
 	}
 	/**

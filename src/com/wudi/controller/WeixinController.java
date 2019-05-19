@@ -148,9 +148,9 @@ public class WeixinController extends Controller{
 			}else {//不是队长
 				TeamersModel find = TeamersModel.findByUd(user_id);
 				if(find != null) {//有团队的
-					TeamModel d = TeamModel.getById(find.getId());
+					TeamModel d = TeamModel.getById(find.getTeam_id());
 					if(d != null) {
-						boolean self = UserIntegralModel.saveIntegraForSelf(user_id);
+						boolean self = UserIntegralModel.saveIntegraForPalyer(user_id);
 						boolean cap = UserIntegralModel.saveIntegraForCap(d.getUser_id());
 						if(cap && self) {
 							code = 0;
