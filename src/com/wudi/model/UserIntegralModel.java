@@ -74,10 +74,27 @@ public static boolean InitIntegra(String user_id) {
 					m.setUpdata_time(new Date());
 					return m.update();
 		}
+	
+	public static boolean deleteIntegraForCap(String user_id) {//队员给队长删积分
+		
+		UserIntegralModel m = UserIntegralModel.findById(user_id);
+	    int integra = m.getTotal();
+		m.setTotal(integra-3);
+		m.setUpdata_time(new Date());
+		return m.update();
+}
 	public static boolean saveIntegraForSelf(String user_id) {//队长加的积分
 		UserIntegralModel m = UserIntegralModel.findById(user_id);
 	    int integra = m.getTotal();
 		m.setTotal(integra+10);
+		m.setUpdata_time(new Date());
+		return m.update();
+	}
+	
+	public static boolean deleteIntegraForSelf(String user_id) {//队长删自己积分
+		UserIntegralModel m = UserIntegralModel.findById(user_id);
+	    int integra = m.getTotal();
+		m.setTotal(integra-10);
 		m.setUpdata_time(new Date());
 		return m.update();
 	}
@@ -88,10 +105,26 @@ public static boolean InitIntegra(String user_id) {
 		m.setUpdata_time(new Date());
 		return m.update();
 	}
+	
+	public static boolean deleteIntegraForPalyer(String user_id) {//队员删积分
+		UserIntegralModel m = UserIntegralModel.findById(user_id);
+	    int integra = m.getTotal();
+		m.setTotal(integra-7);
+		m.setUpdata_time(new Date());
+		return m.update();
+	}
 	public static boolean saveIntegraForSelfNoTeam(String user_id) {//自己加积分（无团队）
 		UserIntegralModel m = UserIntegralModel.findById(user_id);
 	    int integra = m.getTotal();
 		m.setTotal(integra+7);
+		m.setUpdata_time(new Date());
+		return m.update();
+	}
+	
+	public static boolean deleteIntegraForSelfNoTeam(String user_id) {//删积分（无团队）
+		UserIntegralModel m = UserIntegralModel.findById(user_id);
+	    int integra = m.getTotal();
+		m.setTotal(integra-7);
 		m.setUpdata_time(new Date());
 		return m.update();
 	}

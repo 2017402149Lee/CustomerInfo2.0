@@ -220,7 +220,7 @@ layui.config({//框架的固定，配置的使用
 			    	  success:function(d){
 			    		  top.layer.close(msgid);
 			    		  if(d.result){
-			    			  active.reload();//重新加载数据
+			    			  actives.reload();//重新加载数据
 			    		  }else{
 			    			  top.layer.msg("操作失败！，数据库操作有问题！！");
 			    		  }
