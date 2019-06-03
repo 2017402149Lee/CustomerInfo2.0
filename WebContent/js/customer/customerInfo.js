@@ -39,7 +39,6 @@ layui.config({//框架的固定，配置的使用
 			    	  }
 		    	  }}
 		      ,{field: 'tel', title: '电话', align:'center',width:'200'}
-		      ,{field: 'remark', title: '备注',align:'center',width:'300'}
 		      ,{field: 'disclose', title: '是否透漏录入人', align:'center',width:'160',templet: function(d){
 		    	  if(d.disclose==1){
 		    		  return '<span class="layui-badge layui-bg-green">是</span>'
@@ -89,6 +88,7 @@ layui.config({//框架的固定，配置的使用
 		    	  return arr.join("\n");
 		      	}
 		      }
+		      ,{field: 'remark', title: '备注',align:'center',width:'300'}
 		      //这里的toolbar值是模板元素的选择器
 	    ]],done : function(obj){
 	    	this.obj=obj;

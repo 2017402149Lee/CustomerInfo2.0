@@ -233,15 +233,59 @@ public class WeixinController extends Controller{
 	 * @TODO 根据ID删除
 	 */
 	public void delCustomerInfo() {
-		String id = getPara("id");
-		int code = -1;
-		boolean result = CustomerModel.delById(id);
-		if(result) {
-			code = 0;
-		}else {
-			code = -1;
+//		String id = getPara("id");
+//		int code = -1;
+//		boolean result = CustomerModel.delById(id);
+//		if(result) {
+//			code = 0;
+//		}else {
+//			code = -1;
+//		}
+//		setAttr("code", code);
+//		renderJson();
+		String id= getPara("id");
+		boolean result = false;
+		//判断是否有团队
+		CustomerModel a = CustomerModel.getById(id);
+		TeamersModel b =TeamersModel.findByUd(a.getUser_id());
+		if(b != null) {//有团队
+			//判断是队长还是队员
+			TeamModel c = TeamModel.findCaptain(b.getUser_id());
+			if(c != null) {//是队长
+				boolean dc = UserIntegralModel.deleteIntegraForSelf(c.getUser_id());
+				if(dc) {
+					result = CustomerModel.delById(id);
+				}else {
+					result = false;
+				}
+			}else {//是队员
+				//找队长
+				TeamersModel d = TeamersModel.findByUd(b.getUser_id());
+				TeamModel e = TeamModel.findcapUser_idById(d.getTeam_id());
+				if(d!=null&&e!=null) {
+				boolean dd = UserIntegralModel.deleteIntegraForPalyer(b.getUser_id());
+				boolean dc = UserIntegralModel.deleteIntegraForCap(e.getUser_id());
+				if(dd&&dc) {
+					result = CustomerModel.delById(id);
+				}else {
+					result = false;
+				}
+				}else {
+					result = false;
+				}
+			}
+			
+			
+		}else {//没有团队
+			boolean ds = UserIntegralModel.deleteIntegraForSelfNoTeam(a.getUser_id());
+					if(ds) {
+						result = CustomerModel.delById(id);
+					}else {
+						result = false;
+					}
 		}
-		setAttr("code", code);
+		
+		setAttr("result", result);
 		renderJson();
 	}
 	/**
