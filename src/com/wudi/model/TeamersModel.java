@@ -1,11 +1,14 @@
 package com.wudi.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.template.expr.ast.Map;
 import com.wudi.util.StringUtil;
 
 public class TeamersModel extends Model<TeamersModel>{
@@ -55,9 +58,17 @@ public class TeamersModel extends Model<TeamersModel>{
 
 		return dao.findFirst("select * from " + tableName + " where user_id = ? ", user_id);
 	}
+	public static List<TeamersModel> gainTeam_id(String user_id) {
+
+		return dao.find("select team_id from " + tableName + " where user_id = ? ", user_id);
+	}
 	public static TeamersModel getTeam_id(String user_id) {
 
 		return dao.findFirst("select * from " + tableName + " where user_id = ? ", user_id);
+	}
+	public static TeamersModel getTypeByTeam_id(String team_id) {
+
+		return dao.findFirst("select * from " + tableName + " where team_id = ? ", team_id);
 	}
 	
 	public static TeamersModel findByPhone(String phone) {
@@ -101,7 +112,7 @@ public class TeamersModel extends Model<TeamersModel>{
 	/**
 	 * 保存
 	 */
-	public static boolean saveTeamers(String phone,String user_id,String team_id) {
+	public static boolean saveTeamers(String user_id,String team_id) {
 		String remark ="";
 		TeamersModel m = new TeamersModel();
 		m.setId(StringUtil.getId());
@@ -150,6 +161,18 @@ public class TeamersModel extends Model<TeamersModel>{
 	public static List<TeamersModel> findList(String team_id){
 		String sql = "select b.id,b.username,b.sex,b.phone,b.level from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where a.team_id = ?";
 		return dao.find(sql,team_id);
+	}
+	
+	
+	public static List<TeamersModel> getTaemList(String user_id){
+		List<TeamersModel> m = TeamersModel.gainTeam_id(user_id);
+		List<TeamersModel> list = null;
+		List<TeamersModel> resList = new ArrayList<TeamersModel>();
+		for(TeamersModel t:m ) {
+			 list= dao.find("select id,name,remark,create_time from "+TeamModel.tableName+" where id = ? ",t._getAttrValues());
+			 resList.addAll(list);
+		}
+		return resList;
 	}
 	public static boolean delTeamer(String user_id,String team_id) {
 		try {

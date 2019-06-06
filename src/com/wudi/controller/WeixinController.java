@@ -137,6 +137,8 @@ public class WeixinController extends Controller{
 		boolean result = CustomerModel.save(name, sex, tel, disclose, age, nation, addr, remark, user_id, type, otherinfo,status);
 		if(result) {
 			TeamModel check = TeamModel.findCaptain(user_id);//检查是否是队长
+			UserModel level_N = UserModel.getById(user_id);
+			if(level_N.getLevel()!=2) {
 			if(check !=null) {
 				//是的话 就只给自己加积分
 				boolean saveIntegra = UserIntegralModel.saveIntegraForSelf(user_id);
@@ -171,7 +173,9 @@ public class WeixinController extends Controller{
 				}
 				
 			}
-
+			}else {
+				code = 0;
+			}
 		}else {
 			code = -1;
 		}
@@ -298,6 +302,7 @@ public class WeixinController extends Controller{
 		String user_id = getPara("user_id");
 		String remark = getPara("remark");
 		boolean exit = TeamModel.isExit(name,user_id);
+		UserModel tt = UserModel.getById(user_id);
 		if(!exit) {//如果不存在，那么就可以创建
 			boolean result = TeamModel.createTeam(name, user_id, remark);
 			if(result) {
@@ -305,7 +310,15 @@ public class WeixinController extends Controller{
 				NewsModel.createNews("创建团队","你已于"+Util.getCurrentTime()+"加入了团队",user_id,user_id);
 			}
 		}else {
-			code = 1;
+			if(tt.getLevel()==2) {
+				boolean result = TeamModel.createTeam(name, user_id, remark);
+				if(result) {
+					code = 0;//创建成功
+					NewsModel.createNews("创建团队","你已于"+Util.getCurrentTime()+"加入了团队",user_id,user_id);
+				}
+			}else {
+				code =-1;
+			}
 		}
 		setAttr("code", code);
 		renderJson();
@@ -337,13 +350,27 @@ public class WeixinController extends Controller{
 		String user_id=getPara("user_id");
 		String team_id = getPara("team_id");
 		String phone =  getPara("phone");
-		//检查是否友这个人
+		//检查是否有这个人
 		UserModel user=UserModel.findByPhone(phone);
 		if(user!=null) {
 			//检查一下是否在团队里面
 			TeamersModel data = TeamersModel.findByUd(user.getId());
 			if(data!=null) {
-				code = -1;
+				if(user.getLevel()==2) {
+					TeamersModel type = TeamersModel.getTypeByTeam_id(team_id);
+					if(type.getType()!=2) {
+					boolean result=TeamersModel.addTeamers(user.getId(), team_id, 0);
+					if(result) {
+						code = 0;//成功
+						NewsModel.createNews("邀请加入团队","你已于"+Util.getCurrentTime()+"被邀请加入了团队",user_id,user.getId());
+					}
+				}else {
+					code = -2;//该团队已有二级会员
+				}
+				}else {
+					code = -1;
+				}
+				
 			}else {
 				//检查一下是否有这个团队
 				TeamModel team=TeamModel.getById(team_id);
@@ -354,6 +381,7 @@ public class WeixinController extends Controller{
 						NewsModel.createNews("邀请加入团队","你已于"+Util.getCurrentTime()+"被邀请加入了团队",user_id,user.getId());
 					}
 				}
+				
 			}
 		}
 		setAttr("code", code);
@@ -398,22 +426,63 @@ public class WeixinController extends Controller{
 	 * @author 王苏黔
 	 */
 	public void queryTeamCustomerList() {
-		String user_id = getPara("user_id");	
-		int code = -1;
+		String user_id = getPara("user_id");
 		List<CustomerModel> list = null;
+		int code = -1;
+		UserModel level = UserModel.getById(user_id);
+		if(level.getLevel()==2) {
+			TeamersModel M = TeamersModel.findByUd(user_id);
+				list = CustomerModel.queryTeamCustomerList(M.getTeam_id());//队长查看成员已成交的客户信息
+				code=0;
+			
+		}else {
 		TeamersModel m=TeamersModel.findByUd(user_id);
 		if(m != null) {
 			list = CustomerModel.queryTeamCustomerList(m.getTeam_id());//队长查看成员已成交的客户信息
 			code=0;
 		}
+		}
 		setAttr("list", list);
 		setAttr("code", code);
-		renderJson();
 		
+		renderJson();
+		}
+
+	
+	/**
+	 * 二级会员加入团队
+	 */
+	public void joinTeam() {
+		String phone = getPara("phone");//队长号码
+		String user_id = getPara("user_id");	
+		String team_id="111";
+		int code = -1;
+		UserModel find = UserModel.findByPhone(phone);
+		if(find != null) {
+			TeamersModel data = TeamersModel.findByUd(user_id);
+			if(data ==null) {
+			TeamersModel m = TeamersModel.findByUd(find.getId());//找队长的user_id
+			team_id = m.getTeam_id();
+			boolean join = TeamersModel.addTeamers(user_id, team_id, 0);
+			if(join) {
+				code = 0;
+			}else {
+				code =-1;//加入失败
+			}
+		}else {
+			code = -3;//已是该团队成员
+		}
+	}else {
+			code = -2;//该号码没有团队
+		}
+		setAttr("code", code);
+		renderJson();
+	}
+	
 	/**
 	 * 获取团队信息接口	
 	 */
-	}
+	
 	public void getTeamInfo() {
 		String user_id = getPara("user_id");
 		int code = -1;
@@ -429,19 +498,46 @@ public class WeixinController extends Controller{
 		renderJson();
 	}
 	/**
-	 * 获取团队信息及团队成员信息接口	
+	 *获取团队列表
+	 */
+	public void  getTaemList() {
+		String user_id =getPara("user_id");
+		List <TeamersModel> list = TeamersModel.getTaemList(user_id);
+		setAttr("list", list);
+		renderJson();
+	}
+//	/**
+//	 * 获取团队信息及团队成员信息接口	
+//	 */
+//	public void getTeamDetailInfo() {
+//		String user_id = getPara("user_id");
+//		int code = -1;
+//		TeamModel data=null;
+//		List<TeamersModel> list=null;
+//		//再根据user查找，他所在的团队，找出他的团队id
+//		TeamersModel teamer=TeamersModel.findByUd(user_id);
+//		if(teamer!=null) {
+//			data = TeamModel.getById(teamer.getTeam_id());
+//			list=TeamersModel.findList(teamer.getTeam_id());
+//			code = 1;
+//		}
+//		setAttr("data", data);
+//		setAttr("list", list);
+//		setAttr("code", code);
+//		renderJson();
+//	}
+	/**
+	 * 2级会员获取团队信息及队员信息接口
 	 */
 	public void getTeamDetailInfo() {
-		String user_id = getPara("user_id");
+		String id = getPara("id");
 		int code = -1;
-		TeamModel data=null;
-		List<TeamersModel> list=null;
-		//再根据user查找，他所在的团队，找出他的团队id
-		TeamersModel teamer=TeamersModel.findByUd(user_id);
-		if(teamer!=null) {
-			data = TeamModel.getById(teamer.getTeam_id());
-			list=TeamersModel.findList(teamer.getTeam_id());
+		TeamModel data = TeamModel.getById(id);
+		List<TeamersModel> list=TeamersModel.findList(id);
+		if(data!=null&&list!=null) {
 			code = 1;
+		}else {
+			code = -1;
 		}
 		setAttr("data", data);
 		setAttr("list", list);

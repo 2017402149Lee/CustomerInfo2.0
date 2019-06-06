@@ -48,7 +48,6 @@ layui.config({//框架的固定，配置的使用
 		    	  }
 		      }
 		      ,{field: 'username', title: '录入人',align:'center',width:'100'}
-		      
 		      ,{field: 'status', title: '状态', align:'center',width:'90',
 		    	  templet: function(d){
 			    	  if(d.status==6){
@@ -59,6 +58,7 @@ layui.config({//框架的固定，配置的使用
 			    		  return '<span class="layui-badge layui-bg-red">未处理</span>'
 			    	  }
 			      }}
+		      ,{field: 'remark', title: '备注',align:'center',width:'300'}
 		      ,{fixed: 'right', align:'center',title:'操作',width:'350', templet:function(d){
 		    	  var arr=new Array();
 		    	  if(per==0||per==1){
@@ -88,7 +88,6 @@ layui.config({//框架的固定，配置的使用
 		    	  return arr.join("\n");
 		      	}
 		      }
-		      ,{field: 'remark', title: '备注',align:'center',width:'300'}
 		      //这里的toolbar值是模板元素的选择器
 	    ]],done : function(obj){
 	    	this.obj=obj;

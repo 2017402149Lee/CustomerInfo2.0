@@ -70,9 +70,7 @@ public class CustomerModel extends Model<CustomerModel>{
 	public void setNation(String nation) {
 		set("nation", nation);
 	}
-
 	
-
 	public String getAddr() {
 		return get("addr");
 	}
@@ -145,7 +143,7 @@ public class CustomerModel extends Model<CustomerModel>{
 		String sele_sql = "select a.*,b.username,c.type as captype ";
 		StringBuffer from_sql = new StringBuffer();
 		from_sql.append("from ").append(tableName).append(" a left join ").append(UserModel.tableName).append(" b on a.user_id=b.id").append(" left join " ).append(TeamersModel.tableName).append(" c on c.user_id=b.id ");
-		from_sql.append(" where a.type='").append(type).append("' and a.status in (1,2,6)");
+		from_sql.append(" where a.type='").append(type).append("' and a.status in (1,2,6)").append(" ORDER BY a.create_time DESC ");
 		//StringBuffer UserSql = new StringBuffer(); 
 		//UserSql.append("select type from ").append(TeamersModel.tableName).append(" where user_id = '").append(user_id).append(" '");
 		if (!StringUtil.isBlankOrEmpty(key)) {
@@ -205,7 +203,7 @@ public class CustomerModel extends Model<CustomerModel>{
  * @return
  */
 	public static List<CustomerModel> queryTeamCustomerList(String team_id){
-		String sql = "select a.*,b.username from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where user_id in (SELECT user_id from "+TeamersModel.tableName+" where team_id=?)";
+		String sql = "select a.*,b.username from "+tableName+" a LEFT JOIN "+UserModel.tableName+" b on a.user_id=b.id where user_id in (SELECT user_id from "+TeamersModel.tableName+" where team_id=?) ORDER BY a.create_time DESC ";
 		return dao.find(sql,team_id);
 	}
 	
@@ -346,6 +344,7 @@ public class CustomerModel extends Model<CustomerModel>{
 
 		return dao.find(sql.toString());
 	}
+
 	/**
 	 * 个人中心的三种Status
 	 * @return

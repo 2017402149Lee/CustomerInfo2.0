@@ -202,6 +202,7 @@ public class AdminController extends Controller {
         int page=getParaToInt("page");
         Page<UserModel> list = UserModel.getList(page, limit, key);
         setAttr("code", 0);
+        setAttr("page", page);
         setAttr("msg", "你好！");
         setAttr("count", list.getTotalRow());
         setAttr("data", list.getList());
