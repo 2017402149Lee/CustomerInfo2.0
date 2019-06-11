@@ -58,6 +58,11 @@ public class TeamersModel extends Model<TeamersModel>{
 
 		return dao.findFirst("select * from " + tableName + " where user_id = ? ", user_id);
 	}
+	
+	public static TeamersModel findByUTd(String user_id,String team_id) {//查找该二级会员是否已在该团队
+
+		return dao.findFirst("select * from " + tableName + " where user_id = ? and team_id = ?", user_id,team_id);
+	}
 	public static List<TeamersModel> gainTeam_id(String user_id) {
 
 		return dao.find("select team_id from " + tableName + " where user_id = ? ", user_id);
@@ -71,9 +76,10 @@ public class TeamersModel extends Model<TeamersModel>{
 		return dao.findFirst("select * from " + tableName + " where team_id = ? ", team_id);
 	}
 	
-	public static TeamersModel findByPhone(String phone) {
+	public static TeamersModel findLevel(String team_id) {
 
-		return dao.findFirst("select * from " + tableName + " where phone = ? ", phone);
+		String sql = "select a.*,b.level from "+tableName+" a , "+UserModel.tableName+" b where a.user_id = b.id and b.level = 2 and a.team_id =? ";
+		return dao.findFirst(sql,team_id);
 	}
 	public static TeamersModel getById(String id) {
 

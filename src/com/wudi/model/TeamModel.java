@@ -63,7 +63,17 @@ public class TeamModel extends Model<TeamModel>{
 		String sql = "select * from "+tableName+" where name = ? or user_id=?";
 		TeamModel m=dao.findFirst(sql,name,captainId);
 		boolean result=false;
-		if(m!=null) {//存在
+		if(m==null) {//不存在
+			result=true;
+		}
+		return result;
+	}
+	
+	public static boolean isIn(String name) {
+		String sql = "select * from "+tableName+" where name = ? ";
+		TeamModel m=dao.findFirst(sql,name);
+		boolean result=false;
+		if(m==null) {//不存在
 			result=true;
 		}
 		return result;

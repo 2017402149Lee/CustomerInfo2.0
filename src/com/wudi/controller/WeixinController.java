@@ -88,6 +88,7 @@ public class WeixinController extends Controller{
 				setAttr("words", words);
 			}
 		}
+		setAttr("level", user.getLevel());
 		setAttr("data", data);
 		setAttr("code", code);
 		renderJson();
@@ -303,7 +304,7 @@ public class WeixinController extends Controller{
 		String remark = getPara("remark");
 		boolean exit = TeamModel.isExit(name,user_id);
 		UserModel tt = UserModel.getById(user_id);
-		if(!exit) {//如果不存在，那么就可以创建
+		if(exit==true) {//如果不存在，那么就可以创建
 			boolean result = TeamModel.createTeam(name, user_id, remark);
 			if(result) {
 				code = 0;//创建成功
@@ -311,13 +312,21 @@ public class WeixinController extends Controller{
 			}
 		}else {
 			if(tt.getLevel()==2) {
+				boolean in = TeamModel.isIn(name);
+				if(in == true) {
 				boolean result = TeamModel.createTeam(name, user_id, remark);
 				if(result) {
 					code = 0;//创建成功
 					NewsModel.createNews("创建团队","你已于"+Util.getCurrentTime()+"加入了团队",user_id,user_id);
+				}else {
+					code = -3;//错误
 				}
+				}else {
+					code = -2;//该团队名称已存在
+				}
+				
 			}else {
-				code =-1;
+				code =-1;//1级只能创建一个团队
 			}
 		}
 		setAttr("code", code);
@@ -355,33 +364,29 @@ public class WeixinController extends Controller{
 		if(user!=null) {
 			//检查一下是否在团队里面
 			TeamersModel data = TeamersModel.findByUd(user.getId());
-			if(data!=null) {
+			if(data!=null) {//已经有了团队
+				TeamersModel level = TeamersModel.findLevel(team_id);
+				if(level == null){
 				if(user.getLevel()==2) {
 					TeamersModel type = TeamersModel.getTypeByTeam_id(team_id);
-					if(type.getType()!=2) {
 					boolean result=TeamersModel.addTeamers(user.getId(), team_id, 0);
 					if(result) {
 						code = 0;//成功
 						NewsModel.createNews("邀请加入团队","你已于"+Util.getCurrentTime()+"被邀请加入了团队",user_id,user.getId());
 					}
-				}else {
-					code = -2;//该团队已有二级会员
-				}
+				
 				}else {
 					code = -1;
 				}
-				
 			}else {
-				//检查一下是否有这个团队
-				TeamModel team=TeamModel.getById(team_id);
-				if(team!=null) {
+				code = -2;//该团队已有二级会员，或者是该成员为1级会员已有团队。
+			}
+			}else {//没有团队
 					boolean result=TeamersModel.addTeamers(user.getId(), team_id, 0);
 					if(result) {
 						code = 0;//成功
 						NewsModel.createNews("邀请加入团队","你已于"+Util.getCurrentTime()+"被邀请加入了团队",user_id,user.getId());
 					}
-				}
-				
 			}
 		}
 		setAttr("code", code);
@@ -459,18 +464,21 @@ public class WeixinController extends Controller{
 		int code = -1;
 		UserModel find = UserModel.findByPhone(phone);
 		if(find != null) {
-			TeamersModel data = TeamersModel.findByUd(user_id);
+			TeamersModel caps = TeamersModel.findByUd(find.getId());
+			TeamersModel level = TeamersModel.findLevel(caps.getTeam_id());
+			if(level== null) {//该团队没有二级会员
+			TeamersModel data = TeamersModel.findByUTd(user_id, caps.getTeam_id());
 			if(data ==null) {
-			TeamersModel m = TeamersModel.findByUd(find.getId());//找队长的user_id
-			team_id = m.getTeam_id();
+			team_id = caps.getTeam_id();
 			boolean join = TeamersModel.addTeamers(user_id, team_id, 0);
 			if(join) {
 				code = 0;
-			}else {
+			}else{
 				code =-1;//加入失败
 			}
+			}
 		}else {
-			code = -3;//已是该团队成员
+			code = -3;//该团队已存在一名二级会员或者已经是该团队成员
 		}
 	}else {
 			code = -2;//该号码没有团队

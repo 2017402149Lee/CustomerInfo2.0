@@ -45,6 +45,8 @@ layui.config({
 		      ,{field: 'level' ,title:'等级',width:70,templet:function(d){
 		    	  if(d.level== 1){
 		    		  return '<span style="color: blue">1级</span>'
+		    	  }if(d.level== 2){
+		    		  return '<span style="color: blue">2级</span>'
 		    	  }else{
 		    		  return '<span style="color: red" >0级</span>'
 		    	  }
