@@ -141,14 +141,15 @@ public class CustomerModel extends Model<CustomerModel>{
 	
 	public static Page<CustomerModel> getList(int pageNumber, int pageSize, String key, String type) {
 		String sele_sql = "select a.*,b.username,c.type as captype ";
+		String sql = "";
 		StringBuffer from_sql = new StringBuffer();
 		from_sql.append("from ").append(tableName).append(" a left join ").append(UserModel.tableName).append(" b on a.user_id=b.id").append(" left join " ).append(TeamersModel.tableName).append(" c on c.user_id=b.id ");
-		from_sql.append(" where a.type='").append(type).append("' and a.status in (1,2,6)").append(" ORDER BY a.create_time DESC ");
-		//StringBuffer UserSql = new StringBuffer(); 
-		//UserSql.append("select type from ").append(TeamersModel.tableName).append(" where user_id = '").append(user_id).append(" '");
+		from_sql.append(" where a.type='").append(type).append("' and a.status in (1,2,6)");
 		if (!StringUtil.isBlankOrEmpty(key)) {
 			from_sql.append(" and a.name like '%" + key + "%'");
-		}
+			 //sql = "select a.*,b.username,c.type as captype  from "+ tableName + " a left join "+ UserModel.tableName+" b on a.user_id=b.id left join "+TeamersModel.tableName+ " c on c.user_id=b.id  where a.type= "+type+" and a.status in (1,2,6) and a.name like '%" + key +" %' ";
+		}from_sql.append(" ORDER BY a.create_time DESC ");
+		
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
 	}
 

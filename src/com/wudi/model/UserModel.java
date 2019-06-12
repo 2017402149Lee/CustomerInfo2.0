@@ -83,7 +83,7 @@ public class UserModel extends Model<UserModel>{
 		StringBuffer from_sql = new StringBuffer();
 		from_sql.append(" from ").append(tableName).append(" a INNER JOIN ").append(RoleModel.tableName).append(" b INNER JOIN ").append(UserIntegralModel.tableName).append(" c on a.role_id=b.id and a.id=c.user_id");
 		if (!StringUtil.isBlankOrEmpty(key)) {
-			from_sql.append(" and a.name like '%" + key + "%'");
+			from_sql.append(" and a.username like '%" + key + "%'");
 		}
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString());
 	}
