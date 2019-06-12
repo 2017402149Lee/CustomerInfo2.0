@@ -401,11 +401,17 @@ public class WeixinController extends Controller{
 		int code = -1;
 		String user_id = getPara("user_id");
 		String team_id=getPara("team_id");
+		UserModel m = UserModel.getById(user_id);
+		TeamersModel c = TeamersModel.findByUd(user_id);
+		if(m.getLevel()==2||c.getType()==1) {
+			code = -2;//2级会员不能被删除,不能删除队长
+		}else {
 		boolean result = TeamersModel.delTeamer(user_id,team_id);
 		if(result) {
 			code = 0;
 		}else {
 			code = -1;
+		}
 		}
 		setAttr("code", code);
 		renderJson();
