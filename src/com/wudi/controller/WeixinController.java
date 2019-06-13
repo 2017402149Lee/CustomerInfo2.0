@@ -138,8 +138,6 @@ public class WeixinController extends Controller{
 		boolean result = CustomerModel.save(name, sex, tel, disclose, age, nation, addr, remark, user_id, type, otherinfo,status);
 		if(result) {
 			TeamModel check = TeamModel.findCaptain(user_id);//检查是否是队长
-			UserModel level_N = UserModel.getById(user_id);
-			if(level_N.getLevel()!=2) {
 			if(check !=null) {
 				//是的话 就只给自己加积分
 				boolean saveIntegra = UserIntegralModel.saveIntegraForSelf(user_id);
@@ -173,9 +171,6 @@ public class WeixinController extends Controller{
 					}
 				}
 				
-			}
-			}else {
-				code = 0;
 			}
 		}else {
 			code = -1;

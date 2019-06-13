@@ -310,8 +310,6 @@ public class AdminController extends Controller {
 					result = false;
 				}
 			}
-			
-			
 		}else {//没有团队
 			boolean ds = UserIntegralModel.deleteIntegraForSelfNoTeam(a.getUser_id());
 					if(ds) {
