@@ -2,6 +2,7 @@ package com.wudi.model;
 
 import java.util.Date;
 
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.wudi.util.StringUtil;
@@ -105,6 +106,20 @@ public class TeamModel extends Model<TeamModel>{
 		m.setId(StringUtil.getId());
 		return m.save();
 		
+	}
+	public static boolean delById(String id) {
+		try {
+			String delsql = "DELETE FROM " + tableName + " WHERE id=?";
+			int iRet = Db.update(delsql, id);
+			if (iRet > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	public static boolean createTeam(String name,String user_id,String remark) {
 		boolean result=false;

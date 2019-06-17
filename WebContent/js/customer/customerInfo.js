@@ -62,7 +62,7 @@ layui.config({//框架的固定，配置的使用
 		      ,{fixed: 'right', align:'center',title:'操作',width:'350', templet:function(d){
 		    	  var arr=new Array();
 		    	  if(per==0||per==1){
-			    	  if(d.status==2){
+			    	  if(d.status==2&&d.level==1&&d.level==0){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='chengjiao'><i class='layui-icon'>&#xe654;</i>成交</a>");
 			    	  }
 			    	  if(d.status!=6){
@@ -73,14 +73,14 @@ layui.config({//框架的固定，配置的使用
 				    	  arr.push("<a class='layui-btn layui-btn-xs ' lay-event='hide'><i class='layui-icon'></i>删除</a>");
 				    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='cancel'><i class='layui-icon'></i>取消成交</a>");
 			    	  }
-			    	  if(d.status==6&&d.captype==null){
+			    	  if(d.status==6&&d.captype==null&&d.level==1&&d.level==0){
 				    	 
 				    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
 			    	  }
-			    	  if(d.captype==1&&d.status==6){
+			    	  if(d.captype==1&&d.status==6&&d.level==1&&d.level==0){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
 			    	  }
-			    	  if(d.captype==0&&d.status==6){
+			    	  if(d.captype==0&&d.status==6&&d.level==1&&d.level==0){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gaincap'><i class='layui-icon'></i>给队长积分</a>");
 			    	  }
@@ -104,7 +104,7 @@ layui.config({//框架的固定，配置的使用
 							// 执行重载
 			  table.reload('testReload', {//reload重新加载
 				  page : {
-					  curr : 1// 重新从第 1 页开始
+					  curr : laypage// 重新从第 1 页开始
 					  },
 					  where : {//要查询的字段
 						  key : demoReload.val(),

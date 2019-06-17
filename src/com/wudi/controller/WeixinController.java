@@ -630,4 +630,5 @@ public class WeixinController extends Controller{
 		setAttr("code", code);
 		renderJson();
 	}
+	
 }

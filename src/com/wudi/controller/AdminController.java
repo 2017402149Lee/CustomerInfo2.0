@@ -42,12 +42,16 @@ public class AdminController extends Controller {
 		String check = m.getRole_id();
 		RoleModel pp = RoleModel.getModelById(check);
 		String right = pp.getName();
+		int level = m.getLevel();
+		List<TeamersModel> s = TeamersModel.gainTeam_id(m.getId());		
 		// 判断用户名和密码是否正确
-		if (m != null && (right.equals("超级管理员")||right.equals("客服人员"))) {
+		if (m != null && (right.equals("超级管理员")||right.equals("客服人员"))||level==2) {
 			if (m.getPassword().equals(password)) {
 				setAttr("result", 0);// 可以登录
 				setCookie("cname",m.getUsername(), 36000);
 				setSessionAttr("user", m);
+				setSessionAttr("level", level);
+					setSessionAttr("team_id", s);
 			} else {
 				setAttr("result", 1);// 密码错误
 			}
@@ -85,6 +89,7 @@ public class AdminController extends Controller {
 	 *  作者： xiao
 	 */
 	public void main() {
+		setAttr("level", getSessionAttr("level"));
 		render("main.html");
 	}
 	/**
@@ -166,15 +171,34 @@ public class AdminController extends Controller {
 		renderFreeMarker("customer/customerInfo.html");
 	}
 	public void queryCustomers() {
+		int level = getSessionAttr("level");
+        List<TeamersModel> team_id = getSessionAttr("team_id");	
 		String key = getPara("key");
         int limit=getParaToInt("limit");
         int page=getParaToInt("page");
         String type=getPara("type"); 
-        Page<CustomerModel> list = CustomerModel.getList(page, limit, key,type);
-        setAttr("code", 0);
-        setAttr("msg", "你好！");
-        setAttr("count", list.getTotalRow());
-        setAttr("data", list.getList());
+        Page<CustomerModel> list = null;
+       // List<String> reslist = new ArrayList<String>();
+        if(level==2) {
+        	StringBuffer ts = new StringBuffer();
+        	for(TeamersModel m:team_id) {
+        		String teamid=m.getTeam_id();
+        		ts.append("'").append(teamid).append("'").append(",");
+        	}
+        	ts.append("'").append(0).append("'");
+        	list= CustomerModel.SecondgetList(page, limit, key, type,ts.toString());
+    		setAttr("code",0);
+    		setAttr("msg", "你好！");
+    		setAttr("count", list.getTotalRow());
+    		setAttr("data", list.getList());
+    		setAttr("level", level);
+        }else {
+	        list = CustomerModel.getList(page, limit, key,type);
+	        setAttr("code", 0);
+	        setAttr("msg", "你好！");
+	        setAttr("count", list.getTotalRow());
+	        setAttr("data", list.getList());
+        }
         renderJson();
 	}
 	
@@ -200,12 +224,23 @@ public class AdminController extends Controller {
 		String key = getPara("key");
         int limit=getParaToInt("limit");
         int page=getParaToInt("page");
-        Page<UserModel> list = UserModel.getList(page, limit, key);
-        setAttr("code", 0);
-        setAttr("page", page);
-        setAttr("msg", "你好！");
-        setAttr("count", list.getTotalRow());
-        setAttr("data", list.getList());
+        int level =getSessionAttr("level");
+        if(level != 2) {
+        	Page<UserModel> list = UserModel.getList(page, limit, key);
+            setAttr("code", 0);
+            setAttr("page", page);
+            setAttr("msg", "你好！");
+            setAttr("count", list.getTotalRow());
+            setAttr("data", list.getList());
+        }else {
+        	Page<UserModel> list = UserModel.getList(page, limit, key);
+            setAttr("code", 1);
+            setAttr("page", page);
+            setAttr("msg", "非管理员不可查看用户信息！");
+            setAttr("count", list.getTotalRow());
+            setAttr("data", list.getList());
+        }
+        
         renderJson();
 	}
 	/**
@@ -548,11 +583,22 @@ public class AdminController extends Controller {
 		String key = getPara("key");
         int limit=getParaToInt("limit");
         int page=getParaToInt("page");
+        int level = getSessionAttr("level");
+        if(level!=2) {
+        	
+        
         Page<TeamModel> list = TeamModel.getList(page, limit, key);
         setAttr("code", 0);
         setAttr("msg", "你好！");
         setAttr("count", list.getTotalRow());
         setAttr("data", list.getList());
+        }else {
+        	Page<TeamModel> list = TeamModel.getList(page, limit, key);
+            setAttr("code", 1);
+            setAttr("msg", "非管理员不可查看团队信息");
+            setAttr("count", list.getTotalRow());
+            setAttr("data", list.getList());
+        }
         renderJson();
 	}
 	/**
@@ -679,6 +725,16 @@ public class AdminController extends Controller {
 		String id=getPara("id");
 		UserIntegralModel result=UserIntegralModel.getId(id);
 		setAttr("result", result);
+		renderJson();
+	}
+	/**
+	 * 删除团队
+	 */
+	public void delGroupInfo() {
+		String id = getPara("id");
+		boolean d = TeamModel.delById(id);
+		boolean del= TeamersModel.delByTeam_id(id);
+		setAttr("result", d&&del);
 		renderJson();
 	}
 }

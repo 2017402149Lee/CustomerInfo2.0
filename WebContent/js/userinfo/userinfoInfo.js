@@ -90,7 +90,7 @@ layui.config({
 								// 执行重载
 				  table.reload('testReload', {
 					  page : {
-						  curr : 1// 重新从第 1 页开始
+						  curr : laypage// 重新从第 1 页开始
 						  },
 						  where : {//要查询的字段
 							  key : demoReload.val(),

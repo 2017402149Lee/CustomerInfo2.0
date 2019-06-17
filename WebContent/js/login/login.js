@@ -29,6 +29,7 @@ layui.config({
 	          },
 	          success:function(d){
 	        	  	var r=d.result;
+	        	  	var l=d.level;
 	        	  	console.log(r);
 	        	  		if(r==0){
 					  		top.layer.msg("登陆成功！");

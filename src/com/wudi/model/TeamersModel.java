@@ -194,4 +194,19 @@ public class TeamersModel extends Model<TeamersModel>{
 			return false;
 		}
 	}
+	
+	public static boolean delByTeam_id(String team_id) {
+		try {
+			String delsql = "delete from "+tableName+" where team_id = ? ";
+			int iRet = Db.update(delsql,team_id);
+			if(iRet>0) {
+				return true;
+			}else {
+				return false;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

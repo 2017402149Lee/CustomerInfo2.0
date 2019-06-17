@@ -197,7 +197,7 @@ public class UserModel extends Model<UserModel>{
 	 */
 	public static UserModel findByLogin(String phone) {
 		StringBuffer sql = new StringBuffer();
-		sql.append("select * from ").append(tableName).append(" a INNER JOIN ");
+		sql.append("select a.*,b.name,b.permission from ").append(tableName).append(" a INNER JOIN ");
 		sql.append(RoleModel.tableName).append(" b on a.role_id=b.id ");
 		sql.append(" where a.phone=?");
 		return dao.findFirst(sql.toString(),phone);

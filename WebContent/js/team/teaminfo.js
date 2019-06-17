@@ -46,6 +46,7 @@ layui.config({
 		    	  var arr=new Array();
 		    	  if(per==1){
 			    	arr.push("<a class='layui-btn layui-btn-xs' lay-event='detail'><i class='layui-icon'>&#xe654;</i>查看</a>");
+			    	arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger '  lay-event='del'><i class='layui-icon'></i>删 除</a>");
 		    	  }
 		    	  return arr.join("\n");
 		      	}
@@ -124,13 +125,13 @@ layui.config({
 	  
 		  
 	  } else if(layEvent === 'del'){ //删除
-		  layer.confirm('确定删除此信息？',{icon:3, title:'提示信息'},function(index){
+		  layer.confirm('确定删除此信息？删除后不可恢复！！！',{icon:3, title:'提示信息'},function(index){
 				var msgid;
 				//向服务端发送删除指令
 		 		 $.ajax({//异步请求返回给后台
 			    	  url:'delGroupInfo',
 			    	  type:'POST',
-			    	  data:{"id":data.captain_phone},
+			    	  data:{"id":data.id},
 			    	  dataType:'json',
 			    	  beforeSend: function(re){
 			    		  msgid = top.layer.msg('数据处理中，请稍候',{icon: 16,time:false,shade:0.8});

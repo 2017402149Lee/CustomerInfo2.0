@@ -3,8 +3,21 @@ layui.config({
 	base : "js/"
 }).use(['form','layer','jquery'],function(){
 	var form = layui.form,
+	laypage = layui.laypage,
 		layer = parent.layer === undefined ? layui.layer : parent.layer,
 		$ = layui.jquery;
+	 var active = {
+			  reload : function() {
+				  var demoReload = $('#demoReload');
+								// 执行重载
+				  table.reload('testReload', {
+						  where : {//要查询的字段
+							  key : demoReload.val(),
+							  id : 11
+							  }
+						  });
+				  }
+	  };
 	
  	form.on("submit(upIntegra)",function(data){
  		var index;
@@ -22,7 +35,7 @@ layui.config({
 			  		top.layer.msg("修改成功！");
 			   		layer.closeAll("iframe");
 			  	 	//刷新父页面
-			  	 	parent.location.reload();
+			  	 	active.reload();
 		    		
 	    	  },
 	    	  error:function(XMLHttpRequest, textStatus, errorThrown){
