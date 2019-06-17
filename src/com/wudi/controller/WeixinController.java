@@ -433,6 +433,7 @@ public class WeixinController extends Controller{
 	 */
 	public void queryTeamCustomerList() {
 		String user_id = getPara("user_id");
+		String team_id = getPara("team_id");
 		List<CustomerModel> list = null;
 		int code = -1;
 		UserModel level = UserModel.getById(user_id);
