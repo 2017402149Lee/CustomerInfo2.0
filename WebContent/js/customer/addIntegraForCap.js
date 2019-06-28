@@ -6,7 +6,6 @@ layui.config({
 		layer = parent.layer === undefined ? layui.layer : parent.layer,
 		laypage = layui.laypage;
 		$ = layui.jquery;
-
  	form.on("submit(add)",function(data){
  		var index;
  		 $.ajax({//异步请求返回给后台
@@ -23,7 +22,12 @@ layui.config({
 			  		top.layer.msg("操作成功！");
 			   		layer.closeAll("iframe");
 			  	 		//刷新父页面
-			  	 	parent.location.reload();
+			   		parent.layui.table.reload('testReload', {//reload重新加载
+						  where : {//要查询的字段
+							  key : $('#demoReload').val(),
+							  type:$("#type").val()
+							  }
+						  });
 		    		
 	    	  },
 	    	  error:function(XMLHttpRequest, textStatus, errorThrown){

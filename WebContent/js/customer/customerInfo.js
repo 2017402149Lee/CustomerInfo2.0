@@ -62,7 +62,7 @@ layui.config({//框架的固定，配置的使用
 		      ,{fixed: 'right', align:'center',title:'操作',width:'350', templet:function(d){
 		    	  var arr=new Array();
 		    	  if(per==0||per==1){
-			    	  if(d.status==2){
+		    		  if(d.status==2){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='chengjiao'><i class='layui-icon'>&#xe654;</i>成交</a>");
 			    	  }
 			    	  if(d.status!=6){
@@ -97,6 +97,7 @@ layui.config({//框架的固定，配置的使用
 	    		  });
 	    }
 	  });
+	
 //====================点击【搜索】按钮事件===========================
   var active = {
 		  reload : function() {
@@ -125,6 +126,7 @@ layui.config({//框架的固定，配置的使用
 					  });
 			  }
   };
+
 //绑定搜索事件
   //将事件绑定在按钮上
   $('.layui-btn').on('click', function() {
@@ -186,7 +188,7 @@ layui.config({//框架的固定，配置的使用
 			    	  success:function(d){
 			    		  top.layer.close(msgid);
 			    		  if(d.result){
-			    			  active.reload();//重新加载数据
+			    			  actives.reload();//重新加载数据
 			    		  }else{
 			    			  top.layer.msg("操作失败！，数据库操作有问题！！");
 			    		  }

@@ -177,28 +177,29 @@ public class AdminController extends Controller {
         int limit=getParaToInt("limit");
         int page=getParaToInt("page");
         String type=getPara("type"); 
-        Page<CustomerModel> list = null;
        // List<String> reslist = new ArrayList<String>();
-        if(level==2) {
-        	StringBuffer ts = new StringBuffer();
-        	for(TeamersModel m:team_id) {
-        		String teamid=m.getTeam_id();
-        		ts.append("'").append(teamid).append("'").append(",");
-        	}
-        	ts.append("'").append(0).append("'");
-        	list= CustomerModel.SecondgetList(page, limit, key, type,ts.toString());
-    		setAttr("code",0);
-    		setAttr("msg", "你好！");
-    		setAttr("count", list.getTotalRow());
-    		setAttr("data", list.getList());
-    		setAttr("level", level);
-        }else {
-	        list = CustomerModel.getList(page, limit, key,type);
+        if(level!=2) {
+        	Page<CustomerModel>  list = CustomerModel.getList(page, limit, key,type);
 	        setAttr("code", 0);
 	        setAttr("msg", "你好！");
 	        setAttr("count", list.getTotalRow());
 	        setAttr("data", list.getList());
+	        setAttr("level", level);
+        }else {
+        	 StringBuffer ts = new StringBuffer();
+         	for(TeamersModel m:team_id) {
+         		String teamid=m.getTeam_id();
+         		ts.append("'").append(teamid).append("'").append(",");
+         	}
+         	ts.append("'").append(0).append("'");
+         	Page<CustomerModel>  list= CustomerModel.SecondgetList(page, limit, key, type,ts.toString());
+     		setAttr("code",0);
+     		setAttr("msg", "你好！");
+     		setAttr("count", list.getTotalRow());
+     		setAttr("data", list.getList());
+     		setAttr("level", level);
         }
+       
         renderJson();
 	}
 	

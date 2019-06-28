@@ -160,7 +160,6 @@ public class CustomerModel extends Model<CustomerModel>{
 	 */
 	public static Page<CustomerModel> SecondgetList(int pageNumber, int pageSize, String key, String type,String team_id) {
 		String sele_sql = "select a.*,b.username,c.type as captype ";
-		String sql = "";
 		StringBuffer from_sql = new StringBuffer();
 		from_sql.append("from ").append(tableName).append(" a left join ").append(UserModel.tableName).append(" b on a.user_id=b.id").append(" left join " ).append(TeamersModel.tableName).append(" c on c.user_id=b.id ");
 		from_sql.append(" where a.type='").append(type).append("' and a.status in (1,2,6) and c.team_id in (").append(team_id).append(")");
