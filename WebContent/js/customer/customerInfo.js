@@ -73,7 +73,7 @@ layui.config({//框架的固定，配置的使用
 				    	  arr.push("<a class='layui-btn layui-btn-xs ' lay-event='hide'><i class='layui-icon'></i>删除</a>");
 				    	  arr.push("<a class='layui-btn layui-btn-xs layui-btn-danger' lay-event='cancel'><i class='layui-icon'></i>取消成交</a>");
 			    	  }
-			    	  if(d.status==6&&d.captype==nul){
+			    	  if(d.status==6&&d.captype==null){
 				    	 
 				    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='gain'><i class='layui-icon'></i>给积分</a>");
 			    	  }

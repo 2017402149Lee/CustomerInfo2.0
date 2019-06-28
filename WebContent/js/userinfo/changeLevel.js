@@ -22,7 +22,11 @@ layui.config({
 			  		top.layer.msg("修改成功！");
 			   		layer.closeAll("iframe");
 			  	 	//刷新父页面
-			  	 	parent.location.reload();
+			   		parent.layui.table.reload('testReload', {//reload重新加载
+						  where : {//要查询的字段
+							  key : $('#demoReload').val()
+							  }
+						  });
 		    		
 	    	  },
 	    	  error:function(XMLHttpRequest, textStatus, errorThrown){
