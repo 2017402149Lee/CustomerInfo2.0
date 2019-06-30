@@ -24,7 +24,7 @@ layui.config({//框架的固定，配置的使用
 	    elem: '#demo',//渲染对象
 	    height:'full-88',//表格高度
 	    url: 'queryCustomers',//数据接口
-	    where: {key: '',type:$("#type").val()},//给后台传的参数
+	    where: {key:'',type:$("#type").val()},//给后台传的参数
 	    page: true, //开启分页
 	    limit: 10,//每页显示信息条数
 	    limits: [10,20,100,200,500,1000,2000,5000,10000,50000,100000,150000,200000],
@@ -101,21 +101,21 @@ layui.config({//框架的固定，配置的使用
 	  });
 	
 //====================点击【搜索】按钮事件===========================
-  var active = {
-		  reload : function() {
-			  var demoReload = $('#demoReload');
-							// 执行重载
-			  table.reload('testReload', {//reload重新加载
-				  page : {
-					  curr : laypage// 重新从第 1 页开始
-					  },
-					  where : {//要查询的字段
-						  key : demoReload.val(),
-						  type:$("#type").val()
-						  }
-					  });
-			  }
-  };
+//  var active = {
+//		  reload : function() {
+//			  var demoReload = $('#demoReload');
+//							// 执行重载
+//			  table.reload('testReload', {//reload重新加载
+//				  page : {
+//					  curr : laypage// 重新从第 1 页开始
+//					  },
+//					  where : {//要查询的字段
+//						  key : demoReload.val(),
+//						  type:$("#type").val()
+//						  }
+//					  });
+//			  }
+//  };
   var actives = {
 		  reload : function() {
 			  var demoReload = $('#demoReload');
@@ -133,7 +133,7 @@ layui.config({//框架的固定，配置的使用
   //将事件绑定在按钮上
   $('.layui-btn').on('click', function() {
 	  var type = $(this).data('type');
-	  active[type] ? active[type].call(this) : '';
+	  actives[type] ? actives[type].call(this) : '';
 	  });
 //=======================待处理按钮====================================  
 //给点击成交动作，直接应用layui

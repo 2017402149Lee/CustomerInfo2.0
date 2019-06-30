@@ -117,11 +117,11 @@ layui.config({
 	  };
 	  
 	//绑定搜索事件
+	  //将事件绑定在按钮上
 	  $('.layui-btn').on('click', function() {
 		  var type = $(this).data('type');
-		  active[type] ? active[type].call(this) : '';
+		  active_op[type] ? active_op[type].call(this) : '';
 		  });
-	  
 	  
 	//=============绑定【添加】事件============================
 	  $(document).on('click','#add_b',function(){
