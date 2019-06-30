@@ -160,6 +160,7 @@ public class AdminController extends Controller {
 	 */
 	public void getPermission() {
 		setAttr("user", getSessionAttr("user"));
+		setAttr("level", getSessionAttr("level"));
 		renderJson();
 	}
 	

@@ -13,7 +13,7 @@ layui.config({//框架的固定，配置的使用
 		var obj = $.parseJSON(p);
 		var v=obj['c101'];
 		per=v;
-		if(v==1){
+		if(v==1||data.level==2){
 			var arr=new Array();
 			arr.push("<button id ='xls' class='layui-btn  layui-bg-blue' ><i class='layui-icon layui-icon-export'></i>导出所有数据</button>");
 			$("#add_xiao").append(arr.join("\n"));
@@ -27,6 +27,7 @@ layui.config({//框架的固定，配置的使用
 	    where: {key: '',type:$("#type").val()},//给后台传的参数
 	    page: true, //开启分页
 	    limit: 10,//每页显示信息条数
+	    limits: [10,20,100,200,500,1000,2000,5000,10000,50000,100000,150000,200000],
 	    id: 'testReload',
 	    cols:  [[ //表头
 	    	 {field: 'name', title: '姓名', sort: true,align:'center', fixed: 'left',width:'110'}
@@ -95,6 +96,7 @@ layui.config({//框架的固定，配置的使用
 	    		 table.exportFile(ins.config.id,obj.xlsdata,'xls');
 	    		  
 	    		  });
+	    	
 	    }
 	  });
 	

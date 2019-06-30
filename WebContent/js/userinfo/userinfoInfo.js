@@ -67,7 +67,7 @@ layui.config({
 			    	  if(d.status==0){
 			    		  arr.push("<a class='layui-btn layui-btn-xs layui-bg-blue' lay-event='check'><i class='layui-icon'>&#xe654;</i>通过</a>");
 			    	  }
-			    	  if(d.level==0){
+			    	  if(d.rolename=="客服人员"){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='changeLevel'><i class='layui-icon'></i>升级会员</a>");  
 			    	  }
 			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'>&#xe642;</i>修改角色</a>");
