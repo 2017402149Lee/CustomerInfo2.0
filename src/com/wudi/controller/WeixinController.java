@@ -468,7 +468,7 @@ public class WeixinController extends Controller{
 		if(find != null) {
 			TeamersModel caps = TeamersModel.findByUd(find.getId());
 			TeamersModel level = TeamersModel.findLevel(caps.getTeam_id());
-			if(level== null) {//该团队没有二级会员
+			if(level==null) {//该团队没有二级会员
 			TeamersModel data = TeamersModel.findByUTd(user_id, caps.getTeam_id());
 			if(data ==null) {
 			team_id = caps.getTeam_id();
@@ -483,7 +483,7 @@ public class WeixinController extends Controller{
 			code = -3;//该团队已存在一名二级会员或者已经是该团队成员
 		}
 	}else {
-			code = -2;//该号码没有团队
+			code = -2;//该号码不存在
 		}
 		setAttr("code", code);
 		renderJson();

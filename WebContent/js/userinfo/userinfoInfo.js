@@ -30,9 +30,11 @@ layui.config({
 	    where: {key: ''},//给后台传的参数
 	    page: true, //开启分页
 	    limit: 10,//每页显示信息条数
+	    limits: [10,20,100,200,500,1000,2000,5000,10000,50000,100000,150000,200000],
 	    toolbar: '#toolbarDemo',
 	    id: 'testReload',
 	    cols: [[ //表头
+	    	{type: 'checkbox'},
 		      {field: 'username', title: '用户名',width:100}
 		      ,{field: 'sex', title: '性别',width:80,templet:function(d){
 		    	  if(d.sex==1){
@@ -67,7 +69,7 @@ layui.config({
 			    	  if(d.status==0){
 			    		  arr.push("<a class='layui-btn layui-btn-xs layui-bg-blue' lay-event='check'><i class='layui-icon'>&#xe654;</i>通过</a>");
 			    	  }
-			    	  if(d.rolename=="客服人员"){
+			    	  if(d.level!=2){
 			    		  arr.push("<a class='layui-btn layui-btn-xs' lay-event='changeLevel'><i class='layui-icon'></i>升级会员</a>");  
 			    	  }
 			    	  arr.push("<a class='layui-btn layui-btn-xs' lay-event='edit'><i class='layui-icon'>&#xe642;</i>修改角色</a>");
@@ -78,11 +80,16 @@ layui.config({
 		    	  return arr.join("\n");
 		      	}
 		      } //这里的toolbar值是模板元素的选择器
-		    ]]
-
-	  });
 	  
-	  
+	]],done : function(obj){
+    	this.obj=obj;
+    	$('#xls').on('click', function() {//导出所有数据
+    		 table.exportFile(ins.config.id,obj.xlsdata,'xls');
+    		  
+    		  });
+    	
+    }
+  });
 	  
 	  
 	//====================点击【搜索】按钮事件===========================
@@ -141,6 +148,33 @@ layui.config({
 			})
 		});
 	  
+	  $("#delsel").on('click',function() {
+			 var checkStatus = table.checkStatus('testReload');
+				if(checkStatus.data.length==0){
+					layer.msg('请先选择要删除的数据行！', {icon: 2,time:3000});
+				}else{
+					
+				var ids = "";
+				for(var i=0;i<checkStatus.data.length;i++){
+					ids += checkStatus.data[i].id+",";
+				}
+				console.log(ids);
+				 layer.confirm('删除不可恢复，确定删除记录？',{icon:3, title:'提示信息'},function(index){
+				layer.msg('删除中...', {icon: 16,shade: 0.3,time:5000});
+				$.post('delSelectU?ids='+ids,function(data){
+					        layer.closeAll('loading');
+					        if(data.result){
+						        layer.msg('删除成功！', {icon: 1,time:2000,shade:0.2});
+						        location.reload(true);
+					        }else{
+						        layer.msg('删除失败！', {icon: 2,time:3000,shade:0.2});
+					        }
+				        }
+				
+			    );
+				});
+				}
+		  	})
 	//=======================监听工具条====================================
 		table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 		  var data = obj.data; //获得当前行数据

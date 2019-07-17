@@ -146,7 +146,7 @@ public class CustomerModel extends Model<CustomerModel>{
 		from_sql.append("from ").append(tableName).append(" a left join ").append(UserModel.tableName).append(" b on a.user_id=b.id").append(" left join " ).append(TeamersModel.tableName).append(" c on c.user_id=b.id ");
 		from_sql.append(" where a.type='").append(type).append("' and a.status in (1,2,6)");
 		if (!StringUtil.isBlankOrEmpty(key)) {
-			from_sql.append(" and a.name like '%" + key + "%'");
+			from_sql.append(" and b.username like '%" + key + "%'");
 			 //sql = "select a.*,b.username,c.type as captype  from "+ tableName + " a left join "+ UserModel.tableName+" b on a.user_id=b.id left join "+TeamersModel.tableName+ " c on c.user_id=b.id  where a.type= "+type+" and a.status in (1,2,6) and a.name like '%" + key +" %' ";
 		}from_sql.append(" ORDER BY a.create_time DESC ");
 		
@@ -341,6 +341,36 @@ public class CustomerModel extends Model<CustomerModel>{
 			return false;
 		}
 	}
+	public static boolean delIntegra(String id) {
+		boolean result = false;
+		//判断是否有团队
+		CustomerModel a = CustomerModel.getById(id);
+		TeamersModel b =TeamersModel.findByUd(a.getUser_id());
+		if(b != null) {//有团队
+			//判断是队长还是队员
+			TeamModel c = TeamModel.findCaptain(b.getUser_id());
+			if(c != null) {//是队长
+				boolean dc = UserIntegralModel.deleteIntegraForSelf(c.getUser_id());
+				result =dc;
+			}else {//是队员
+				//找队长
+				TeamersModel d = TeamersModel.findByUd(b.getUser_id());
+				TeamModel e = TeamModel.findcapUser_idById(d.getTeam_id());
+				if(d!=null&&e!=null) {
+				boolean dd = UserIntegralModel.deleteIntegraForPalyer(b.getUser_id());
+				boolean dc = UserIntegralModel.deleteIntegraForCap(e.getUser_id());
+					result = dd&&dc;
+				}else {
+					result = false;
+				}
+			}
+		}else {//没有团队
+			boolean ds = UserIntegralModel.deleteIntegraForSelfNoTeam(a.getUser_id());
+					result = ds;
+		}
+		return result;
+	}
+
 	/**
 	 * 找出本年的数据
 	 * 
