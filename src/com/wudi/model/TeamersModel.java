@@ -78,7 +78,7 @@ public class TeamersModel extends Model<TeamersModel>{
 	
 	public static TeamersModel findLevel(String team_id) {
 
-		String sql = "select a.*,b.level from "+tableName+" a , "+UserModel.tableName+" b where a.user_id = b.id and b.level = 2 and a.team_id =? ";
+		String sql = "select a.*,b.level from "+tableName+" a inner join "+UserModel.tableName+" b where a.user_id = b.id and b.level = 2 and a.team_id =? ";
 		return dao.findFirst(sql,team_id);
 	}
 	public static TeamersModel getById(String id) {

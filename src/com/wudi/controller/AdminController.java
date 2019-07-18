@@ -368,6 +368,8 @@ public class AdminController extends Controller {
 		renderJson();
 	}
 	
+
+	
 	/**
 	 * 
 	* @Title: openRoles
@@ -745,7 +747,6 @@ public class AdminController extends Controller {
 		setAttr("result", d&&del);
 		renderJson();
 	}
-	
 	public void openCustomerInfoAdd() {
 //		String type = getPara("type");
 //		setSessionAttr("type", type);
@@ -782,6 +783,52 @@ public class AdminController extends Controller {
 		boolean result = CustomerModel.save(name, sex, tel, disclose, age, nation, addr, remark, user_id, type, otherinfo,status);
 		}
 		setAttr("code", code);
+		renderJson();
+	}
+	/**
+	 * 批量删除
+	 * @author lijinpeng
+	 */
+	public void delSelect() {
+		String ids = getPara("ids");		
+			String a[] = ids.split(",");
+			boolean result = false;
+			try{
+				for (int i = 0; i < a.length; i++) {
+					String id = a[i];
+			  boolean	results	= CustomerModel.delIntegra(id);
+			  if(results) {
+				  result = CustomerModel.delById(id);
+			  }else {
+				  result =false;
+			  }
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+				result = false;
+			}
+			
+		
+		setAttr("result", result);
+		renderJson();
+	}
+	
+	public void delSelectU() {
+		String ids = getPara("ids");		
+			String a[] = ids.split(",");
+			boolean result = false;
+			try{
+				for (int i = 0; i < a.length; i++) {
+					String id = a[i];
+			 	result	= UserModel.delById(id);
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+				result = false;
+			}
+			
+		
+		setAttr("result", result);
 		renderJson();
 	}
 }

@@ -17,6 +17,8 @@ layui.config({//框架的固定，配置的使用
 			var arr=new Array();
 			arr.push("<a class='layui-btn layui-btn-normal add_btn' id='add_b'> <i class='layui-icon'>&#xe608;</i>添加</a>");
 			arr.push("<button id ='xls' class='layui-btn  layui-bg-blue' ><i class='layui-icon layui-icon-export'></i>导出所有数据</button>");
+			arr.push("<button id = 'delsel' class='layui-btn layui-btn-danger ' ><i class='layui-icon '>&#xe640;</i>批量删除</button>");
+
 			$("#add_xiao").append(arr.join("\n"));
 		}
 	});
@@ -31,8 +33,9 @@ layui.config({//框架的固定，配置的使用
 	    limits: [10,20,100,200,500,1000,2000,5000,10000,50000,100000,150000,200000],
 	    id: 'testReload',
 	    cols:  [[ //表头
-	    	 {field: 'name', title: '姓名', sort: true,align:'center', fixed: 'left',width:'110'}
-		      ,{field: 'sex', title: '性别',align:'center',width:70,
+	    		{type: 'checkbox',fixed: 'left'},
+	    		{field: 'name', title: '姓名', sort: true,align:'center', fixed: 'left',width:'110'}
+	    		,{field: 'sex', title: '性别',align:'center',width:70,
 		    	  templet: function(d){
 		    		  if(d.sex==1){
 			    		  return '<span class="layui-badge layui-bg-blue">男</span>'
@@ -41,7 +44,7 @@ layui.config({//框架的固定，配置的使用
 			    	  }
 		    	  }}
 		      ,{field: 'tel', title: '电话', align:'center',width:'200'}
-		      ,{field: 'disclose', title: '是否透漏录入人', align:'center',width:'160',templet: function(d){
+		      ,{field: 'disclose', title: '是否透漏录入人', align:'center',width:'80',templet: function(d){
 		    	  if(d.disclose==1){
 		    		  return '<span class="layui-badge layui-bg-green">是</span>'
 		    	  }else{
@@ -60,7 +63,7 @@ layui.config({//框架的固定，配置的使用
 			    		  return '<span class="layui-badge layui-bg-red">未处理</span>'
 			    	  }
 			      }}
-		      ,{field: 'remark', title: '备注',align:'center',width:'300'}
+		      ,{field: 'remark', title: '备注',align:'center',width:'240'}
 		      ,{fixed: 'right', align:'center',title:'操作',width:'350', templet:function(d){
 		    	  var arr=new Array();
 		    	  if(per==0||per==1){
@@ -97,9 +100,80 @@ layui.config({//框架的固定，配置的使用
 	    		 table.exportFile(ins.config.id,obj.xlsdata,'xls');
 	    		  
 	    		  });
+
 	    	
 	    }
 	  });
+	 $("#delsel").on('click',function() {
+		 var checkStatus = table.checkStatus('testReload');
+			if(checkStatus.data.length==0){
+				layer.msg('请先选择要删除的数据行！', {icon: 2,time:3000});
+			}else{
+				
+			var ids = "";
+			for(var i=0;i<checkStatus.data.length;i++){
+				ids += checkStatus.data[i].id+",";
+			}
+			console.log(ids);
+			 layer.confirm('删除不可恢复，确定删除记录？',{icon:3, title:'提示信息'},function(index){
+			layer.msg('删除中...', {icon: 16,shade: 0.3,time:5000});
+			$.post('delSelect?ids='+ids,function(data){
+				        layer.closeAll('loading');
+				        if(data.result){
+					        layer.msg('删除成功！', {icon: 1,time:2000,shade:0.2});
+					        location.reload(true);
+				        }else{
+					        layer.msg('删除失败！', {icon: 2,time:3000,shade:0.2});
+				        }
+			        }
+			
+		    );
+			});
+			}
+	  	})
+
+//	  	 var checkStatus = table.checkStatus('testReload'),
+//		  data = checkStatus.data,
+//		  Ids = "";
+//		  	if(data.length > 0) {
+//		  		for (var i in data) {
+//		  			Ids+=data[i].id+",";
+//		  		}
+//		  		console.log(Ids);
+//		  		layer.confirm('确定删除选中的数据？', {icon: 3, title: '提示信息'}, function (index) {
+//		  			$.post('del'+Ids,function(data){
+//		  				tableIns.reload();
+//		  				layer.msg(data.msg);
+//		  				layer.close(index);
+//		  			});
+//		  		})
+//		  	}else{
+//		  		layer.msg("请选择需要删除的数据");
+//		  	}
+//	function deleteA(){
+//		var checkStatus = table.checkStatus('testReload');
+//		if(checkStatus.data.length==0){
+//			parent.layer.msg('请先选择要删除的数据行！', {icon: 2});
+//		}
+//		var ids = "";
+//		for(var i=0;i<checkStatus.data.length;i++){
+//			ids += checkStatus.data[i].id+",";
+//		}
+//		console.log(ids);
+//		parent.layer.msg('删除中...', {icon: 16,shade: 0.3,time:5000});
+//		$.post('del'+ids,function(data){
+//			        layer.closeAll('loading');
+//			        if(data.code==1){
+//				        parent.layer.msg('删除成功！', {icon: 1,time:2000,shade:0.2});
+//				        location.reload(true);
+//			        }else{
+//				        parent.layer.msg('删除失败！', {icon: 2,time:3000,shade:0.2});
+//			        }
+//		        }
+//	    );
+//	}
+
+
 	
 //=============绑定【添加】事件============================
 	
@@ -155,6 +229,10 @@ layui.config({//框架的固定，配置的使用
 	  var type = $(this).data('type');
 	  actives[type] ? actives[type].call(this) : '';
 	  });
+  
+//批量删除
+ 
+
 //=======================待处理按钮====================================  
 //给点击成交动作，直接应用layui
 	table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -227,7 +305,7 @@ layui.config({//框架的固定，配置的使用
 	      layer.close(index);
 	    });
 
-	  }
+	  } 
 	  else if(layEvent === 'cancel'){ //取消成交
 		  layer.confirm('确定取消成交信息？',{icon:3, title:'提示信息'},function(index){
 				var msgid;
