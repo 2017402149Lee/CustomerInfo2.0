@@ -352,7 +352,7 @@ public class AdminController extends Controller {
 		}else {//没有团队
 			CustomerModel fd = CustomerModel.getById(id);
 			UserModel lx = UserModel.getById(fd.getUser_id());
-			if(lx.getLevel()==2) {
+			if(lx.getUsername().equals("admin")||lx.getLevel()==2) {
 				result = CustomerModel.delById(id);
 			}else {
 			boolean ds = UserIntegralModel.deleteIntegraForSelfNoTeam(a.getUser_id());
