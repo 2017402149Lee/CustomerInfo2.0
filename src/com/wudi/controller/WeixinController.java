@@ -36,9 +36,7 @@ public class WeixinController extends Controller{
 		String password = getPara("password");
 		int sex = getParaToInt("sex");
 		UserModel p = UserModel.findByPhone(phone);
-		 if(p != null) {
-			code = 1 ;//1是用户已存在
-		}else {
+		 if(p == null) {
 			boolean result = UserModel.saveUserinfo(username, password, phone, sex);
 			if(result) {
 				UserModel a = UserModel.findByPhone(phone);
@@ -48,6 +46,8 @@ public class WeixinController extends Controller{
 				}
 				code = 0;
 			}
+		}else {
+			code = 1 ;//1是用户已存在
 		}
 		setAttr("code", code);
 		renderJson();
