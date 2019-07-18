@@ -52,6 +52,7 @@ public class AdminController extends Controller {
 				setSessionAttr("user", m);
 				setSessionAttr("level", level);
 					setSessionAttr("team_id", s);
+					setSessionAttr("user_id", m.getId());
 			} else {
 				setAttr("result", 1);// 密码错误
 			}
@@ -178,6 +179,7 @@ public class AdminController extends Controller {
         int limit=getParaToInt("limit");
         int page=getParaToInt("page");
         String type=getPara("type"); 
+        setSessionAttr("type", type);
        // List<String> reslist = new ArrayList<String>();
         if(level!=2) {
         	Page<CustomerModel>  list = CustomerModel.getList(page, limit, key,type);
@@ -348,12 +350,18 @@ public class AdminController extends Controller {
 				}
 			}
 		}else {//没有团队
+			CustomerModel fd = CustomerModel.getById(id);
+			UserModel lx = UserModel.getById(fd.getUser_id());
+			if(lx.getLevel()==2) {
+				result = CustomerModel.delById(id);
+			}else {
 			boolean ds = UserIntegralModel.deleteIntegraForSelfNoTeam(a.getUser_id());
 					if(ds) {
 						result = CustomerModel.delById(id);
 					}else {
 						result = false;
 					}
+			}
 		}
 		
 		setAttr("result", result);
@@ -735,6 +743,45 @@ public class AdminController extends Controller {
 		boolean d = TeamModel.delById(id);
 		boolean del= TeamersModel.delByTeam_id(id);
 		setAttr("result", d&&del);
+		renderJson();
+	}
+	
+	public void openCustomerInfoAdd() {
+//		String type = getPara("type");
+//		setSessionAttr("type", type);
+		renderFreeMarker("customer/addcustomer.html");
+	}
+	
+	/**@author ljp
+	 * 说明：code：返回编码，0：添加成功，-1：添加失败
+	 * @TODO: 添加客户信息
+	 */
+	public void addCustomerInfo() {
+		int code = -1;
+		int status = 1;
+		String addr = "";
+		String remark = "";
+		String age = "";
+		String name = getPara("name");
+		int sex = getParaToInt("sex");
+		String tel = getPara("tel");
+		int disclose = getParaToInt("disclose");
+		age = getPara("age");
+		addr = getPara("addr");
+		remark = getPara("remark");
+		String user_id = getSessionAttr("user_id");
+		String nation = getPara("nation");
+		String type = getSessionAttr("type");
+		String otherinfo =getPara("otherinfo");
+		//int status = getParaToInt("status");
+		//int last = UserIntegralModel.findLastTotal(user_id);
+		CustomerModel checktel = CustomerModel.findModel(type, tel);
+		if(checktel != null) {
+			code = -1;
+		}else {
+		boolean result = CustomerModel.save(name, sex, tel, disclose, age, nation, addr, remark, user_id, type, otherinfo,status);
+		}
+		setAttr("code", code);
 		renderJson();
 	}
 }

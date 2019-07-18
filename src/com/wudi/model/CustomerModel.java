@@ -177,7 +177,7 @@ public class CustomerModel extends Model<CustomerModel>{
 		return dao.find(sql,type);
 	}
 	public static CustomerModel findModel(String type,String tel) {
-		return dao.findFirst("select * from "+tableName+" where type = ?and tel = ?",type,tel);
+		return dao.findFirst("select * from "+tableName+" where type = ?and tel = ? ",type,tel);
 	}
 	public static CustomerModel getById(String id) {
 

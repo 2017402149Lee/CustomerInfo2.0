@@ -15,6 +15,7 @@ layui.config({//框架的固定，配置的使用
 		per=v;
 		if(v==1||data.level==2){
 			var arr=new Array();
+			arr.push("<a class='layui-btn layui-btn-normal add_btn' id='add_b'> <i class='layui-icon'>&#xe608;</i>添加</a>");
 			arr.push("<button id ='xls' class='layui-btn  layui-bg-blue' ><i class='layui-icon layui-icon-export'></i>导出所有数据</button>");
 			$("#add_xiao").append(arr.join("\n"));
 		}
@@ -99,6 +100,25 @@ layui.config({//框架的固定，配置的使用
 	    	
 	    }
 	  });
+	
+//=============绑定【添加】事件============================
+	
+	  $(document).on('click','#add_b',function(){
+		  var index = layui.layer.open({
+				title : "【添加信息】",
+				icon: 2,
+				type : 2,
+				area: ['800px', '600px'],
+				content : "openCustomerInfoAdd",
+				success : function(layero, index){
+					setTimeout(function(){
+						layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
+							tips: 3
+						});
+					},500)
+				}
+			})
+		});
 	
 //====================点击【搜索】按钮事件===========================
 //  var active = {
