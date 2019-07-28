@@ -45,7 +45,7 @@ public class AdminController extends Controller {
 		int level = m.getLevel();
 		List<TeamersModel> s = TeamersModel.gainTeam_id(m.getId());		
 		// 判断用户名和密码是否正确
-		if (m != null && (right.equals("超级管理员")||right.equals("客服人员"))||level==2) {
+		if (m != null && (right.equals("超级管理员")||right.equals("客服人员"))||level==2 ||level==0 ) {
 			if (m.getPassword().equals(password)) {
 				setAttr("result", 0);// 可以登录
 				setCookie("cname",m.getUsername(), 36000);
@@ -174,6 +174,7 @@ public class AdminController extends Controller {
 	}
 	public void queryCustomers() {
 		int level = getSessionAttr("level");
+		String user_id = getSessionAttr("user_id");
         List<TeamersModel> team_id = getSessionAttr("team_id");	
 		String key = getPara("key");
         int limit=getParaToInt("limit");
@@ -181,26 +182,35 @@ public class AdminController extends Controller {
         String type=getPara("type"); 
         setSessionAttr("type", type);
        // List<String> reslist = new ArrayList<String>();
-        if(level!=2) {
+        if(level==1) {
         	Page<CustomerModel>  list = CustomerModel.getList(page, limit, key,type);
+        	System.out.println("走admin");
 	        setAttr("code", 0);
 	        setAttr("msg", "你好！");
 	        setAttr("count", list.getTotalRow());
 	        setAttr("data", list.getList());
 	        setAttr("level", level);
-        }else {
+        }else if(level==2){
         	 StringBuffer ts = new StringBuffer();
          	for(TeamersModel m:team_id) {
          		String teamid=m.getTeam_id();
          		ts.append("'").append(teamid).append("'").append(",");
          	}
          	ts.append("'").append(0).append("'");
-         	Page<CustomerModel>  list= CustomerModel.SecondgetList(page, limit, key, type,ts.toString());
+         	Page<CustomerModel> list= CustomerModel.SecondgetList(page, limit, key, type,ts.toString());
      		setAttr("code",0);
      		setAttr("msg", "你好！");
      		setAttr("count", list.getTotalRow());
      		setAttr("data", list.getList());
      		setAttr("level", level);
+        }else if(level==0){   		//这里后期要改进 ，用这个else if太难看了
+        	Page<CustomerModel>  list = CustomerModel.ZerogetList(page, limit, key,type,user_id);
+        	System.out.println("走zero");
+	        setAttr("code", 0);
+	        setAttr("msg", "你好！");
+	        setAttr("count", list.getTotalRow());
+	        setAttr("data", list.getList());
+	        setAttr("level", level);
         }
        
         renderJson();
@@ -772,7 +782,7 @@ public class AdminController extends Controller {
 		remark = getPara("remark");
 		String user_id = getSessionAttr("user_id");
 		String nation = getPara("nation");
-		String type = getSessionAttr("type");
+		String type =  getPara("type");
 		String otherinfo =getPara("otherinfo");
 		//int status = getParaToInt("status");
 		//int last = UserIntegralModel.findLastTotal(user_id);

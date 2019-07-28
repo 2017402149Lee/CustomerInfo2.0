@@ -170,6 +170,35 @@ public class CustomerModel extends Model<CustomerModel>{
 		
 		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString()); 
 	}
+	public static Page<CustomerModel> ZerogetList(int pageNumber, int pageSize, String key, String type,String user_id) {
+		String sele_sql = "select a.*,b.username,c.type as captype ";
+		StringBuffer from_sql = new StringBuffer();
+		from_sql.append("from ").append(tableName).append(" a left join ").append(UserModel.tableName).append(" b on a.user_id=b.id").append(" left join " ).append(TeamersModel.tableName).append(" c on c.user_id=b.id ");
+		from_sql.append(" where a.type='").append(type).append("' and a.status in (1,2,6) and a.user_id = ").append(user_id);
+		if (!StringUtil.isBlankOrEmpty(key)) {
+			from_sql.append(" and a.name like '%" + key + "%'");
+			 //sql = "select a.*,b.username,c.type as captype  from "+ tableName + " a left join "+ UserModel.tableName+" b on a.user_id=b.id left join "+TeamersModel.tableName+ " c on c.user_id=b.id  where a.type= "+type+" and a.status in (1,2,6) and a.name like '%" + key +" %' ";
+		}from_sql.append(" ORDER BY a.create_time DESC ");
+		
+		return dao.paginate(pageNumber, pageSize, sele_sql, from_sql.toString()); 
+	}
+	
+	/**
+	 * 0级数据
+	 * @param 多了去
+	 * @return
+	 */
+//	public static Page<CustomerModel> getPersonList(int pageNumber, int pageSize, String key,String user_id,String type,int status){
+//		String sele_sql = "select a.*,b.username,c.type as captype ";
+//		String from_sql = new StringBuffer();
+//		from_sql.append(" select a.*,b.username ,b.phone  ");
+//		from_sql.append("from ").append(tableName).append(" a LEFT JOIN ").append(UserModel.tableName).append(" b on a.user_id=b.id ");
+//		from_sql.append(" where a.user_id= '").append(user_id).append(" ' ");
+//		if (!StringUtil.isBlankOrEmpty(type)) {
+//			from_sql.append(" and a.type= '").append(type).append("' ");
+//		}
+//	return dao.paginate(pageNumber, pageSize, from_sql, from_sql.toString()); 
+//}
 
 	
 	public static List<CustomerModel> getCustomerByType(String type){

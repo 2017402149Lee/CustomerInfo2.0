@@ -13,11 +13,9 @@ layui.config({//框架的固定，配置的使用
 		var obj = $.parseJSON(p);
 		var v=obj['c101'];
 		per=v;
-		if(v==1||data.level==2){
+		if(v==1||data.level==2||data.level==0){
 			var arr=new Array();
-			arr.push("<a class='layui-btn layui-btn-normal add_btn' id='add_b'> <i class='layui-icon'>&#xe608;</i>添加</a>");
 			arr.push("<button id ='xls' class='layui-btn  layui-bg-blue' ><i class='layui-icon layui-icon-export'></i>导出所有数据</button>");
-			arr.push("<button id = 'delsel' class='layui-btn layui-btn-danger ' ><i class='layui-icon '>&#xe640;</i>批量删除</button>");
 
 			$("#add_xiao").append(arr.join("\n"));
 		}
